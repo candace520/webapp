@@ -7,9 +7,9 @@
 <?php
 $x = 2;
 $y = 6;
-
-echo "$x * $y = " . $x * $y. "<br>";
-echo "$x + $y =" . $x + $y. "<br>";
+$total =$x + $y ;
+echo "$x * $y =" . $x * $y. "<br>";
+echo "$x + $y = " .$total. "<br>";
 ?>
 </body>
 </html>

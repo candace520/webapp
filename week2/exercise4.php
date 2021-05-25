@@ -5,11 +5,12 @@
 </head>
 <body>
 <?php
-$x = 2;
-$y = 6;
 
-echo "$x * $y = " . $x * $y. "<br>";
-echo "$x + $y =" . $x + $y. "<br>";
+$x = rand(1,100);
+$y = rand(1,100);
+$total =$x + $y ;
+echo "$x * $y =" . $x * $y. "<br>";
+echo "$x + $y = " .$total. "<br>";
 ?>
 </body>
 </html>
