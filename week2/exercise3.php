@@ -5,7 +5,7 @@
 </head>
 <body>
 <?php
-$color = "red";
+//$color = "red";
 $number = 2;
 $name = "candace";
 echo "My favourite colour is " . $color . "<br>";
