@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>exercise2</title>
+<title>adding comment</title>
 </head>
 <body>
 <?php

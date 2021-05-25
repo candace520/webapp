@@ -9,8 +9,8 @@
 $x = rand(1,100);
 $y = rand(1,100);
 
-echo $x + $y . "<br>";
-echo $x * $y;
+echo "The first random number is " . $x . "<br>";
+echo "The second random number is " . $y . "<br>";
 ?>
 </body>
 </html>
