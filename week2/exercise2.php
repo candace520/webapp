@@ -3,7 +3,7 @@
 <body>
 <?php
 $color = "red";
-$number = "2";
+$number = 2;
 $name = "candace";
 echo "My favourite colour is " . $color . "<br>";
 echo "My favourite number is " . $number . "<br>";
