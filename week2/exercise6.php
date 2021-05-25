@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>homework3</title>
+<title>exercise6</title>
 <style>
 .bigdiv{
     color: red;

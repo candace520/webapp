@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>homework3</title>
+<title>exercise5</title>
 </head>
 <body>
 <?php
 $x = rand(1,100);
 $y = rand(1,100);
-echo "The first random number is " . $x . "<br>";
-echo "The second random number is " . $y . "<br>";
+$total =$x + $y ;
+echo "$x * $y =" . $x * $y. "<br>";
+echo "$x + $y = " .$total. "<br>";
 if ($x > $y) { 
   echo "The larger random number is " . $x;
 }
