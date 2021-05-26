@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>exercise2</title>
+<title>exercise1</title>
 </head>
 <body>
 
