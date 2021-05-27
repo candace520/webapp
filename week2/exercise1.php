@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>exercise1</title>
+    <title>exercise1</title>
 </head>
+
 <body>
 
     <?php
