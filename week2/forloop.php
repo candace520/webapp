@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-
+<head>
+<title>for loop of php</title>
+</head>
 <body>
 
 
