@@ -16,7 +16,8 @@
   <div class="container">
     <div class="btn-group">
       <button class="btn btn-info btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Day
-        <span class="caret"></span></button>
+        <span class="caret"></span>
+      </button>
 
       <ul class="dropdown-menu">
         <?php
