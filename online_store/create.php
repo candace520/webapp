@@ -5,9 +5,56 @@
     <title>PDO - Create a Record - PHP CRUD Tutorial</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #leftrow {
+            width: 30%;
+
+        }
+
+        .container {
+            width: 50%;
+        }
+
+        .nav {
+            padding-left: 30px;
+            font-size: 18px;
+            font-weight: normal;
+            font-family: sans-serif;
+        }
+
+        span {
+            font-weight: bolder;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="nav">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="home.php">Home </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="create.php">Create Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="customer.php">Create Customer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.php">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+    </div>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -60,47 +107,64 @@
 
         <!-- html form here where the product information will be entered -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
-                    <td>Name</td>
-                    <td><input type='text' name='name' class='form-control' /></td>
+
+                    <td id="leftrow">Name</td>
+                    <td>
+                        <input type='text' name='name' placeholder="Enter name" class='form-control' />
+                    </td>
                 </tr>
                 <tr>
                     <td>Malay Name</td>
-                    <td><input type='text' name='nameMalay' class='form-control' /></td>
+                    <td>
+                        <input type='text' name='nameMalay' placeholder="Enter malay name " class='form-control' />
+                    </td>
                 </tr>
                 <tr>
                 <tr>
                     <td>Description</td>
-                    <td><input type='text' name='description' class='form-control' /></td>
+                    <td><textarea name='description' id="uname" placeholder="Enter description" class='form-control' /></textarea></td>
                 </tr>
                 <tr>
                     <td>Price</td>
-                    <td><input type='text' name='price' class='form-control' /></td>
-                </tr>
-
-                <td>Promotion Price</td>
-                <td><input type='text' name='promotion_price' class='form-control' /></td>
-                </tr>
-                </tr>
-
-                <td>Manufacture Date</td>
-                <td><input type='date' name='manufacture_date' class='form-control' /></td>
-                </tr>
-                </tr>
-
-                <td>Expired Date</td>
-                <td><input type='date' name='expired_date' class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td></td>
                     <td>
-                        <input type='submit' value='Save' class='btn btn-primary' />
-                        <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                        <div class="input-group">
+                            <span class="input-group-text">RM</span>
+                            <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
+
                     </td>
                 </tr>
-            </table>
-        </form>
+    </div>
+
+    <td>Promotion Price</td>
+    <td>
+        <div class="input-group">
+            <span class="input-group-text">RM</span>
+            <input type='text' name='promotion_price' id="uname" placeholder="xx.xx" class='form-control' />
+    </td>
+    </tr>
+    </tr>
+    </div>
+
+    <td>Manufacture Date</td>
+    <td><input type='date' name='manufacture_date' class='form-control' /></td>
+    </tr>
+    </tr>
+
+    <td>Expired Date</td>
+    <td><input type='date' name='expired_date' class='form-control' /></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input type='submit' value='Save' class='btn btn-primary' />
+            <a href='index.php' class='btn btn-danger'>Back to read products</a>
+        </td>
+    </tr>
+    </table>
+    </form>
 
     </div>
     <!-- end .container -->
