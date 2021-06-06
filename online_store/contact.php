@@ -95,10 +95,6 @@
             </div>
     </nav>
     </div>
-
-
-
-
     <div class="container">
         <h3>Contact Form</h3><br>
         <form action="/action_page.php">
