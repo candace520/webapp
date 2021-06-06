@@ -71,7 +71,6 @@
             </div>
     </nav>
     </div>
-    <!-- container -->
     <div class="container">
         <div class="page-header">
             <h1>Create Customer</h1>
