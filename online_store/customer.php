@@ -84,7 +84,7 @@
             try {
                 // insert query
                 $query = "INSERT INTO customer SET name=:name,password=:password,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
-                accountstatus=:accountstatus,created=:created";
+                accountstatus=:accountstatus";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
@@ -98,16 +98,13 @@
                 $accountstatus = $_POST['accountstatus'];
                 // bind the parameters
                 $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':password', $password);
+                 $stmt->bindParam(':password', $password);
                 $stmt->bindParam(':firstname', $firstname);
                 $stmt->bindParam(':lastname', $lastname);
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':dateofbirth', $dateofbirth);
                 $stmt->bindParam(':registrationdatetime', $registrationdatetime);
                 $stmt->bindParam(':accountstatus', $accountstatus);
-                // specify when this record was inserted to the database
-                $created = date('Y-m-d H:i:s');
-                $stmt->bindParam(':created', $created);
                 // Execute the query
                 if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was saved.</div>";
