@@ -64,43 +64,74 @@
         <!-- PHP insert code will be here -->
         <?php
         if ($_POST) {
-            // include database connection
-            include 'config/database.php';
-            try {
-                // insert query
-                $query = "INSERT INTO products SET name=:name,nameMalay=:nameMalay,description=:description, price=:price, promotion_price=:promotion_price,manufacture_date=:manufacture_date,expired_date=:expired_date,
+
+            if (
+                $_POST['name'] != "" &&  $_POST['nameMalay'] != ""
+                && $_POST['description'] != "" && $_POST['price'] != ""
+                && $_POST['promotion_price'] != "" && $_POST['manufacture_date'] != ""
+                && $_POST['expired_date'] != ""
+            ) {
+                if (is_numeric($_POST['price']) && is_numeric($_POST['promotion_price'])) {
+                    if ($_POST['price'] > 0 && $_POST['promotion_price'] > 0) {
+                        if ($_POST['price'] < 1000 && $_POST['promotion_price'] < 1000) {
+                            if ($_POST['price'] > $_POST['promotion_price']) {
+                                if ($_POST['manufacture_date'] < $_POST['expired_date']) {
+                                    $name = $_POST['name'];
+                                    $nameMalay = $_POST['nameMalay'];
+                                    $description = $_POST['description'];
+                                    $price = $_POST['price'];
+                                    $promotion_price = $_POST['promotion_price'];
+                                    $manufacture_date = $_POST['manufacture_date'];
+                                    $expired_date = $_POST['expired_date'];
+                                    // include database connection
+                                    include 'config/database.php';
+                                    try {
+                                        // insert query
+                                        $query = "INSERT INTO products SET name=:name,nameMalay=:nameMalay,description=:description, price=:price, promotion_price=:promotion_price,manufacture_date=:manufacture_date,expired_date=:expired_date,
         created=:created";
-                // prepare query for execution
-                $stmt = $con->prepare($query);
-                // posted values
-                $name = $_POST['name'];
-                $nameMalay = $_POST['nameMalay'];
-                $description = $_POST['description'];
-                $price = $_POST['price'];
-                $promotion_price = $_POST['promotion_price'];
-                $manufacture_date = $_POST['manufacture_date'];
-                $expired_date = $_POST['expired_date'];
-                // bind the parameters
-                $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':nameMalay', $nameMalay);
-                $stmt->bindParam(':description', $description);
-                $stmt->bindParam(':price', $price);
-                $stmt->bindParam(':promotion_price', $promotion_price);
-                $stmt->bindParam(':manufacture_date', $manufacture_date);
-                $stmt->bindParam(':expired_date', $expired_date);
-                // specify when this record was inserted to the database
-                $created = date('Y-m-d H:i:s');
-                $stmt->bindParam(':created', $created);
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was saved.</div>";
+                                        // prepare query for execution
+                                        $stmt = $con->prepare($query);
+                                        // posted values
+
+                                        // bind the parameters
+                                        $stmt->bindParam(':name', $name);
+                                        $stmt->bindParam(':nameMalay', $nameMalay);
+                                        $stmt->bindParam(':description', $description);
+                                        $stmt->bindParam(':price', $price);
+                                        $stmt->bindParam(':promotion_price', $promotion_price);
+                                        $stmt->bindParam(':manufacture_date', $manufacture_date);
+                                        $stmt->bindParam(':expired_date', $expired_date);
+                                        // specify when this record was inserted to the database
+                                        $created = date('Y-m-d H:i:s');
+                                        $stmt->bindParam(':created', $created);
+                                        // Execute the query
+                                        if ($stmt->execute()) {
+                                            echo "<div class='alert alert-success'>Record was saved.</div>";
+                                        } else {
+                                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                                        }
+                                    }
+                                    // show error
+                                    catch (PDOException $exception) {
+                                        die('ERROR: ' . $exception->getMessage());
+                                    }
+                                } else {
+                                    echo "<div class='alert alert-danger'>Please make sure the expired date is later than the manufacture date.</div>";
+                                }
+                            } else {
+                                echo "<div class='alert alert-danger'>Please make sure the promotion price must be not bigger than normal price.</div>";
+                            }
+                        } else {
+                            echo "<div class='alert alert-danger'>Please make sure the price must be not bigger than RM 1000.</div>";
+                        }
+                    } else {
+                        echo "<div class='alert alert-danger'>Please make sure the price must be not a negative value.</div>";
+                    }
                 } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                    echo "<div class='alert alert-danger'>Please make sure the price is a number.</div>";
                 }
-            }
-            // show error
-            catch (PDOException $exception) {
-                die('ERROR: ' . $exception->getMessage());
+            } else {
+                echo "<div class='alert alert-danger'>Please make sure all fields are not empty</div>";
             }
         }
         ?>
@@ -135,6 +166,7 @@
                             <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
 
                     </td>
+
                 </tr>
     </div>
 
