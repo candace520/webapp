@@ -79,42 +79,79 @@
         <!-- PHP insert code will be here -->
         <?php
         if ($_POST) {
-            // include database connection
-            include 'config/database.php';
-            try {
-                // insert query
-                $query = "INSERT INTO customer SET name=:name,password=:password,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
+            if (
+                $_POST['name'] != "" &&  $_POST['password'] != ""
+                && $_POST['firstname'] != "" && $_POST['lastname'] != ""
+                && $_POST['gender'] != "" && $_POST['dateofbirth'] != ""
+                && $_POST['registrationdatetime'] != "" && $_POST['accountstatus'] != ""
+                && $_POST['confPass'] != ""
+            ) {
+                $namelength = strlen($_POST['name']);
+                if ($namelength >= 6) {
+                    if ($_POST['password'] == $_POST['confPass']) {
+                        if (preg_match('/[A-Za-z]/', $_POST['password']) && preg_match('/[0-9]/', $_POST['password'])) {
+                            if (strlen($_POST["password"]) >= 8) {
+                                $date1 = "Y";
+                                $diff = abs(strtotime($date1) - strtotime($_POST['dateofbirth']));
+                                $years = floor($diff / (365 * 60 * 60 * 24));
+                                if ($years >= 18) {
+
+                                    // include database connection
+                                    include 'config/database.php';
+                                    try {
+                                        // insert query
+                                        $query = "INSERT INTO customer SET name=:name,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
                 accountstatus=:accountstatus";
-                // prepare query for execution
-                $stmt = $con->prepare($query);
-                // posted values
-                $name = $_POST['name'];
-                $password = $_POST['password'];
-                $firstname = $_POST['firstname'];
-                $lastname = $_POST['lastname'];
-                $gender = $_POST['gender'];
-                $dateofbirth = $_POST['dateofbirth'];
-                $registrationdatetime = $_POST['registrationdatetime'];
-                $accountstatus = $_POST['accountstatus'];
-                // bind the parameters
-                $stmt->bindParam(':name', $name);
-                 $stmt->bindParam(':password', $password);
-                $stmt->bindParam(':firstname', $firstname);
-                $stmt->bindParam(':lastname', $lastname);
-                $stmt->bindParam(':gender', $gender);
-                $stmt->bindParam(':dateofbirth', $dateofbirth);
-                $stmt->bindParam(':registrationdatetime', $registrationdatetime);
-                $stmt->bindParam(':accountstatus', $accountstatus);
-                // Execute the query
-                if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was saved.</div>";
+                                        // prepare query for execution
+                                        $stmt = $con->prepare($query);
+                                        // posted values
+                                        $name = $_POST['name'];
+                                        $password = $_POST['password'];
+                                        $confPass = $_POST['confPass'];
+                                        $firstname = $_POST['firstname'];
+                                        $lastname = $_POST['lastname'];
+                                        $gender = $_POST['gender'];
+                                        $dateofbirth = $_POST['dateofbirth'];
+                                        $registrationdatetime = $_POST['registrationdatetime'];
+                                        $accountstatus = $_POST['accountstatus'];
+                                        // bind the parameters
+                                        $stmt->bindParam(':name', $name);
+                                        $stmt->bindParam(':password', $password);
+                                        $stmt->bindParam(':confPass', $confPass);
+                                        $stmt->bindParam(':firstname', $firstname);
+                                        $stmt->bindParam(':lastname', $lastname);
+                                        $stmt->bindParam(':gender', $gender);
+                                        $stmt->bindParam(':dateofbirth', $dateofbirth);
+                                        $stmt->bindParam(':registrationdatetime', $registrationdatetime);
+                                        $stmt->bindParam(':accountstatus', $accountstatus);
+                                        // Execute the query
+                                        if ($stmt->execute()) {
+                                            echo "<div class='alert alert-success'>Record was saved.</div>";
+                                        } else {
+                                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                                        }
+                                    }
+                                    // show error
+                                    catch (PDOException $exception) {
+                                        die('ERROR: ' . $exception->getMessage());
+                                    }
+                                } else {
+                                    echo "<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>";
+                                }
+                            } else {
+                                echo "<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>";
+                            }
+                        } else {
+                            echo "<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets</div>";
+                        }
+                    } else {
+                        echo "<div class='alert alert-danger'>Please make sure your password same as confirm password</div>";
+                    }
                 } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                    echo "<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters</div>";
                 }
-            }
-            // show error
-            catch (PDOException $exception) {
-                die('ERROR: ' . $exception->getMessage());
+            } else {
+                echo "<div class='alert alert-danger'>Please make sure all fields are not empty</div>";
             }
         }
         ?>
@@ -141,6 +178,17 @@
                 <i class="fa fa-key icon"></i>
                 <div class="input-group">
                     <input type='password' name='password' placeholder="Enter password " class='form-control' />
+        </td>
+    </tr>
+    </div>
+    </div>
+    <tr>
+        <td>Confirm Password</td>
+        <td>
+            <div class="input-container">
+                <i class="fa fa-key icon"></i>
+                <div class="input-group">
+                    <input type='password' name='confPass' placeholder="Enter confirm password " class='form-control' />
         </td>
     </tr>
     </div>

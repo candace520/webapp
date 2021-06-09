@@ -60,7 +60,6 @@
         <div class="page-header">
             <h1>Create Product</h1>
         </div>
-
         <!-- PHP insert code will be here -->
         <?php
         if ($_POST) {
@@ -128,7 +127,7 @@
                         echo "<div class='alert alert-danger'>Please make sure the price must be not a negative value.</div>";
                     }
                 } else {
-                    echo "<div class='alert alert-danger'>Please make sure the price is a number.</div>";
+                    echo " <div class='alert alert-danger'>Please make sure the price is a number.</div>";
                 }
             } else {
                 echo "<div class='alert alert-danger'>Please make sure all fields are not empty</div>";
@@ -158,23 +157,24 @@
                     <td>Description</td>
                     <td><textarea name='description' id="uname" placeholder="Enter description" class='form-control' /></textarea></td>
                 </tr>
-                <tr>
-                    <td>Price</td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-text">RM</span>
-                            <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
-
-                    </td>
-
-                </tr>
+                <td> Price</td>
+    <td>
+        <div class="input-group">
+            <span class="input-group-text">RM</span>
+            <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
+           
+    </td>
+    </tr>
+    </tr>
     </div>
+
 
     <td>Promotion Price</td>
     <td>
         <div class="input-group">
             <span class="input-group-text">RM</span>
             <input type='text' name='promotion_price' id="uname" placeholder="xx.xx" class='form-control' />
+            
     </td>
     </tr>
     </tr>
