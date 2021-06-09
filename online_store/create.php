@@ -158,14 +158,14 @@
                     <td><textarea name='description' id="uname" placeholder="Enter description" class='form-control' /></textarea></td>
                 </tr>
                 <td> Price</td>
-    <td>
-        <div class="input-group">
-            <span class="input-group-text">RM</span>
-            <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
-           
-    </td>
-    </tr>
-    </tr>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-text">RM</span>
+                        <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
+
+                </td>
+                </tr>
+                </tr>
     </div>
 
 
@@ -174,7 +174,7 @@
         <div class="input-group">
             <span class="input-group-text">RM</span>
             <input type='text' name='promotion_price' id="uname" placeholder="xx.xx" class='form-control' />
-            
+
     </td>
     </tr>
     </tr>
