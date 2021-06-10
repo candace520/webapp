@@ -162,7 +162,6 @@
                     <div class="input-group">
                         <span class="input-group-text">RM</span>
                         <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
-
                 </td>
                 </tr>
                 </tr>
