@@ -61,76 +61,75 @@
         <?php
         if ($_POST) {
             include 'config/database.php';
-                try {
-            if (
-                empty($_POST['name']) ||   empty($_POST['password'])
-                ||  empty($_POST['firstname'])  ||  empty($_POST['lastname']) 
-                ||  empty($_POST['gender'])  || empty($_POST['dateofbirth']) 
-                ||  empty($_POST['registrationdatetime']) ||  empty($_POST['accountstatus'] )
-                ||  empty($_POST['confPass'])
-            ) {
-                throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty</div>");
-            }
+            try {
+                if (
+                    empty($_POST['name']) ||   empty($_POST['password'])
+                    ||  empty($_POST['firstname'])  ||  empty($_POST['lastname'])
+                    ||  empty($_POST['gender'])  || empty($_POST['dateofbirth'])
+                    ||  empty($_POST['registrationdatetime']) ||  empty($_POST['accountstatus'])
+                    ||  empty($_POST['confPass'])
+                ) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty</div>");
+                }
                 $namelength = strlen($_POST['name']);
                 if ($namelength <= 6) {
                     throw new Exception("<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters</div>");
                 }
-                    if ($_POST['password'] != $_POST['confPass']) {
-                        throw new Exception("<div class='alert alert-danger'>Please make sure your password same as confirm password</div>");
-                    }
-                        if (!preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
-                            throw new Exception( "<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets</div>");
-                        }
-                            if (strlen($_POST["password"]) < 8) {
-                                throw new Exception("<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>");
-                            }
-                                $date1 = "Y";
-                                $diff = abs(strtotime($date1) - strtotime($_POST['dateofbirth']));
-                                $years = floor($diff / (365 * 60 * 60 * 24));
-                                if ($years < 18) {
-                                    throw new Exception( "<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
-                                }
-                                    // include database connection
-                                    
-                                        // insert query
-                                        $query = "INSERT INTO customer SET name=:name,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
+                if ($_POST['password'] != $_POST['confPass']) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure your password same as confirm password</div>");
+                }
+                if (!preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets</div>");
+                }
+                if (strlen($_POST["password"]) < 8) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>");
+                }
+                $date1 = "Y";
+                $diff = abs(strtotime($date1) - strtotime($_POST['dateofbirth']));
+                $years = floor($diff / (365 * 60 * 60 * 24));
+                if ($years < 18) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
+                }
+                // include database connection
+
+                // insert query
+                $query = "INSERT INTO customer SET name=:name,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
                 accountstatus=:accountstatus";
-                                        // prepare query for execution
-                                        $stmt = $con->prepare($query);
-                                        // posted values
-                                        $name = $_POST['name'];
-                                        $password = $_POST['password'];
-                                        $confPass = $_POST['confPass'];
-                                        $firstname = $_POST['firstname'];
-                                        $lastname = $_POST['lastname'];
-                                        $gender = $_POST['gender'];
-                                        $dateofbirth = $_POST['dateofbirth'];
-                                        $registrationdatetime = $_POST['registrationdatetime'];
-                                        $accountstatus = $_POST['accountstatus'];
-                                        // bind the parameters
-                                        $stmt->bindParam(':name', $name);
-                                        $stmt->bindParam(':password', $password);
-                                        $stmt->bindParam(':confPass', $confPass);
-                                        $stmt->bindParam(':firstname', $firstname);
-                                        $stmt->bindParam(':lastname', $lastname);
-                                        $stmt->bindParam(':gender', $gender);
-                                        $stmt->bindParam(':dateofbirth', $dateofbirth);
-                                        $stmt->bindParam(':registrationdatetime', $registrationdatetime);
-                                        $stmt->bindParam(':accountstatus', $accountstatus);
-                                        // Execute the query
-                                        if ($stmt->execute()) {
-                                            echo "<div class='alert alert-success'>Record was saved.</div>";
-                                        } else {
-                                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
-                                        }
-                                    }
-                                    // show error
-                                    catch (PDOException $exception) {
-                                        echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
-                                    } catch (Exception $exception) {
-                                        echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
-                                    }
-                                
+                // prepare query for execution
+                $stmt = $con->prepare($query);
+                // posted values
+                $name = $_POST['name'];
+                $password = $_POST['password'];
+                $confPass = $_POST['confPass'];
+                $firstname = $_POST['firstname'];
+                $lastname = $_POST['lastname'];
+                $gender = $_POST['gender'];
+                $dateofbirth = $_POST['dateofbirth'];
+                $registrationdatetime = $_POST['registrationdatetime'];
+                $accountstatus = $_POST['accountstatus'];
+                // bind the parameters
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':password', $password);
+                $stmt->bindParam(':confPass', $confPass);
+                $stmt->bindParam(':firstname', $firstname);
+                $stmt->bindParam(':lastname', $lastname);
+                $stmt->bindParam(':gender', $gender);
+                $stmt->bindParam(':dateofbirth', $dateofbirth);
+                $stmt->bindParam(':registrationdatetime', $registrationdatetime);
+                $stmt->bindParam(':accountstatus', $accountstatus);
+                // Execute the query
+                if ($stmt->execute()) {
+                    echo "<div class='alert alert-success'>Record was saved.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                }
+            }
+            // show error
+            catch (PDOException $exception) {
+                echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+            } catch (Exception $exception) {
+                echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+            }
         }
         ?>
         <!-- html form here where the product information will be entered -->
