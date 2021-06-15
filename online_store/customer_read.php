@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <title>PDO - Create a Record - PHP CRUD Tutorial</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
