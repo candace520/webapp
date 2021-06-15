@@ -48,29 +48,10 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="nav">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item ">
-                        <a class="nav-link" href="index.php">Home </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="create.php">Create Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="customer.php">Create Customer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact Us</a>
-                    </li>
-                </ul>
-            </div>
-    </nav>
-    </div>
+    <?php
+    include 'menu.php';
+    ?>
+
     <div class="container">
         <div class="page-header">
             <h1>Create Customer</h1>
@@ -79,26 +60,38 @@
         <!-- PHP insert code will be here -->
         <?php
         if ($_POST) {
+            include 'config/database.php';
+                try {
             if (
-                $_POST['name'] != "" &&  $_POST['password'] != ""
-                && $_POST['firstname'] != "" && $_POST['lastname'] != ""
-                && $_POST['gender'] != "" && $_POST['dateofbirth'] != ""
-                && $_POST['registrationdatetime'] != "" && $_POST['accountstatus'] != ""
-                && $_POST['confPass'] != ""
+                empty($_POST['name']) ||   empty($_POST['password'])
+                ||  empty($_POST['firstname'])  ||  empty($_POST['lastname']) 
+                ||  empty($_POST['gender'])  || empty($_POST['dateofbirth']) 
+                ||  empty($_POST['registrationdatetime']) ||  empty($_POST['accountstatus'] )
+                ||  empty($_POST['confPass'])
             ) {
+                throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty</div>");
+            }
                 $namelength = strlen($_POST['name']);
-                if ($namelength >= 6) {
-                    if ($_POST['password'] == $_POST['confPass']) {
-                        if (preg_match('/[A-Za-z]/', $_POST['password']) && preg_match('/[0-9]/', $_POST['password'])) {
-                            if (strlen($_POST["password"]) >= 8) {
+                if ($namelength <= 6) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters</div>");
+                }
+                    if ($_POST['password'] != $_POST['confPass']) {
+                        throw new Exception("<div class='alert alert-danger'>Please make sure your password same as confirm password</div>");
+                    }
+                        if (!preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
+                            throw new Exception( "<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets</div>");
+                        }
+                            if (strlen($_POST["password"]) < 8) {
+                                throw new Exception("<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>");
+                            }
                                 $date1 = "Y";
                                 $diff = abs(strtotime($date1) - strtotime($_POST['dateofbirth']));
                                 $years = floor($diff / (365 * 60 * 60 * 24));
-                                if ($years >= 18) {
-
+                                if ($years < 18) {
+                                    throw new Exception( "<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
+                                }
                                     // include database connection
-                                    include 'config/database.php';
-                                    try {
+                                    
                                         // insert query
                                         $query = "INSERT INTO customer SET name=:name,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
                 accountstatus=:accountstatus";
@@ -133,26 +126,11 @@
                                     }
                                     // show error
                                     catch (PDOException $exception) {
-                                        die('ERROR: ' . $exception->getMessage());
+                                        echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                                    } catch (Exception $exception) {
+                                        echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
                                     }
-                                } else {
-                                    echo "<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>";
-                                }
-                            } else {
-                                echo "<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>";
-                            }
-                        } else {
-                            echo "<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets</div>";
-                        }
-                    } else {
-                        echo "<div class='alert alert-danger'>Please make sure your password same as confirm password</div>";
-                    }
-                } else {
-                    echo "<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters</div>";
-                }
-            } else {
-                echo "<div class='alert alert-danger'>Please make sure all fields are not empty</div>";
-            }
+                                
         }
         ?>
         <!-- html form here where the product information will be entered -->
@@ -259,8 +237,12 @@
     </tr>
     </table>
     </form>
+    <?php
+    include 'footer.php';
+    ?>
     </div>
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
+
 </html>

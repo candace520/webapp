@@ -32,29 +32,10 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="nav">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item ">
-                        <a class="nav-link" href="index.php">Home </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="create.php">Create Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="customer.php">Create Customer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact Us</a>
-                    </li>
-                </ul>
-            </div>
-    </nav>
-    </div>
+    <?php
+    include 'menu.php';
+    ?>
+
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -63,74 +44,74 @@
         <!-- PHP insert code will be here -->
         <?php
         if ($_POST) {
-
-            if (
-                $_POST['name'] != "" &&  $_POST['nameMalay'] != ""
-                && $_POST['description'] != "" && $_POST['price'] != ""
-                && $_POST['promotion_price'] != "" && $_POST['manufacture_date'] != ""
-                && $_POST['expired_date'] != ""
-            ) {
-                if (is_numeric($_POST['price']) && is_numeric($_POST['promotion_price'])) {
-                    if ($_POST['price'] > 0 && $_POST['promotion_price'] > 0) {
-                        if ($_POST['price'] < 1000 && $_POST['promotion_price'] < 1000) {
-                            if ($_POST['price'] > $_POST['promotion_price']) {
-                                if ($_POST['manufacture_date'] < $_POST['expired_date']) {
-                                    $name = $_POST['name'];
-                                    $nameMalay = $_POST['nameMalay'];
-                                    $description = $_POST['description'];
-                                    $price = $_POST['price'];
-                                    $promotion_price = $_POST['promotion_price'];
-                                    $manufacture_date = $_POST['manufacture_date'];
-                                    $expired_date = $_POST['expired_date'];
-                                    // include database connection
-                                    include 'config/database.php';
-                                    try {
-                                        // insert query
-                                        $query = "INSERT INTO products SET name=:name,nameMalay=:nameMalay,description=:description, price=:price, promotion_price=:promotion_price,manufacture_date=:manufacture_date,expired_date=:expired_date,
-        created=:created";
-                                        // prepare query for execution
-                                        $stmt = $con->prepare($query);
-                                        // posted values
-
-                                        // bind the parameters
-                                        $stmt->bindParam(':name', $name);
-                                        $stmt->bindParam(':nameMalay', $nameMalay);
-                                        $stmt->bindParam(':description', $description);
-                                        $stmt->bindParam(':price', $price);
-                                        $stmt->bindParam(':promotion_price', $promotion_price);
-                                        $stmt->bindParam(':manufacture_date', $manufacture_date);
-                                        $stmt->bindParam(':expired_date', $expired_date);
-                                        // specify when this record was inserted to the database
-                                        $created = date('Y-m-d H:i:s');
-                                        $stmt->bindParam(':created', $created);
-                                        // Execute the query
-                                        if ($stmt->execute()) {
-                                            echo "<div class='alert alert-success'>Record was saved.</div>";
-                                        } else {
-                                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
-                                        }
-                                    }
-                                    // show error
-                                    catch (PDOException $exception) {
-                                        die('ERROR: ' . $exception->getMessage());
-                                    }
-                                } else {
-                                    echo "<div class='alert alert-danger'>Please make sure the expired date is later than the manufacture date.</div>";
-                                }
-                            } else {
-                                echo "<div class='alert alert-danger'>Please make sure the promotion price must be not bigger than normal price.</div>";
-                            }
-                        } else {
-                            echo "<div class='alert alert-danger'>Please make sure the price must be not bigger than RM 1000.</div>";
-                        }
-                    } else {
-                        echo "<div class='alert alert-danger'>Please make sure the price must be not a negative value.</div>";
-                    }
-                } else {
-                    echo " <div class='alert alert-danger'>Please make sure the price is a number.</div>";
+            include 'config/database.php';
+            try {
+                if (
+                    empty($_POST['name'])  ||  empty($_POST['nameMalay'])
+                    || empty($_POST['description']) || empty($_POST['price'])
+                    || empty($_POST['promotion_price'])  || empty($_POST['manufacture_date'])
+                    || empty($_POST['expired_date'])
+                ) {
+                    throw new Exception("Please make sure all fields are not empty");
                 }
-            } else {
-                echo "<div class='alert alert-danger'>Please make sure all fields are not empty</div>";
+                if (!is_numeric($_POST['price']) || !is_numeric($_POST['promotion_price'])) {
+                    throw new Exception(" <div class='alert alert-danger'>Please make sure the price is a number.</div>");
+                }
+                if ($_POST['price'] < 0 && $_POST['promotion_price'] < 0) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure the price must be not a negative value.</div>");
+                }
+
+                if ($_POST['price'] > 1000 && $_POST['promotion_price'] > 1000) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure the price must be not bigger than RM 1000.</div>");
+                }
+                if ($_POST['price'] < $_POST['promotion_price']) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure the promotion price must be not bigger than normal price.</div>");
+                }
+
+                if ($_POST['manufacture_date'] > $_POST['expired_date']) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure the expired date is later than the manufacture date.</div>");
+                }
+
+                $name = $_POST['name'];
+                $nameMalay = $_POST['nameMalay'];
+                $description = $_POST['description'];
+                $price = $_POST['price'];
+                $promotion_price = $_POST['promotion_price'];
+                $manufacture_date = $_POST['manufacture_date'];
+                $expired_date = $_POST['expired_date'];
+                // include database connection
+
+                // insert query
+                $query = "INSERT INTO products SET name=:name,nameMalay=:nameMalay,description=:description, price=:price, promotion_price=:promotion_price,manufacture_date=:manufacture_date,expired_date=:expired_date,
+        created=:created";
+                // prepare query for execution
+                $stmt = $con->prepare($query);
+                // posted values
+
+                // bind the parameters
+                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':nameMalay', $nameMalay);
+                $stmt->bindParam(':description', $description);
+                $stmt->bindParam(':price', $price);
+                $stmt->bindParam(':promotion_price', $promotion_price);
+                $stmt->bindParam(':manufacture_date', $manufacture_date);
+                $stmt->bindParam(':expired_date', $expired_date);
+                // specify when this record was inserted to the database
+                $created = date('Y-m-d H:i:s');
+                $stmt->bindParam(':created', $created);
+                // Execute the query
+                if ($stmt->execute()) {
+                    echo "<div class='alert alert-success'>Record was saved.</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                }
+            }
+            // show error
+            //for database 'PDO'
+            catch (PDOException $exception) {
+                echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+            } catch (Exception $exception) {
+                echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
             }
         }
         ?>
@@ -196,8 +177,11 @@
     </tr>
     </table>
     </form>
+    <?php
+    include 'footer.php';
+    ?>
 
-    </div>
+
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>

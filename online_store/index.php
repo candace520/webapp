@@ -32,29 +32,9 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="nav">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="index.php">Home </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="create.php">Create Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="customer.php">Create Customer</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="contact.php">Contact Us</a>
-                    </li>
-                </ul>
-            </div>
-    </nav>
-    </div>
+    <?php
+    include 'menu.php';
+    ?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -79,7 +59,7 @@
             <h1>Home Page</h1>
             <p>Resize this responsive page to see the effect!</p>
         </div>
-        
+
         <div class="container" style="margin-top:30px">
             <div class="row">
                 <div class="col-sm-4">
@@ -121,12 +101,13 @@
             </div>
         </div>
 
-        <div class="jumbotron text-center" style="margin-bottom:0">
-            <p>Footer</p>
-        </div>
+        <?php
+    include 'footer.php';
+    ?>
 
     </body>
 
     </html>
 </body>
+
 </html>
