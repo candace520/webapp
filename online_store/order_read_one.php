@@ -59,8 +59,7 @@
             die('ERROR: ' . $exception->getMessage());
         }
         ?>
-
-
+        
         <!-- HTML read one record table will be here -->
         <!--we have our html table here where the record will be displayed-->
         <table class='table table-hover table-responsive table-bordered'>
