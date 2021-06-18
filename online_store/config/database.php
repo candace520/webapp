@@ -7,7 +7,6 @@ $password = "07240206xuen";
   
 try {
     $con = new PDO("mysql:host={$host};dbname={$db_name}", $username, $password);
-    
 }  
 // show error
 catch(PDOException $exception){

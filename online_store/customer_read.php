@@ -44,7 +44,7 @@
             echo "<tr>";
             echo "<th>ID</th>";
             echo "<th>User Name</th>";
-            echo "<th>Gender</th>";
+            echo "<th>Registration Date Time</th>";
             echo "<th>Date of birth</th>";
             echo "<th>Action</th>";
             echo "</tr>";
@@ -59,7 +59,7 @@
                 echo "<tr>";
                 echo "<td>{$id}</td>";
                 echo "<td>{$name}</td>";
-                echo "<td>{$gender}</td>";
+                echo "<td>{$registrationdatetime}</td>";
                 echo "<td>{$dateofbirth}</td>";
                 echo "<td>";
                 // read one record
