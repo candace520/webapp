@@ -1,7 +1,6 @@
 <?php
 session_start();
 if (isset($_SESSION['cus_username'])) {
-   
 }
 ?>
 <!DOCTYPE HTML>
@@ -46,7 +45,7 @@ if (isset($_SESSION['cus_username'])) {
                 <td>Order ID</td>
                 <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
             </tr>
-           
+
             <tr>
                 <td>Customer Username</td>
                 <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
