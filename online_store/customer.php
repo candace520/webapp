@@ -1,7 +1,6 @@
 <?php
 session_start();
 if (isset($_SESSION['cus_username'])) {
-   
 }
 ?>
 <!DOCTYPE HTML>
@@ -196,7 +195,7 @@ if (isset($_SESSION['cus_username'])) {
     <tr>
         <td>Gender</td>
         <td>
-        <input type="radio"  name="gender" value="male">
+            <input type="radio" name="gender" value="male">
               <label for="html">Male</label><br>
               <input type="radio" name="gender" value="female">
               <label for="css">Female</label>
@@ -219,7 +218,7 @@ if (isset($_SESSION['cus_username'])) {
 
     <tr>
         <td>Accounts Status</td>
-        <td><input type="radio"  name="accountstatus" value="active">
+        <td><input type="radio" name="accountstatus" value="active">
               <label for="html">Active</label><br>
               <input type="radio" name="accountstatus" value="inactive">
               <label for="css">Inactive</label>
