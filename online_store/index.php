@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['cus_username'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -52,14 +58,12 @@
             }
         </style>
     </head>
-
+    
     <body>
-
-        <div class="jumbotron text-center" style="margin-bottom:0">
-            <h1>Home Page</h1>
-            <p>Resize this responsive page to see the effect!</p>
-        </div>
-
+    <?php
+    echo "<h1 class='text-center text-dark p-5'> Hi, $_SESSION[name].
+     <br>Welcome to Candace's Online Store.</h1>"; ?>
+                
         <div class="container" style="margin-top:30px">
             <div class="row">
                 <div class="col-sm-4">
@@ -104,7 +108,6 @@
         <?php
     include 'footer.php';
     ?>
-
     </body>
 
     </html>
