@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['cus_username'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -63,7 +69,7 @@
             include 'config/database.php';
             try {
                 if (
-                    empty($_POST['name']) ||   empty($_POST['password'])
+                    empty($_POST['cus_username']) ||   empty($_POST['password'])
                     ||  empty($_POST['firstname'])  ||  empty($_POST['lastname'])
                     ||  empty($_POST['gender'])  || empty($_POST['dateofbirth'])
                     ||  empty($_POST['registrationdatetime']) ||  empty($_POST['accountstatus'])
@@ -71,7 +77,7 @@
                 ) {
                     throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty</div>");
                 }
-                $namelength = strlen($_POST['name']);
+                $namelength = strlen($_POST['cus_username']);
                 if ($namelength <= 6) {
                     throw new Exception("<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters</div>");
                 }
@@ -93,12 +99,12 @@
                 // include database connection
 
                 // insert query
-                $query = "INSERT INTO customer SET name=:name,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
+                $query = "INSERT INTO customer SET cus_username=:cus_username,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
                 accountstatus=:accountstatus";
                 // prepare query for execution
                 $stmt = $con->prepare($query);
                 // posted values
-                $name = $_POST['name'];
+                $cus_username = $_POST['cus_username'];
                 $password = $_POST['password'];
                 $confPass = $_POST['confPass'];
                 $firstname = $_POST['firstname'];
@@ -108,7 +114,7 @@
                 $registrationdatetime = $_POST['registrationdatetime'];
                 $accountstatus = $_POST['accountstatus'];
                 // bind the parameters
-                $stmt->bindParam(':name', $name);
+                $stmt->bindParam(':cus_username', $cus_username);
                 $stmt->bindParam(':password', $password);
                 $stmt->bindParam(':confPass', $confPass);
                 $stmt->bindParam(':firstname', $firstname);
@@ -142,7 +148,7 @@
                         <div class="input-container">
                             <i class="fa fa-user icon"></i>
                             <div class="input-group">
-                                <input type='text' name='name' placeholder="Enter user name " class='form-control' />
+                                <input type='text' name='cus_username' placeholder="Enter user name " class='form-control' />
                     </td>
                 </tr>
     </div>
@@ -190,14 +196,10 @@
     <tr>
         <td>Gender</td>
         <td>
-            <label class="container">
-                <input type="radio" checked="checked" name="gender">
-                <span class="checkmark"></span>Male
-            </label>
-            <label class="container">
-                <input type="radio" name="gender">
-                <span class="checkmark"></span>Female
-            </label>
+        <input type="radio"  name="gender" value="male">
+              <label for="html">Male</label><br>
+              <input type="radio" name="gender" value="female">
+              <label for="css">Female</label>
         </td>
     </tr>
 
@@ -217,14 +219,10 @@
 
     <tr>
         <td>Accounts Status</td>
-        <td><label class="container">
-                <input type="radio" checked="checked" name="accountstatus">
-                <span class="checkmark"></span>Active
-            </label>
-            <label class="container">
-                <input type="radio" name="accountstatus">
-                <span class="checkmark"></span>Inactive
-            </label>
+        <td><input type="radio"  name="accountstatus" value="active">
+              <label for="html">Active</label><br>
+              <input type="radio" name="accountstatus" value="inactive">
+              <label for="css">Inactive</label>
         </td>
     </tr>
     <tr>

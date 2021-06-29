@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['cus_username'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 

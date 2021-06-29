@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['name'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -46,200 +52,128 @@
         if ($_POST) {
             include 'config/database.php';
             try {
-                if (
-                    empty($_POST['orderdatetime']) || empty($_POST['names'])
-                    || empty($_POST['pro_names']) || empty($_POST['quantity'])
-                ) {
-                    throw new Exception("Please make sure all fields are not empty");
+                if (empty($_POST['cus_username'])) {
+                    throw new Exception("Make sure all fields are not empty");
                 }
-
-                $names = $_POST['names'];
-                $orderdatetime = $_POST['orderdatetime'];
-                $pro_names = $_POST['pro_names'];
-                $quantity = $_POST['quantity'];
-                // include database connection
-
-                // insert query
-                $query = "INSERT INTO orders SET orderdatetime=:orderdatetime,names=:names,pro_names=:pro_names,
-                quantity=:quantity";
-                // prepare query for execution
+                $con->beginTransaction();
+                $query = "INSERT INTO orders SET cus_username=:cus_username";
                 $stmt = $con->prepare($query);
-                // posted values
-
-                // bind the parameters
-                $stmt->bindParam(':names', $names);
-                $stmt->bindParam(':orderdatetime', $orderdatetime);
-                $stmt->bindParam(':pro_names', $pro_names);
-                $stmt->bindParam(':quantity', $quantity);
-                // specify when this record was inserted to the database
-                // Execute the query
+                $cus_username = $_POST['cus_username'];
+                $stmt->bindParam(':cus_username', $cus_username);
                 if ($stmt->execute()) {
-                    echo "<div class='alert alert-success'>Record was saved.</div>";
+                    $lastID = $con->lastInsertId();
+                    for ($i = 0; $i < count($_POST['productID']); $i++) {
+                        $product = $_POST['productID'][$i];
+                        $quant = $_POST['quantity'][$i];
+                        if ($product != '' && $quant != '') {
+                            $query = "INSERT INTO order_detail SET orderID=:orderID, productID=:productID, quantity=:quantity";
+                            $stmt = $con->prepare($query);
+                            $stmt->bindParam(':orderID', $lastID);
+                            $stmt->bindParam(':productID', $product);
+                            $stmt->bindParam(':quantity', $quant);
+                            $stmt->execute();
+                        } else {
+                            throw new Exception("Please make sure the product and quantity is selected.");
+                        }
+                    }
+                    echo "<div class='alert alert-success'>Record was saved. Order ID is $lastID.</div>";
                 } else {
-                    echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                    throw new Exception("Unable to save record.");
                 }
-            }
-            // show error
-            //for database 'PDO'
-            catch (PDOException $exception) {
-                echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                $con->commit();
+            } catch (PDOException $exception) {
+                //for databae 'PDO'
+                if ($con->inTransaction()) {
+                    $con->rollback();
+                    echo "<div class='alert alert-danger'>Please make sure no duplicate product chosen!</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                }
             } catch (Exception $exception) {
                 echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
             }
         }
         ?>
 
-        <!-- html form here where the product information will be entered -->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
-
-                    <td id="leftrow">Order Date Time</td>
-                    <td><input type='datetime-local' name='orderdatetime' class='form-control' /></td>
-                </tr>
-
-                <tr>
-
-                    <td id="leftrow">User Name</td>
+                    <td>Customer Username</td>
                     <td>
-                        <?php
-                        // include database connection
-                        include 'config/database.php';
-
-                        // delete message prompt will be here
-
-                        // select all data
-                        $query = "SELECT * FROM customer ORDER BY id ";
-                        $stmt = $con->prepare($query);
-                        $stmt->execute();
-
-                        // this is how to get number of rows returned
-                        //this is how to get how many product found
-                        $num = $stmt->rowCount();
-
-                        //check if more than 0 record found
-                        if ($num > 0) {
-
-
-                            echo "<select name='names' class='form-select' aria-label='Default select example'>";
-                            echo "<option selected>Please select the user name</option>";
-                            // table body will be here
-                            // retrieve our table contents
-                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                                // extract row
-                                extract($row);
-                                // this will make $row['firstname'] to just $firstname only
-
-
-                                // creating new table row per record
-
-                                echo "<option value='$name'>$id. $name</option>";
-
-                                // read one record
-
-
-                            }
-                            echo "</select>";
-
-
-
-                            // end table
-                        }
-
-                        // if no records found
-                        else {
-                            echo "<div class='alert alert-danger'>No records found.</div>";
-                        }
-                        ?>
-                    </td>
-                </tr>
-
-                <tr>
-
-                    <td id="leftrow">Product Name</td>
-                    <td>
-                        <?php
-                        // include database connection
-                        include 'config/database.php';
-
-                        // delete message prompt will be here
-
-                        // select all data
-                        $query = "SELECT * FROM products ORDER BY id ";
-                        $stmt = $con->prepare($query);
-                        $stmt->execute();
-
-                        // this is how to get number of rows returned
-                        //this is how to get how many product found
-                        $num = $stmt->rowCount();
-
-                        //check if more than 0 record found
-                        if ($num > 0) {
-
-
-                            echo "<select name='pro_names' class='form-select' aria-label='Default select example'>";
-                            echo "<option selected>Please select the product name</option>";
-                            // table body will be here
-                            // retrieve our table contents
-                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-
-                                // extract row
-                                extract($row);
-                                // this will make $row['firstname'] to just $firstname only
-
-
-                                // creating new table row per record
-
-                                echo "<option value='$name'>$id. $name</option>";
-
-                                // read one record
-
-
-                            }
-                            echo "</select>";
-
-
-
-                            // end table
-                        }
-
-                        // if no records found
-                        else {
-                            echo "<div class='alert alert-danger'>No records found.</div>";
-                        }
-                        ?>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Quantity</td>
-                    <td>
-                        <div class="input-group">
-                            <select name="quantity" class="form-select" aria-label="Default select example">
+                        <div>
+                            <select class="form-select" id="autoSizingSelect" name="cus_username">
+                                <option selected>-- Select User --</option>
                                 <?php
-                                echo "<option selected>Please select the quantity</option>";
-                                for ($i = 1; $i <= 100; $i++) {
-
-                                    echo "<option value='$i'>$i</option>";
+                                include 'config/database.php';
+                                $select_user_query = "SELECT cus_username FROM customer";
+                                $select_user_stmt = $con->prepare($select_user_query);
+                                $select_user_stmt->execute();
+                                while ($cus_username = $select_user_stmt->fetch(PDO::FETCH_ASSOC)) {
+                                    echo "<option value = '$cus_username[cus_username]'> $cus_username[cus_username] </option>";
                                 }
                                 ?>
-                            </select>
 
+                            </select>
+                        </div>
                     </td>
                 </tr>
-    </div>
+                <?php
+                echo "<tr class='productQuantity'>";
+                echo "<td>Product</td>";
+                echo "<td>";
+                echo "<div>";
+                echo "<select class='form-select' id='autoSizingSelect' name='productID[]'> ";
+                echo "<option value=''>-- Select Product --</option> ";
+                include 'config/database.php';
+                $select_product_query = "SELECT productID, name FROM products";
+                $select_product_stmt = $con->prepare($select_product_query);
+                $select_product_stmt->execute();
+                while ($productID = $select_product_stmt->fetch(PDO::FETCH_ASSOC)) {
+                    echo "<option value = '$productID[productID]'> $productID[name] </option>";
+                }
+                echo "</select>";
+                echo "<select class='form-select' id='autoSizingSelect' name='quantity[]'>";
+                echo "<option value=''>-- Select Quantity --</option>";
+                $number = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
+                for ($i = 0; $i < count($number); $i++) {
+                    echo "<option value='$number[$i]'> $number[$i] </option>";
+                }
+                echo "</select>";
+                echo "</div>";
+                echo "</td>";
 
-    <tr>
-        <td></td>
-        <td>
-            <input type='submit' value='Save' class='btn btn-primary' />
-            <a href='index.php' class='btn btn-danger'>Back to read products</a>
-        </td>
-    </tr>
-    </table>
-    </form>
+                ?>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <button type="button" class="add_one btn btn-info text-light">Add More Product</button>
+                        <button type="button" class="delete_one btn btn-warning text-light">Delete Last Product</button>
+                        <input type='submit' value='Save' class='btn btn-primary' />
+                        <a href='order_read.php' class='btn btn-danger'>View Order</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('.add_one')) {
+                var element = document.querySelector('.productQuantity');
+                var clone = element.cloneNode(true);
+                element.after(clone);
+            }
+            if (event.target.matches('.delete_one')) {
+                var total = document.querySelectorAll('.productQuantity').length;
+                if (total > 1) {
+                    var element = document.querySelector('.productQuantity');
+                    element.remove(element);
+                }
+            }
+        }, false);
+    </script>
     <?php
     include 'footer.php';
     ?>

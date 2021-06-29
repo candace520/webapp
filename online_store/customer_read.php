@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['cus_username'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -23,7 +29,7 @@
         // delete message prompt will be here
 
         // select all data
-        $query = "SELECT * FROM customer ORDER BY id DESC";
+        $query = "SELECT * FROM customer ORDER BY id";
         $stmt = $con->prepare($query);
         $stmt->execute();
 
@@ -44,8 +50,8 @@
             echo "<tr>";
             echo "<th>ID</th>";
             echo "<th>User Name</th>";
-            echo "<th>Registration Date Time</th>";
-            echo "<th>Date of birth</th>";
+            echo "<th>Password</th>";
+            echo "<th>Account Status</th>";
             echo "<th>Action</th>";
             echo "</tr>";
 
@@ -58,15 +64,15 @@
                 // creating new table row per record
                 echo "<tr>";
                 echo "<td>{$id}</td>";
-                echo "<td>{$name}</td>";
-                echo "<td>{$registrationdatetime}</td>";
-                echo "<td>{$dateofbirth}</td>";
+                echo "<td>{$cus_username}</td>";
+                echo "<td>{$password}</td>";
+                echo "<td>{$accountstatus}</td>";
                 echo "<td>";
                 // read one record
                 echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='product_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='customer_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$id});'  class='btn btn-danger'>Delete</a>";
@@ -75,7 +81,7 @@
             }
 
 
-
+            
             // end table
             echo "</table>";
         }

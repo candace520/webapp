@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['cus_username'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -47,7 +53,7 @@
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             // values to fill up our form
-            $name = $row['name'];
+            $cus_username = $row['cus_username'];
             $gender = $row['gender'];
             $dateofbirth = $row['dateofbirth'];
             // shorter way to do that is extract($row)
@@ -65,7 +71,7 @@
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
                 <td>Name</td>
-                <td><?php echo htmlspecialchars($name, ENT_QUOTES);  ?></td>
+                <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
             </tr>
             <tr>
                 <td>Gender</td>

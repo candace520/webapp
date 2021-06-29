@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (isset($_SESSION['cus_username'])) {
+   
+}
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -16,80 +22,59 @@
             <h1>Read Order</h1>
         </div>
 
-        <!-- PHP read one record will be here -->
         <?php
-        // get passed parameter value, in this case, the record ID
-        // isset() is a PHP function used to verify if a value is there or not
-        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
-        /*if (isset($_GET['id'])){
-    $id = $_GET['id'];
-} else {
-    die('ERROR: Record ID not found.');
-}*/
+        $orderID = isset($_GET['orderID']) ? $_GET['orderID'] : die('ERROR: Order record not found.');
 
-
-        //include database connection
         include 'config/database.php';
 
-        // read current record's data
         try {
-            // prepare select query
-            $query = "SELECT * FROM orders WHERE id = :id ";
-            $stmt = $con->prepare($query);
+            $o_query = "SELECT * FROM orders WHERE orderID = :orderID";
+            $o_stmt = $con->prepare($o_query);
+            $o_stmt->bindParam(":orderID", $orderID);
+            $o_stmt->execute();
+            $o_row = $o_stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Bind the parameter
-            $stmt->bindParam(":id", $id);
-
-            // execute our query
-            $stmt->execute();
-
-            // store retrieved row to a variable
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            // values to fill up our form
-            $names = $row['names'];
-            $orderdatetime = $row['orderdatetime'];
-            $pro_names = $row['pro_names'];
-            $quantity = $row['quantity'];
-            // shorter way to do that is extract($row)
-        }
-
-        // show error
-        catch (PDOException $exception) {
+            $orderID = $o_row['orderID'];
+            $cus_username = $o_row['cus_username'];
+        } catch (PDOException $exception) {
             die('ERROR: ' . $exception->getMessage());
         }
         ?>
-        
-        <!-- HTML read one record table will be here -->
-        <!--we have our html table here where the record will be displayed-->
+
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
-                <td>User Name</td>
-                <td><?php echo htmlspecialchars($names, ENT_QUOTES);  ?></td>
+                <td>Order ID</td>
+                <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
             </tr>
+           
             <tr>
-                <td>Order Date Time</td>
-                <td><?php echo htmlspecialchars($orderdatetime, ENT_QUOTES);  ?></td>
+                <td>Customer Username</td>
+                <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
             </tr>
-            <tr>
-                <td>Product name</td>
-                <td><?php echo htmlspecialchars($pro_names, ENT_QUOTES);  ?></td>
-            </tr>
-            <tr>
-                <td>Quantity</td>
-                <td><?php echo htmlspecialchars($quantity, ENT_QUOTES);  ?></td>
-            </tr>
+            <?php
+            $od_query = "SELECT p.productID, name, quantity, price
+                        FROM order_detail od
+                        INNER JOIN products p ON od.productID = p.productID
+                        WHERE orderID = :orderID";
+            $od_stmt = $con->prepare($od_query);
+            $od_stmt->bindParam(":orderID", $orderID);
+            $od_stmt->execute();
+            echo "<th class='col-4'>Product</th>";
+            echo "<th class='col-4'>Quantity</th>";
+            while ($od_row = $od_stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo "<tr>";
+                echo "<td>$od_row[name]</td>";
+                echo "<td>$od_row[quantity]</td>";
+                echo "</tr>";
+            } ?>
             <tr>
                 <td></td>
                 <td>
-                    <a href='index.php' class='btn btn-danger'>Back to read customer</a>
+                    <a href='order_read.php' class='btn btn-danger'>Back to read order </a>
                 </td>
             </tr>
         </table>
-
-
-    </div> <!-- end .container -->
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 
 </html>
