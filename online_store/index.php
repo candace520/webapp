@@ -61,7 +61,7 @@ if (isset($_SESSION['cus_username'])) {
     
     <body>
     <?php
-    echo "<h1 class='text-center text-dark p-5'> Hi, $_SESSION[name].
+    echo "<h1 class='text-center text-dark p-5'> Hi, $_SESSION[cus_username].
      <br>Welcome to Candace's Online Store.</h1>"; ?>
                 
         <div class="container" style="margin-top:30px">

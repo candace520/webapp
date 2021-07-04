@@ -72,10 +72,10 @@ if (isset($_SESSION['cus_username'])) {
                 echo "<td>{$price}</td>";
                 echo "<td>";
                 // read one record
-                echo "<a href='product_read_one.php?id={$productID}' class='btn btn-info m-r-1em'>Read</a>";
+                echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info m-r-1em'>Read</a>";
 
                 // we will use this links on next part of this post
-                echo "<a href='product_update.php?id={$productID}' class='btn btn-primary m-r-1em'>Edit</a>";
+                echo "<a href='product_update.php?productID={$productID}' class='btn btn-primary m-r-1em'>Edit</a>";
 
                 // we will use this links on next part of this post
                 echo "<a href='#' onclick='delete_user({$productID});'  class='btn btn-danger'>Delete</a>";

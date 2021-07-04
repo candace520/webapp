@@ -27,21 +27,18 @@ if (isset($_SESSION['cus_username'])) {
 
         <!-- PHP code to read records will be here -->
         <?php
-        // include database connection
         include 'config/database.php';
-
-        $query = "SELECT * FROM orders ORDER BY orderID DESC";
+        $query = "SELECT * FROM orders ORDER BY orderId DESC";
         $stmt = $con->prepare($query);
         $stmt->execute();
         $num = $stmt->rowCount();
-        echo "<a href='order.php' class='btn btn-primary mb-2'>Create New Order</a>";
+        echo "<a href='orders.php' class='btn btn-primary mb-2'>Create New Order</a>";
         if ($num > 0) {
             echo "<table class='table table-hover table-responsive table-bordered'>";
 
             echo "<tr>";
             echo "<th>Order ID</th>";
             echo "<th>Customer Username</th>";
-            echo "<th>Action</th>";
             echo "</tr>";
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -61,6 +58,7 @@ if (isset($_SESSION['cus_username'])) {
             echo "<div class='alert alert-danger'>No records found.</div>";
         }
         ?>
+
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>

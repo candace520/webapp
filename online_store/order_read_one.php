@@ -14,7 +14,9 @@ if (isset($_SESSION['cus_username'])) {
 </head>
 
 <body>
-
+<?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -45,13 +47,13 @@ if (isset($_SESSION['cus_username'])) {
                 <td>Order ID</td>
                 <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
             </tr>
-
+            
             <tr>
                 <td>Customer Username</td>
                 <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
             </tr>
             <?php
-            $od_query = "SELECT p.productID, name, quantity, price
+            $od_query = "SELECT p.productID, name, quantity
                         FROM order_detail od
                         INNER JOIN products p ON od.productID = p.productID
                         WHERE orderID = :orderID";

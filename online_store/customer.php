@@ -228,7 +228,8 @@ if (isset($_SESSION['cus_username'])) {
         <td></td>
         <td>
             <input type='submit' value='Save' class='btn btn-primary' />
-            <a href='index.php' class='btn btn-danger'>Back to read customers</a>
+            <a href='customer_read.php' class='btn btn-danger'>View Customer</a>
+            
         </td>
     </tr>
     </table>

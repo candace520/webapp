@@ -15,6 +15,9 @@ if (isset($_SESSION['cus_username'])) {
 </head>
 
 <body>
+<?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -51,6 +54,9 @@ if (isset($_SESSION['cus_username'])) {
             echo "<th>ID</th>";
             echo "<th>User Name</th>";
             echo "<th>Password</th>";
+            echo "<th>Gender</th>";
+            echo "<th>First Name</th>";
+            echo "<th>Last Name</th>";
             echo "<th>Account Status</th>";
             echo "<th>Action</th>";
             echo "</tr>";
@@ -66,7 +72,11 @@ if (isset($_SESSION['cus_username'])) {
                 echo "<td>{$id}</td>";
                 echo "<td>{$cus_username}</td>";
                 echo "<td>{$password}</td>";
+                echo "<td>{$gender}</td>";
+                echo "<td>{$firstname}</td>";
+                echo "<td>{$lastname}</td>";
                 echo "<td>{$accountstatus}</td>";
+                
                 echo "<td>";
                 // read one record
                 echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";

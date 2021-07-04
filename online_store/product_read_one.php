@@ -15,7 +15,9 @@ if (isset($_SESSION['cus_username'])) {
 </head>
 
 <body>
-
+<?php
+    include 'menu.php';
+    ?>
     <!-- container -->
     <div class="container">
         <div class="page-header">
@@ -26,7 +28,7 @@ if (isset($_SESSION['cus_username'])) {
         <?php
         // get passed parameter value, in this case, the record ID
         // isset() is a PHP function used to verify if a value is there or not
-        $id = isset($_GET['id']) ? $_GET['id'] : die('ERROR: Record ID not found.');
+        $productID = isset($_GET['productID']) ? $_GET['productID'] : die('ERROR: Record ID not found.');
         /*if (isset($_GET['id'])){
     $id = $_GET['id'];
 } else {
@@ -40,11 +42,11 @@ if (isset($_SESSION['cus_username'])) {
         // read current record's data
         try {
             // prepare select query
-            $query = "SELECT id, name, description, price FROM products WHERE id = :id ";
+            $query = "SELECT productID, name, description, price FROM products WHERE productID = :productID ";
             $stmt = $con->prepare($query);
 
             // Bind the parameter
-            $stmt->bindParam(":id", $id);
+            $stmt->bindParam(":productID", $productID);
 
             // execute our query
             $stmt->execute();
