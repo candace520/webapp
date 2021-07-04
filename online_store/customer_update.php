@@ -31,6 +31,7 @@ if (isset($_SESSION['cus_username'])) {
     </style>
 </head>
 
+
 <body>
     <?php
     include 'menu.php';
