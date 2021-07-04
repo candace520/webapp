@@ -39,8 +39,6 @@ if (isset($_SESSION['cus_username'])) {
         <div class="page-header">
             <h1>Update Customer</h1>
         </div>
-
-
         <?php
         //PHP read record by ID will be here 
 
