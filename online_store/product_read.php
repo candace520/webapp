@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (isset($_SESSION['cus_username'])) {
-   
 }
 ?>
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <title>PDO - Create a Record - PHP CRUD Tutorial</title>
     <!-- Latest compiled and minified Bootstrap CSS -->
@@ -19,7 +19,7 @@ if (isset($_SESSION['cus_username'])) {
     ?>
     <!-- container -->
     <div class="container">
-    
+
         <div class="page-header">
             <h1>Read Products</h1>
         </div>

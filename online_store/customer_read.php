@@ -1,7 +1,6 @@
 <?php
 session_start();
 if (isset($_SESSION['cus_username'])) {
-   
 }
 ?>
 <!DOCTYPE HTML>
@@ -15,7 +14,7 @@ if (isset($_SESSION['cus_username'])) {
 </head>
 
 <body>
-<?php
+    <?php
     include 'menu.php';
     ?>
     <!-- container -->
@@ -76,7 +75,7 @@ if (isset($_SESSION['cus_username'])) {
                 echo "<td>{$firstname}</td>";
                 echo "<td>{$lastname}</td>";
                 echo "<td>{$accountstatus}</td>";
-                
+
                 echo "<td>";
                 // read one record
                 echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Read</a>";
@@ -91,7 +90,7 @@ if (isset($_SESSION['cus_username'])) {
             }
 
 
-            
+
             // end table
             echo "</table>";
         }

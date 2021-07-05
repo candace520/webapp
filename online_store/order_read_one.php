@@ -14,7 +14,7 @@ if (isset($_SESSION['cus_username'])) {
 </head>
 
 <body>
-<?php
+    <?php
     include 'menu.php';
     ?>
     <!-- container -->
@@ -47,7 +47,7 @@ if (isset($_SESSION['cus_username'])) {
                 <td>Order ID</td>
                 <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
             </tr>
-            
+
             <tr>
                 <td>Customer Username</td>
                 <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>

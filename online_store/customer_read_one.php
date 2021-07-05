@@ -14,7 +14,7 @@ if (isset($_SESSION['cus_username'])) {
 </head>
 
 <body>
-<?php
+    <?php
     include 'menu.php';
     ?>
     <!-- container -->

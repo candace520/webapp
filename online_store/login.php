@@ -68,60 +68,81 @@ session_start();
       float: right;
       padding-top: 16px;
     }
+
     /* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  padding-top: 60px;
-}
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Black w/ opacity */
+      padding-top: 60px;
+    }
 
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-}
+    /* Modal Content/Box */
+    .modal-content {
+      background-color: #fefefe;
+      margin: 5% auto 15% auto;
+      /* 5% from the top, 15% from the bottom and centered */
+      border: 1px solid #888;
+      width: 80%;
+      /* Could be more or less, depending on screen size */
+    }
 
-/* The Close Button (x) */
-.close {
-  position: absolute;
-  right: 25px;
-  top: 0;
-  color: #000;
-  font-size: 35px;
-  font-weight: bold;
-}
+    /* The Close Button (x) */
+    .close {
+      position: absolute;
+      right: 25px;
+      top: 0;
+      color: #000;
+      font-size: 35px;
+      font-weight: bold;
+    }
 
-.close:hover,
-.close:focus {
-  color: red;
-  cursor: pointer;
-}
+    .close:hover,
+    .close:focus {
+      color: red;
+      cursor: pointer;
+    }
 
-/* Add Zoom Animation */
-.animate {
-  -webkit-animation: animatezoom 0.6s;
-  animation: animatezoom 0.6s
-}
+    /* Add Zoom Animation */
+    .animate {
+      -webkit-animation: animatezoom 0.6s;
+      animation: animatezoom 0.6s
+    }
 
-@-webkit-keyframes animatezoom {
-  from {-webkit-transform: scale(0)} 
-  to {-webkit-transform: scale(1)}
-}
-  
-@keyframes animatezoom {
-  from {transform: scale(0)} 
-  to {transform: scale(1)}
-}
+    @-webkit-keyframes animatezoom {
+      from {
+        -webkit-transform: scale(0)
+      }
+
+      to {
+        -webkit-transform: scale(1)
+      }
+    }
+
+    @keyframes animatezoom {
+      from {
+        transform: scale(0)
+      }
+
+      to {
+        transform: scale(1)
+      }
+    }
 
     /* Change styles for span and cancel button on extra small screens */
     @media screen and (max-width: 300px) {
@@ -142,10 +163,10 @@ session_start();
   <h2>Login Form</h2>
   <?php
   if ($_POST) {
-      
-    
+
+
     include 'config/database.php';
-   
+
     $cus_username = $_POST['cus_username'];
     $password = $_POST['password'];
     try {
@@ -154,94 +175,80 @@ session_start();
       ) {
         throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty!</div>");
       }
-      if (isset($_POST['cus_username']) ) {
-      // insert query
-      $query = "SELECT * from  customer WHERE cus_username=:cus_username AND password=:password AND accountstatus='active'";
+      if (isset($_POST['cus_username'])) {
+        // insert query
+        $query = "SELECT * from  customer WHERE cus_username=:cus_username AND password=:password AND accountstatus='active'";
 
-      $stmt = $con->prepare($query);
-      // posted values
-      // bind the parameters
-      $stmt->bindParam(':cus_username', $cus_username);
-      $stmt->bindParam(':password', $password);
-      // Execute the query
-      if ($stmt->execute()) {
-        $count = $stmt->rowCount();
-        $row   = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($count == 1 && !empty($row)) {
-          //header("Location: profile.php");
-          $_SESSION['cus_username'] = $row['cus_username'];
-          $_SESSION['password'] = $row['password'];
-          header("Location: index.php");
-        }
-        
-      }
-      
-       // insert query
-       $query = "SELECT * from  customer WHERE  cus_username=:cus_username AND accountstatus='active'";
-
-       $stmt = $con->prepare($query);
-       $stmt->bindParam(':cus_username', $cus_username);
-       // posted values
-       // bind the parameters
-       // Execute the query
-       if ($stmt->execute()) {
-         $count = $stmt->rowCount();
-         $row   = $stmt->fetch(PDO::FETCH_ASSOC);
-         if ($count == 1 && !empty($row)) {
- 
-         }
-         else{
-           echo"<div class='alert alert-danger'>Your Account NOT ACTIVE!!</div>";
-         }
-       }
-
-      $query = "SELECT * from  customer WHERE cus_username=:cus_username ";
-      // prepare query for execution
-      $stmt = $con->prepare($query);
-      
-      // posted values
-      // bind the parameters
-      $stmt->bindParam(':cus_username', $cus_username);
-      // Execute the query
-      if ($stmt->execute()) {
-        $count = $stmt->rowCount();
-        $row   = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($count == 1 && !empty($row)) {
-        } 
-        else{
-          echo "<div class='alert alert-danger'>User Not found !</div>";
+        $stmt = $con->prepare($query);
+        // posted values
+        // bind the parameters
+        $stmt->bindParam(':cus_username', $cus_username);
+        $stmt->bindParam(':password', $password);
+        // Execute the query
+        if ($stmt->execute()) {
+          $count = $stmt->rowCount();
+          $row   = $stmt->fetch(PDO::FETCH_ASSOC);
+          if ($count == 1 && !empty($row)) {
+            //header("Location: profile.php");
+            $_SESSION['cus_username'] = $row['cus_username'];
+            $_SESSION['password'] = $row['password'];
+            header("Location: index.php");
+          }
         }
 
-        
-      } 
+        // insert query
+        $query = "SELECT * from  customer WHERE  cus_username=:cus_username AND accountstatus='active'";
+
+        $stmt = $con->prepare($query);
+        $stmt->bindParam(':cus_username', $cus_username);
+        // posted values
+        // bind the parameters
+        // Execute the query
+        if ($stmt->execute()) {
+          $count = $stmt->rowCount();
+          $row   = $stmt->fetch(PDO::FETCH_ASSOC);
+          if ($count == 1 && !empty($row)) {
+          } else {
+            echo "<div class='alert alert-danger'>Your Account NOT ACTIVE!!</div>";
+          }
+        }
+
+        $query = "SELECT * from  customer WHERE cus_username=:cus_username ";
+        // prepare query for execution
+        $stmt = $con->prepare($query);
+
+        // posted values
+        // bind the parameters
+        $stmt->bindParam(':cus_username', $cus_username);
+        // Execute the query
+        if ($stmt->execute()) {
+          $count = $stmt->rowCount();
+          $row   = $stmt->fetch(PDO::FETCH_ASSOC);
+          if ($count == 1 && !empty($row)) {
+          } else {
+            echo "<div class='alert alert-danger'>User Not found !</div>";
+          }
+        }
 
 
-      $query = "SELECT * from  customer WHERE cus_username=:cus_username AND password=:password ";
-      // prepare query for execution
-      $stmt = $con->prepare($query);
-      
-      // posted values
-      // bind the parameters
-      $stmt->bindParam(':cus_username', $cus_username);
-      $stmt->bindParam(':password', $password);
-      // Execute the query
-      if ($stmt->execute()) {
-        $count = $stmt->rowCount();
-        $row   = $stmt->fetch(PDO::FETCH_ASSOC);
-        if($count == 1 && !empty($row)) {
-            
-        } 
-        else{
-          echo "<div class='alert alert-danger'>INVALID password!</div>";
-        } 
+        $query = "SELECT * from  customer WHERE cus_username=:cus_username AND password=:password ";
+        // prepare query for execution
+        $stmt = $con->prepare($query);
 
+        // posted values
+        // bind the parameters
+        $stmt->bindParam(':cus_username', $cus_username);
+        $stmt->bindParam(':password', $password);
+        // Execute the query
+        if ($stmt->execute()) {
+          $count = $stmt->rowCount();
+          $row   = $stmt->fetch(PDO::FETCH_ASSOC);
+          if ($count == 1 && !empty($row)) {
+          } else {
+            echo "<div class='alert alert-danger'>INVALID password!</div>";
+          }
+        }
       }
-
-      
-      
-
-    }    
-     
     }
 
     // show error
@@ -255,26 +262,26 @@ session_start();
 
   ?>
 
-<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
+  <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">Login</button>
 
-<div id="id01" class="modal">
-  <form class="modal-content animate" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" method="post">
-    <div class="imgcontainer">
-      <img src="img/img_avatar2.png" alt="Avatar" class="avatar">
-    </div>
+  <div id="id01" class="modal">
+    <form class="modal-content animate" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" method="post">
+      <div class="imgcontainer">
+        <img src="img/img_avatar2.png" alt="Avatar" class="avatar">
+      </div>
 
-    <div class="container">
-      <label for="uname"><b>Username</b></label>
-      <input type="text" placeholder="Enter Username" name="cus_username">
+      <div class="container">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="cus_username">
 
-      <label for="psw"><b>Password</b></label>
-      <input type="password" placeholder="Enter Password" name="password">
-  
-      <input type='submit' value='Login' class='btn btn-primary' href='index.php' />
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-    </div>
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password">
 
-  </form>
+        <input type='submit' value='Login' class='btn btn-primary' href='index.php' />
+        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
+      </div>
+
+    </form>
 
 </body>
 

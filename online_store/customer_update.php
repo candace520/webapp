@@ -153,10 +153,20 @@ if (isset($_SESSION['cus_username'])) {
                 <tr>
                     <td>Gender</td>
                     <td>
-                        <input type="radio" name="gender" value="male">
-                          <label for="html">Male</label><br>
-                          <input type="radio" name="gender" value="female">
-                          <label for="css">Female</label>
+                        <div class="form-check">
+                            <label>
+                                <input type="radio" name="gender" value="male" <?php echo ($gender=='male')?'checked':'' ?>>
+                                Male
+                                <span class="select"></span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label>
+                                <input type="radio" name="gender" value="female" <?php echo ($gender=='female')?'checked':'' ?>>
+                                Female
+                                <span class="select"></span>
+                            </label>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -174,7 +184,7 @@ if (isset($_SESSION['cus_username'])) {
                         <div class="input-container">
                             <i class="fa fa-key icon"></i>
                             <div class="input-group">
-                                <input type='password' name='password' placeholder="Enter password " class='form-control' />
+                                <input type='password' name='password' placeholder="Enter password " class='form-control' value="<?php echo htmlspecialchars($password, ENT_QUOTES);  ?>"/>
                     </td>
                 </tr>
     </div>
@@ -185,7 +195,8 @@ if (isset($_SESSION['cus_username'])) {
             <div class="input-container">
                 <i class="fa fa-key icon"></i>
                 <div class="input-group">
-                    <input type='password' name='confPass' placeholder="Enter confirm password " class='form-control' />
+                    <input type='password' name='confPass' placeholder="Enter confirm password " 
+                    value="<?php echo htmlspecialchars($confPass, ENT_QUOTES);  ?>" class='form-control' />
         </td>
     </tr>
     </div>
@@ -194,7 +205,8 @@ if (isset($_SESSION['cus_username'])) {
 
         <td>First Name</td>
         <td>
-            <input type='text' name='firstname' placeholder="Enter Firstname" class='form-control' />
+            <input type='text' name='firstname' placeholder="Enter Firstname" 
+            value="<?php echo htmlspecialchars($firstname, ENT_QUOTES);  ?>" class='form-control' />
         </td>
         </div>
     </tr>
@@ -202,7 +214,8 @@ if (isset($_SESSION['cus_username'])) {
         <td>Last Name</td>
         <td>
             <div class="input-group">
-                <input type='text' name='lastname' id="uname" placeholder="Enter Lastname" class='form-control' />
+                <input type='text' name='lastname' id="uname" placeholder="Enter Lastname" 
+                value="<?php echo htmlspecialchars($lastname, ENT_QUOTES);  ?>" class='form-control' />
 
         </td>
     </tr>
