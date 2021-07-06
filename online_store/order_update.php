@@ -96,14 +96,13 @@ if (!isset($_SESSION["cus_username"])) {
                 $stmt->bindParam(':orderID', $orderID);
                 $stmt->bindParam(':cus_username', $cus_username);
 
-                         if ($stmt->execute()) {
+                if ($stmt->execute()) {
                     echo "<div class='alert alert-success'>Record was updated.</div>";
                 } else {
                     echo "<div class='alert alert-danger'>Unable to updated record.</div>";
                 }
-                    $con->commit();
-            }
-            catch (PDOException $exception) {
+                $con->commit();
+            } catch (PDOException $exception) {
                 //for databae 'PDO'
                 if ($con->inTransaction()) {
                     $con->rollback();
@@ -120,7 +119,7 @@ if (!isset($_SESSION["cus_username"])) {
         <!--we have our html form here where new record information can be updated-->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?orderID={$orderID}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
-            <tr>
+                <tr>
                     <td>Order ID</td>
                     <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
                 </tr>
@@ -165,9 +164,9 @@ if (!isset($_SESSION["cus_username"])) {
                     echo "<td>";
                     echo "<select class='form-select' id='autoSizingSelect' name='quantity[]'>";
                     echo "<option value=''>-- Please Select --</option>";
-                    
+
                     for ($i = 0; $i < 20; $i++) {
-                        $result = $productQuantity == $i? 'selected' :'';
+                        $result = $productQuantity == $i ? 'selected' : '';
                         echo "<option value='$i' $result> $i </option>";
                     }
                     echo "</select>";
