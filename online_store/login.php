@@ -166,7 +166,9 @@ session_start();
 
 
     include 'config/database.php';
-
+    if (isset($_GET['error']) && $_GET['error'] == "restrictedAccess") {
+      $errorMessage = "Please login for further proceed!";
+  }
     $cus_username = $_POST['cus_username'];
     $password = $_POST['password'];
     try {

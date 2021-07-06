@@ -5,15 +5,15 @@ try {
     $con->beginTransaction();
     // get record ID
     // isset() is a PHP function used to verify if a value is there or not
-    $productID = isset($_GET['productID']) ? $_GET['productID'] :  die('ERROR: Record ID not found.');
+    $id = isset($_GET['id']) ? $_GET['id'] :  die('ERROR: Record ID not found.');
 
      
         // delete query
-        $query = "DELETE FROM products WHERE productID = ?";
+        $query = "DELETE FROM customer WHERE id = ?";
         $stmt = $con->prepare($query);
-        $stmt->bindParam(1, $productID);
+        $stmt->bindParam(1, $id);
         if ($stmt->execute()) {
-            header('Location: product_read.php?action=deleted');
+            header('Location: customer_read.php?action=deleted');
         } else {
             die('Unable to delete record.');
         }

@@ -161,9 +161,9 @@ if (!isset($_SESSION["cus_username"])) {
                 </tr>
                 <tr>
                     <td>Accounts Status</td>
-                    <td><input type="radio" name="accountstatus" value="active">
+                    <td><input type="radio" name="accountstatus" value="active"<?php echo ($accountstatus=='active')?'checked':'' ?>>
                           <label for="active">Active</label><br>
-                          <input type="radio" name="accountstatus" value="inactive">
+                          <input type="radio" name="accountstatus" value="inactive"<?php echo ($accountstatus=='inactive')?'checked':'' ?>>
                           <label for="inactive">Inactive</label>
                     </td>
                 </tr>

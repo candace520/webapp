@@ -26,9 +26,7 @@ if (!isset($_SESSION["cus_username"])) {
 
         $action = isset($_GET['action']) ? $_GET['action'] : "";
         // if it was redirected from delete.php
-        if ($action == 'productInStock') {
-            echo "<div class='alert alert-danger'>Product could not be deleted.</div>";
-        }
+        
         if ($action == 'deleted') {
             echo "<div class='alert alert-success'>Record was deleted.</div>";
         }
