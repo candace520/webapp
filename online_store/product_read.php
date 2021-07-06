@@ -12,11 +12,11 @@ if (!isset($_SESSION["cus_username"])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
 <body>
-<?php
-        include 'menu.php';
-        ?>
+    <?php
+    include 'menu.php';
+    ?>
     <div class="container">
-        
+
         <div class="page-header">
             <h1>Read Product</h1>
         </div>
