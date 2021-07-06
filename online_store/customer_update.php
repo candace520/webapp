@@ -1,6 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['cus_username'])) {
+if (!isset($_SESSION["cus_username"])) {
+    header("Location: login.php?error=restrictedAccess");
 }
 ?>
 <!DOCTYPE HTML>
@@ -151,30 +152,19 @@ if (isset($_SESSION['cus_username'])) {
                     <td><input type='text' name='cus_username' value="<?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?>" class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Gender</td>
-                    <td>
-                        <div class="form-check">
-                            <label>
-                                <input type="radio" name="gender" value="male" <?php echo ($gender=='male')?'checked':'' ?>>
-                                Male
-                                <span class="select"></span>
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <label>
-                                <input type="radio" name="gender" value="female" <?php echo ($gender=='female')?'checked':'' ?>>
-                                Female
-                                <span class="select"></span>
-                            </label>
-                        </div>
+                <td>Gender</td>
+                <td><input type="radio" name="gender" value="male"<?php echo ($gender=='male')?'checked':'' ?>>
+                          <label for="male">Male</label><br>
+                          <input type="radio" name="gender" value="female"<?php echo ($gender=='female')?'checked':'' ?>>
+                          <label for="female">Female</label>
                     </td>
                 </tr>
                 <tr>
                     <td>Accounts Status</td>
                     <td><input type="radio" name="accountstatus" value="active">
-                          <label for="html">Active</label><br>
+                          <label for="active">Active</label><br>
                           <input type="radio" name="accountstatus" value="inactive">
-                          <label for="css">Inactive</label>
+                          <label for="inactive">Inactive</label>
                     </td>
                 </tr>
 

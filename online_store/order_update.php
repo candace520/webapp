@@ -1,6 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['cus_username'])) {
+if (!isset($_SESSION["cus_username"])) {
+    header("Location: login.php?error=restrictedAccess");
 }
 ?>
 <!DOCTYPE HTML>
@@ -88,45 +89,28 @@ if (isset($_SESSION['cus_username'])) {
         // check if form was submitted
         if ($_POST) {
             try {
-                // write update query
-                // in this case, it seemed like we have so many fields to pass and
-                // it is better to label them and not use question marks
-                $query = "UPDATE orders
-                  SET cus_username=:cus_username WHERE orderID=:orderID";
-                // prepare query for excecution
+                $con->beginTransaction();
+                $query = "UPDATE orders SET cus_username=:cus_username WHERE orderID = :orderID";
                 $stmt = $con->prepare($query);
-                // posted values
                 $cus_username = htmlspecialchars(strip_tags($_POST['cus_username']));
-                // bind the parameters
-                $stmt->bindParam(':cus_username', $cus_username);
                 $stmt->bindParam(':orderID', $orderID);
-                if ($stmt->execute()) {
-                    $delete_query = "DELETE FROM order_detail WHERE orderID=:orderID";
-                    $stmt = $con->prepare($delete_query);
-                    $stmt->bindParam(':orderID', $orderID);
-                    $stmt->execute();
-                    for ($i = 0; $i < count($_POST['productID']); $i++) {
-                        $product = $_POST['productID'][$i];
-                        $quant = $_POST['quantity'][$i];
-                        if ($product != '' && $quant != '') {
-                            $query = "INSERT INTO order_detail SET orderID=:orderID, productID=:productID, quantity=:quantity";
-                            $stmt = $con->prepare($query);
-                            $stmt->bindParam(':orderID', $orderID);
-                            $stmt->bindParam(':productID', $product);
-                            $stmt->bindParam(':quantity', $quant);
-                            $stmt->execute();
-                        } else {
-                            throw new Exception("Please make sure the product and quantity is selected.");
-                        }
-                    }
-                    echo "<div class='alert alert-success'>Record was updated.";
+                $stmt->bindParam(':cus_username', $cus_username);
+
+                         if ($stmt->execute()) {
+                    echo "<div class='alert alert-success'>Record was updated.</div>";
                 } else {
-                    throw new Exception("Unable to updated record.");
+                    echo "<div class='alert alert-danger'>Unable to updated record.</div>";
                 }
+                    $con->commit();
             }
-            // show errors
             catch (PDOException $exception) {
-                die('ERROR: ' . $exception->getMessage());
+                //for databae 'PDO'
+                if ($con->inTransaction()) {
+                    $con->rollback();
+                    echo "<div class='alert alert-danger'>Please make sure no duplicate product chosen!</div>";
+                } else {
+                    echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                }
             } catch (Exception $exception) {
                 echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
             }
@@ -136,31 +120,13 @@ if (isset($_SESSION['cus_username'])) {
         <!--we have our html form here where new record information can be updated-->
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?orderID={$orderID}"); ?>" method="post">
             <table class='table table-hover table-responsive table-bordered'>
-                <tr>
-
-                    <td id="leftrow">Order ID</td>
-                    <td>
-                        <input type='text' placeholder="Enter order ID" class='form-control' value="<?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?>" />
-                    </td>
+            <tr>
+                    <td>Order ID</td>
+                    <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
                 </tr>
                 <tr>
                     <td>Customer Username</td>
-                    <td>
-                        <div>
-                            <select class="form-select" id="autoSizingSelect" name="cus_username">
-                                <option value="<?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?>" selected><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></option>
-                                <?php
-                                include 'config/database.php';
-                                $select_user_query = "SELECT cus_username FROM customer";
-                                $select_user_stmt = $con->prepare($select_user_query);
-                                $select_user_stmt->execute();
-                                while ($get_cus_username = $select_user_stmt->fetch(PDO::FETCH_ASSOC)) {
-                                    echo "<option value = '$get_cus_username[cus_username]'> $get_cus_username[cus_username] </option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </td>
+                    <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
                 </tr>
                 <th class='col-4'>Product</th>
                 <th class='col-4'>Quantity</th>
@@ -186,21 +152,23 @@ if (isset($_SESSION['cus_username'])) {
                     echo "<tr>";
                     echo "<td>";
                     echo "<select class='form-select' id='autoSizingSelect' name='productID[]'> ";
-                    echo "<option value='$productID' selected>$productName</option> ";
+                    echo "<option ='' >-- Please Select --</option> ";
                     $select_product_query = "SELECT productID, name FROM products";
                     $select_product_stmt = $con->prepare($select_product_query);
                     $select_product_stmt->execute();
                     while ($get_product = $select_product_stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<option value = '$get_product[productID]'> $get_product[name] </option>";
+                        $result = $productID == $get_product['productID'] ? 'selected' : '';
+                        echo "<option value = '$get_product[productID]' $result> $get_product[name] </option>";
                     }
                     echo "</select>";
                     echo "</td>";
                     echo "<td>";
                     echo "<select class='form-select' id='autoSizingSelect' name='quantity[]'>";
-                    echo "<option value='$quantity' selected> $quantity </option>";
-                    $number = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
-                    for ($i = 0; $i < count($number); $i++) {
-                        echo "<option value='$number[$i]'> $number[$i] </option>";
+                    echo "<option value=''>-- Please Select --</option>";
+                    
+                    for ($i = 0; $i < 20; $i++) {
+                        $result = $productQuantity == $i? 'selected' :'';
+                        echo "<option value='$i' $result> $i </option>";
                     }
                     echo "</select>";
                     echo "</td>";

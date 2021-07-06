@@ -1,7 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['cus_username'])) {
-   
+if (!isset($_SESSION["cus_username"])) {
+    header("Location: login.php?error=restrictedAccess");
 }
 ?>
 <!DOCTYPE HTML>
@@ -86,7 +86,7 @@ if (isset($_SESSION['cus_username'])) {
             <tr>
                 <td></td>
                 <td>
-                    <a href='index.php' class='btn btn-danger'>Back to read products</a>
+                    <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
                 </td>
             </tr>
         </table>

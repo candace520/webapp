@@ -1,6 +1,7 @@
 <?php
 session_start();
-if (isset($_SESSION['cus_username'])) {
+if (!isset($_SESSION["cus_username"])) {
+    header("Location: login.php?error=restrictedAccess");
 }
 ?>
 <!DOCTYPE HTML>
@@ -86,7 +87,12 @@ if (isset($_SESSION['cus_username'])) {
         // check if form was submitted
         if ($_POST) {
             try {
-
+                if (
+                    empty($_POST['name'])  
+                    || empty($_POST['description']) || empty($_POST['price'])
+                ) {
+                    throw new Exception("Please make sure all fields are not empty");
+                }
                 if (!is_numeric($_POST['price'])) {
                     throw new Exception(" <div class='alert alert-danger'>Please make sure the price is a number.</div>");
                 }
