@@ -255,12 +255,12 @@ echo"<div class = 'col-sm-4'>";
    
   <article class="w3-third">
     <p><span>Earphone</span></p>
-    <img src="img/earphone.jpg' alt='Random Name' style='width:100%">
+    <img src="img/earphone.jpg" alt="Random Name" style="width:50%">
     <p><span>Earphone is the smartest.</span></p>
   </article>
   <article class="w3-third">
     <br><p><span>Mouse</span></p>
-    <img src="img/mouse.jpg' alt='Random Name' style='width:100%">
+    <img src="img/mouse.jpg" alt="Random Name" style="width:50%">
     <p><span>Mouse is the prettiest.</span></p>
   </article>
 </section>
