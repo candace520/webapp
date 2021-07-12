@@ -54,21 +54,31 @@ if (!isset($_SESSION["cus_username"])) {
                 <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
             </tr>
             <?php
-            $od_query = "SELECT p.productID, name, quantity
+            $od_query = "SELECT p.productID, name, quantity,price
                         FROM order_detail od
                         INNER JOIN products p ON od.productID = p.productID
                         WHERE orderID = :orderID";
             $od_stmt = $con->prepare($od_query);
             $od_stmt->bindParam(":orderID", $orderID);
             $od_stmt->execute();
-            echo "<th class='col-4'>Product</th>";
-            echo "<th class='col-4'>Quantity</th>";
+            echo "<th class='col-3'>Product</th>";
+            echo "<th class='col-3'>Quantity</th>";
+            echo "<th class='col-3'>Price(Per One)</th>";
+            echo "<th class='col-3'>Total Price</th>";
+            $total = 0;
             while ($od_row = $od_stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
                 echo "<td>$od_row[name]</td>";
                 echo "<td>$od_row[quantity]</td>";
-                echo "</tr>";
-            } ?>
+                echo "<td>RM $od_row[price]</td>";
+                $quantity = $od_row['quantity'];
+                $price = $od_row['price'];
+                $totalPrice = $quantity * $price;
+                echo "<td>RM $totalPrice</td>";
+                $total += $totalPrice;
+                
+            } echo "<tr>
+            <td><td></td><td></td><th>TOTAL AMOUNT YOU NEED TO PAID : RM $total</th></tr>";?>
             <tr>
                 <td></td>
                 <td>
