@@ -70,7 +70,7 @@ echo'</div>';
 
 <div class = 'container-fluid'>
 <div class = 'aboutUs text-center'>
-<h3 class = 'p-2'">About Us</h3>
+<h3 class = 'p-2'>About Us</h3>
             </div><?php
             echo"<div class = 'row'>";
 echo"<span >TOTAL CALCULATION:</span>";
@@ -78,81 +78,36 @@ echo"<span >TOTAL CALCULATION:</span>";
 echo"<div class = 'col-sm-4'>";
         include 'config/database.php';
 
-        $query = "SELECT count( productID ) FROM products";
-        $stmt = $con->prepare($query);
-        $stmt->execute();
-        $num = $stmt->rowCount();
-        if ($num > 0) {
-
-            echo "<table class = 'table table-hover table-responsive table-bordered'>";
-
-            echo "<tr>";
-            echo "<th>Number of product:</th>";
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                echo "<td>";
-                echo $row['count(productID)'];
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "<div class = 'alert alert-danger'>No records found.</div>";
-        }
+      
+                    $productQuery = "SELECT * FROM products";
+                    $productStmt = $con->prepare($productQuery);
+                    $productStmt->execute();
+                    $productTot = $productStmt->rowCount();
+                    echo"<h2>Total number of products : $productTot</h2>";
+                    echo "<a href=product_read.php> <h7>CLICK TO SEE THE LISTING OF products</h7> </a>";
+                    
+                    
       echo "</div>";
       echo"<div class = 'col-sm-4'>";
         include 'config/database.php';
 
-        $query = "SELECT count( id ) FROM customer";
-        $stmt = $con->prepare($query);
-        $stmt->execute();
-        $num = $stmt->rowCount();
-        if ($num > 0) {
-
-            echo "<table class = 'table table-hover table-responsive table-bordered'>";
-
-            echo "<tr>";
-            echo "<th>Number of customer:</th>";
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                echo "<td>";
-                echo $row['count(id)'];
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "<div class = 'alert alert-danger'>No records found.</div>";
-        }
+        $custQuery = "SELECT * FROM customer";
+        $custStmt = $con->prepare($custQuery);
+        $custStmt->execute();
+        $custTot = $custStmt->rowCount();
+        echo"<h2>Total number of customer : $custTot</h2>";
+        echo "<a href=customer_read.php> <h7>CLICK TO SEE THE LISTING OF customer</h7> </a>";
         echo "</div>";
-        
-      echo"<div class = 'col-sm-4'>";
+
+        echo"<div class = 'col-sm-4'>";
         include 'config/database.php';
 
-        $query = "SELECT count( orderID ) FROM orders";
-        $stmt = $con->prepare($query);
-        $stmt->execute();
-        $num = $stmt->rowCount();
-        if ($num > 0) {
-
-            echo "<table class = 'table table-hover table-responsive table-bordered'>";
-
-            echo "<tr>";
-            echo "<th>Number of order:</th>";
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                echo "<td>";
-                echo $row['count(orderID)'];
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "<div class = 'alert alert-danger'>No records found.</div>";
-        }
+        $ordQuery = "SELECT * FROM orders";
+        $ordStmt = $con->prepare($custQuery);
+        $ordStmt->execute();
+        $ordTot = $custStmt->rowCount();
+        echo"<h2>Total number of orders : $ordTot</h2>";
+        echo "<a href=order_read.php> <h7>CLICK TO SEE THE LISTING OF order</h7> </a>";
         echo "</div>";
         
         include 'config/database.php';
@@ -173,11 +128,11 @@ echo"<div class = 'col-sm-4'>";
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
                 echo "<tr>";
-                echo "<td> {
-    $orderID}
+                echo "<td> 
+    $orderID
     </td>";
-                echo "<td> {
-        $cus_username}
+                echo "<td> 
+        $cus_username
         </td>";
                 echo "</tr>";
                 $od_query = "SELECT p.productID, name, quantity, price
@@ -207,7 +162,7 @@ echo"<div class = 'col-sm-4'>";
 
         include 'config/database.php';
         echo"<span>HIGHEST PURCHARSE ORDER:</span>";
-        $query = "SELECT p.productID, name, SUM( quantity )quan, od.orderID FROM order_detail od INNER JOIN products p ON od.productID = p.productID GROUP BY od.orderID ORDER BY quan DESC LIMIT 1;
+        $query = "SELECT p.productID, name, SUM( p.price )total, od.orderID FROM order_detail od INNER JOIN products p ON od.productID = p.productID GROUP BY od.orderID ORDER BY total DESC LIMIT 1;
         ";
         $stmt = $con->prepare($query);
         $stmt->execute();
@@ -222,8 +177,8 @@ echo"<div class = 'col-sm-4'>";
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
                 echo "<tr>";
-                echo "<td> {
-            $orderID}
+                echo "<td> 
+            $orderID
             </td>";
                 echo "</td>";
                 echo "</tr>";
@@ -269,11 +224,11 @@ echo"<div class = 'col-sm-4'>";
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 extract($row);
                 echo "<tr>";
-                echo "<td> {
-                $name}
+                echo "<td> 
+                $name
                 </td>";
-                echo "<td> {
-                    $quan}
+                echo "<td> 
+                    $quan
                     </td>";
                 echo "<td>";
                 echo "</td>";
