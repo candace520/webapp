@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: plum;
+      }
+      form {
+        border: 3px solid #f1f1f1;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #04aa6d;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      .cancelbtn {
+        width: auto;
+        padding: 10px 18px;
+        background-color: #f44336;
+      }
+
+      .container {
+        padding: 16px;
+        width: 50%;
+        background-color: #fefefe;
+        margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+        border: 1px solid #888;
+      }
+
+      span.psw {
+        float: right;
+        padding-top: 16px;
+      }
+
+      /* Change styles for span and cancel button on extra small screens */
+      @media screen and (max-width: 300px) {
+        span.psw {
+          display: block;
+          float: none;
+        }
+        .cancelbtn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Form</h2>
+
+      <form action="#" method="post" onsubmit="return myFunction()">
+        <input
+          type="text"
+          placeholder="Enter First name"
+          name="uname"
+          id="fname"
+        />
+
+        <input
+          type="password"
+          placeholder="Enter Last name"
+          name="psw"
+          id="lname"
+        />
+        <br /><br />
+        <label for="gender"> Gender : </label><br />
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            value="male"
+            type="radio"
+            name="gender"
+            id="genderM"
+          />
+          <label class="form-check-label" for="flexRadioDefault1"> Male </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="gender"
+            id="genderF"
+          />
+          <label class="form-check-label" for="flexRadioDefault2">
+            Female
+          </label>
+        </div>
+        <br /><br />
+        <label for="gender"> Quantity : </label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          id="quantity"
+        >
+          <option selected>Please select the quantity</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <br /><br />
+        <label for="hobby"> Hobby : </label>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="cook"
+            id="hobby1"
+          />
+          <label class="form-check-label"> Cook </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="swimming"
+            id="hobby2"
+          />
+          <label class="form-check-label"> Swimming </label>
+        </div>
+        <button type="submit" value="Check" onclick="validateForm()">
+          Submit
+        </button>
+      </form>
+    </div>
+    <script>
+      function validateForm() {
+        var fname = document.getElementById("fname").value;
+        var lname = document.getElementById("lname").value;
+        var maleBut = document.getElementById("genderM").checked;
+        var femaleBut = document.getElementById("genderF").checked;
+        var sb = document.querySelector("#quantity");
+        var result = sb.selectedIndex;
+        var cook = document.getElementById("hobby1").checked;
+        var swim = document.getElementById("hobby2").checked;
+        var flag = false;
+        var msg = "";
+        if (fname == "") {
+          flag = true;
+          msg = msg + "Please enter your first name!\r\n";
+        }
+        if (lname == "") {
+          flag = true;
+          msg = msg + "Please enter your last name!\r\n";
+        }
+        if (maleBut == false && femaleBut == false) {
+          flag = true;
+          msg = msg + "Please select your gender!\r\n";
+        }
+        if (result == "") {
+          flag = true;
+          msg = msg + "Please select your quantity!\r\n";
+        }
+        if (cook == false && swim == false) {
+          flag = true;
+          msg = msg + "Please select your hobby!";
+        }
+        if (flag == true) {
+          alert(msg);
+          return false;
+        } else {
+          return true;
+        }
+      }
+    </script>
+  </body>
+</html>
