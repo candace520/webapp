@@ -123,32 +123,32 @@ if (!isset($_SESSION["cus_username"])) {
         ?>
 
         <!-- html form here where the product information will be entered -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return validateForm()">
 
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
 
                     <td id="leftrow">Name</td>
                     <td>
-                        <input type='text' name='name' placeholder="Enter name" class='form-control' />
+                        <input type='text' name='name' placeholder="Enter name" class='form-control' id="name"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Malay Name</td>
                     <td>
-                        <input type='text' name='nameMalay' placeholder="Enter malay name " class='form-control' />
+                        <input type='text' name='nameMalay' placeholder="Enter malay name " class='form-control' id="Mname"/>
                     </td>
                 </tr>
                 <tr>
                 <tr>
                     <td>Description</td>
-                    <td><textarea name='description' id="uname" placeholder="Enter description" class='form-control' /></textarea></td>
+                    <td><textarea name='description' id="desc" placeholder="Enter description" class='form-control' /></textarea></td>
                 </tr>
                 <td> Price</td>
                 <td>
                     <div class="input-group">
                         <span class="input-group-text">RM</span>
-                        <input type='text' name='price' id="uname" placeholder="xx.xx" class='form-control' />
+                        <input type='text' name='price' id="price" placeholder="xx.xx" class='form-control' />
                 </td>
                 </tr>
                 </tr>
@@ -159,7 +159,7 @@ if (!isset($_SESSION["cus_username"])) {
     <td>
         <div class="input-group">
             <span class="input-group-text">RM</span>
-            <input type='text' name='promotion_price' id="uname" placeholder="xx.xx" class='form-control' />
+            <input type='text' name='promotion_price' id="proPrice" placeholder="xx.xx" class='form-control' />
 
     </td>
     </tr>
@@ -167,17 +167,17 @@ if (!isset($_SESSION["cus_username"])) {
     </div>
 
     <td>Manufacture Date</td>
-    <td><input type='date' name='manufacture_date' class='form-control' /></td>
+    <td><input type='date' id="man_date" name='manufacture_date' class='form-control' /></td>
     </tr>
     </tr>
 
     <td>Expired Date</td>
-    <td><input type='date' name='expired_date' class='form-control' /></td>
+    <td><input type='date' name='expired_date' class='form-control' id="exp_date"/></td>
     </tr>
     <tr>
         <td></td>
         <td>
-            <input type='submit' value='Save' class='btn btn-primary' />
+            <input type='submit' value='Save' class='btn btn-primary'/>
             <a href='product_read.php' class='btn btn-danger'>Views Product</a>
         </td>
     </tr>
@@ -190,6 +190,48 @@ if (!isset($_SESSION["cus_username"])) {
 
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
+      function validateForm() {
+        var name = document.getElementById("name").value;
+        var Mname = document.getElementById("Mname").value;
+        var price = document.getElementById("price").value;
+        var proPrice = document.getElementById("proPrice").value;
+        var man_date = document.getElementById("man_date").value;
+        var exp_date = document.getElementById("exp_date").value;
+        var flag = false;
+        var msg = "";
+        if (name == ""||Mname == "" ||proPrice == ""|| price == ""||man_date == ""|| exp_date == "") {
+          flag = true;
+          msg = msg + "Please make sure all fields are not empty!\r\n";
+        }
+        if(isNaN(price)||isNaN(proPrice)){
+            flag = true;
+            msg = msg  + " Please make sure the price is a number.\r\n";
+        }
+        if (proPrice > 1000|| price > 1000) {
+          flag = true;
+          msg = msg + "Please make sure the price must be not bigger than RM 1000.\r\n";
+        }
+        if (proPrice < 0 || price < 0) {
+          flag = true;
+          msg = msg + "Please make sure the price must be not a negative value.\r\n";
+        }
+        if (price < proPrice ) {
+          flag = true;
+          msg = msg + "Please make sure the promotion price must be not bigger than normal price.\r\n";
+        }
+        if (exp_date < man_date ) {
+          flag = true;
+          msg = msg + "Please make sure the expired date is later than the manufacture date.\r\n";
+        }
+        if (flag == true) {
+          alert(msg);
+          return false;
+        } else {
+          return true;
+        }
+      }
+    </script>
 </body>
 
 </html>

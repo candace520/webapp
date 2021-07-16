@@ -95,13 +95,13 @@ if (!isset($_SESSION["cus_username"])) {
         }
         ?>
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return validateForm()">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Customer Username</td>
                     <td>
                         <div>
-                            <select class="form-select" id="autoSizingSelect" name="cus_username">
+                            <select class="form-select" id="cname" name="cus_username">
                                 <option selected>-- Select User --</option>
                                 <?php
                                 include 'config/database.php';
@@ -122,7 +122,7 @@ if (!isset($_SESSION["cus_username"])) {
                 echo "<td>Product</td>";
                 echo "<td>";
                 echo "<div>";
-                echo "<select class='form-select' id='autoSizingSelect' name='productID[]'> ";
+                echo "<select class='form-select' id='pro' name='productID[]'> ";
                 echo "<option value=''>-- Select Product --</option> ";
                 include 'config/database.php';
                 $select_product_query = "SELECT productID, name FROM products";
@@ -132,7 +132,7 @@ if (!isset($_SESSION["cus_username"])) {
                     echo "<option value = '$productID[productID]'> $productID[name] </option>";
                 }
                 echo "</select>";
-                echo "<select class='form-select' id='autoSizingSelect' name='quantity[]'>";
+                echo "<select class='form-select' id='quan' name='quantity[]'>";
                 echo "<option value=''>-- Select Quantity --</option>";
                 $number = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20);
                 for ($i = 0; $i < count($number); $i++) {
@@ -183,6 +183,28 @@ if (!isset($_SESSION["cus_username"])) {
 
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
+      function validateForm() {
+        var quan = document.querySelector("#quan");
+        var resultQ = quan.selectedIndex;
+        var pro = document.querySelector("#pro");
+        var resultP = pro.selectedIndex;
+        var cname = document.querySelector("#cname");
+        var resultC = cname.selectedIndex;
+        var flag = false;
+        var msg = "";
+        if (resultQ == ""|| resultP == ""|| resultC == "") {
+          flag = true;
+          msg = msg + "Please make sure all fields are not empty!\r\n";
+        }
+        if (flag == true) {
+          alert(msg);
+          return false;
+        } else {
+          return true;
+        }
+      }
+    </script>
 </body>
 
 </html>

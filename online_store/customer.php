@@ -23,7 +23,6 @@ if (!isset($_SESSION["cus_username"])) {
         .container {
             width: 50%;
         }
-
         .nav {
             padding-left: 30px;
             font-size: 18px;
@@ -85,11 +84,8 @@ if (!isset($_SESSION["cus_username"])) {
                 if ($_POST['password'] != $_POST['confPass']) {
                     throw new Exception("<div class='alert alert-danger'>Please make sure your password same as confirm password</div>");
                 }
-                if (!preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])) {
-                    throw new Exception("<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets</div>");
-                }
-                if (strlen($_POST["password"]) < 8) {
-                    throw new Exception("<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>");
+                if (!preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])||strlen($_POST["password"]) < 8) {
+                    throw new Exception("<div class='alert alert-danger'>Please make sure your password contains numbers and alphabets and also contains 8 characters</div>");
                 }
                 $date1 = "Y";
                 $diff = abs(strtotime($date1) - strtotime($_POST['dateofbirth']));
@@ -140,7 +136,7 @@ if (!isset($_SESSION["cus_username"])) {
         }
         ?>
         <!-- html form here where the product information will be entered -->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"  onsubmit="return validateForm()">
 
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
@@ -149,7 +145,7 @@ if (!isset($_SESSION["cus_username"])) {
                         <div class="input-container">
                             <i class="fa fa-user icon"></i>
                             <div class="input-group">
-                                <input type='text' name='cus_username' placeholder="Enter user name " class='form-control' />
+                                <input type='text' name='cus_username' placeholder="Enter user name " class='form-control' id="cName"/>
                     </td>
                 </tr>
     </div>
@@ -161,7 +157,7 @@ if (!isset($_SESSION["cus_username"])) {
             <div class="input-container">
                 <i class="fa fa-key icon"></i>
                 <div class="input-group">
-                    <input type='password' name='password' placeholder="Enter password " class='form-control' />
+                    <input type='password' name='password' placeholder="Enter password " class='form-control' id="pass"/>
         </td>
     </tr>
     </div>
@@ -172,7 +168,7 @@ if (!isset($_SESSION["cus_username"])) {
             <div class="input-container">
                 <i class="fa fa-key icon"></i>
                 <div class="input-group">
-                    <input type='password' name='confPass' placeholder="Enter confirm password " class='form-control' />
+                    <input type='password' name='confPass' placeholder="Enter confirm password " class='form-control' id="conPass"/>
         </td>
     </tr>
     </div>
@@ -181,7 +177,7 @@ if (!isset($_SESSION["cus_username"])) {
 
         <td>First Name</td>
         <td>
-            <input type='text' name='firstname' placeholder="Enter Firstname" class='form-control' />
+            <input type='text' name='firstname' placeholder="Enter Firstname" class='form-control' id="fname"/>
         </td>
         </div>
     </tr>
@@ -189,7 +185,7 @@ if (!isset($_SESSION["cus_username"])) {
         <td>Last Name</td>
         <td>
             <div class="input-group">
-                <input type='text' name='lastname' id="uname" placeholder="Enter Lastname" class='form-control' />
+                <input type='text' name='lastname' id="lname" placeholder="Enter Lastname" class='form-control' />
 
         </td>
     </tr>
@@ -197,9 +193,9 @@ if (!isset($_SESSION["cus_username"])) {
     <tr>
         <td>Gender</td>
         <td>
-            <input type="radio" name="gender" value="male">
+            <input type="radio" name="gender" value="male" id="gen1">
               <label for="html">Male</label><br>
-              <input type="radio" name="gender" value="female">
+              <input type="radio" name="gender" value="female" id="gen2">
               <label for="css">Female</label>
         </td>
     </tr>
@@ -209,20 +205,20 @@ if (!isset($_SESSION["cus_username"])) {
         <td>
             <div class="input-container">
                 <i class="fa fa-birthday-cake icon"></i>
-                <input type='date' name='dateofbirth' class='form-control' />
+                <input type='date' name='dateofbirth' class='form-control' id="datbir"/>
         </td>
     </tr>
     </div>
     <tr>
         <td>Registration Date And Time</td>
-        <td><input type='datetime-local' name='registrationdatetime' class='form-control' /></td>
+        <td><input type='datetime-local' name='registrationdatetime' class='form-control' id="reDate" /></td>
     </tr>
 
     <tr>
         <td>Accounts Status</td>
-        <td><input type="radio" name="accountstatus" value="active">
+        <td><input type="radio" name="accountstatus" value="active" id="acc1">
               <label for="html">Active</label><br>
-              <input type="radio" name="accountstatus" value="inactive">
+              <input type="radio" name="accountstatus" value="inactive" id="acc2">
               <label for="css">Inactive</label>
         </td>
     </tr>
@@ -242,6 +238,56 @@ if (!isset($_SESSION["cus_username"])) {
     </div>
     <!-- end .container -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
+      function validateForm() {
+        var cName = document.getElementById("cName").value;
+        var pass = document.getElementById("pass").value;
+        var conPass = document.getElementById("conPass").value;
+        var fname = document.getElementById("fname").value;
+        var lname = document.getElementById("lname").value;
+        var gen1 = document.getElementById("gen1").checked;
+        var gen2 = document.getElementById("gen2").checked;
+        var datbir = document.getElementById("datbir").value;
+        var reDate = document.getElementById("reDate").value;
+        var acc1 = document.getElementById("acc1").checked;
+        var acc2 = document.getElementById("acc2").checked;
+        var passw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        
+        
+        var date1 = new Date().getFullYear();
+        var date2 = new Date(datbir);
+        var yearsDiff =  date1 - date2.getFullYear();
+        var flag = false;
+        var msg = "";
+        if (cName == ""||pass == "" ||conPass == ""|| fname == ""||lname == "" ||datbir =="" || reDate == "" ||(gen1 == false && gen2 == false)||(acc1 == false && acc2 == false)){ 
+            flag = true;
+          msg = msg + "Please make sure all fields are not empty!\r\n";
+        }
+        else if(cName.length <= 6){
+            flag = true;
+          msg = msg + "Please make sure your name should be greater than 6 characters!\r\n";
+        }
+        else if(pass != conPass){
+            flag = true;
+          msg = msg + "Please make sure your password same as confirm password!\r\n";
+        }
+        else if(!pass.match(passw)){ 
+            flag = true;
+          msg = msg + "Please make sure your password contains numbers and alphabets and also contains 8 characters!\r\n";
+        }
+        else if(yearsDiff < 18){
+            flag = true;
+          msg = msg + "Please make sure your ages are 18 years old and above!\r\n";
+        }
+        
+        if (flag == true) {
+          alert(msg);
+          return false;
+        } else {
+          return true;
+        }
+      }
+    </script>
 </body>
 
 </html>
