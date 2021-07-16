@@ -1,5 +1,4 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
       <ul class="navbar-nav">
       <li class="nav-item ">
@@ -44,5 +43,4 @@
             </div>
       </ul>
     </div>
-  </div>
 </nav>
