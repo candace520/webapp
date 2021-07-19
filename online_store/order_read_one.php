@@ -8,18 +8,15 @@ if (!isset($_SESSION["cus_username"])) {
 <html>
 
 <head>
-    <title>PDO - Read One Record - PHP CRUD Tutorial</title>
-    <!-- Latest compiled and minified Bootstrap CSS -->
+    <title>Order Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
+<?php
+        include 'menu.php';
+        ?>
 <body>
-    <?php
-    include 'menu.php';
-    ?>
-    <!-- container -->
     <div class="container">
+        
         <div class="page-header">
             <h1>Read Order</h1>
         </div>
@@ -35,9 +32,9 @@ if (!isset($_SESSION["cus_username"])) {
             $o_stmt->bindParam(":orderID", $orderID);
             $o_stmt->execute();
             $o_row = $o_stmt->fetch(PDO::FETCH_ASSOC);
-
             $orderID = $o_row['orderID'];
             $cus_username = $o_row['cus_username'];
+            $total = sprintf('%.2f', $o_row['total']);
         } catch (PDOException $exception) {
             die('ERROR: ' . $exception->getMessage());
         }
@@ -45,16 +42,17 @@ if (!isset($_SESSION["cus_username"])) {
 
         <table class='table table-hover table-responsive table-bordered'>
             <tr>
-                <td>Order ID</td>
+                <td class="col-4">Order ID</td>
                 <td><?php echo htmlspecialchars($orderID, ENT_QUOTES);  ?></td>
             </tr>
-
             <tr>
                 <td>Customer Username</td>
                 <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
             </tr>
+        </table>
+        <table class='table table-hover table-responsive table-bordered'>
             <?php
-            $od_query = "SELECT p.productID, name, quantity,price
+            $od_query = "SELECT p.productID, name, quantity, price, total
                         FROM order_detail od
                         INNER JOIN products p ON od.productID = p.productID
                         WHERE orderID = :orderID";
@@ -63,29 +61,29 @@ if (!isset($_SESSION["cus_username"])) {
             $od_stmt->execute();
             echo "<th class='col-3'>Product</th>";
             echo "<th class='col-3'>Quantity</th>";
-            echo "<th class='col-3'>Price(Per One)</th>";
+            echo "<th class='col-3'>Price per piece</th>";
             echo "<th class='col-3'>Total Price</th>";
-            $total = 0;
             while ($od_row = $od_stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
                 echo "<td>$od_row[name]</td>";
                 echo "<td>$od_row[quantity]</td>";
-                echo "<td>RM $od_row[price]</td>";
-                $quantity = $od_row['quantity'];
-                $price = $od_row['price'];
-                $totalPrice = $quantity * $price;
-                echo "<td>RM $totalPrice</td>";
-                $total += $totalPrice;
-                
-            } echo "<tr>
-            <td><td></td><td></td><th>TOTAL AMOUNT YOU NEED TO PAID : RM $total</th></tr>";?>
-            <tr>
-                <td></td>
-                <td>
-                    <a href='order_read.php' class='btn btn-danger'>Back to read order </a>
-                </td>
-            </tr>
+                $productPrice = sprintf('%.2f', $od_row['price']);
+                echo "<td>RM $productPrice</td>";
+                $productTotal = sprintf('%.2f', $od_row['total']);
+                echo "<td>RM $productTotal</td>";
+                echo "</tr>";
+            }
+            echo "<tr>";
+            echo "<td></td>";
+            echo "<td></td>";
+            echo "<th>Total amount you need to pay:</th>";
+            echo "<td>RM $total</td>";
+            echo "</tr>";
+            ?>   
         </table>
+        <div class="d-flex justify-content-center">
+            <a href='order_read.php' class='btn btn-danger'>Back to read order</a>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 

@@ -8,28 +8,21 @@ if (!isset($_SESSION["cus_username"])) {
 <html>
 
 <head>
-    <title>PDO - Create a Record - PHP CRUD Tutorial</title>
-    <!-- Latest compiled and minified Bootstrap CSS -->
+    <title>Order list</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
 
-<body>
-    <?php
-    include 'menu.php';
-    ?>
-    <!-- container -->
+<body> <?php
+        include 'menu.php';
+        ?>
     <div class="container">
-    
+       
         <div class="page-header">
-            <h1>Read Orders</h1>
+            <h1> Read Order</h1>
         </div>
 
-        <!-- PHP code to read records will be here -->
         <?php
         include 'config/database.php';
         $action = isset($_GET['action']) ? $_GET['action'] : "";
-        // if it was redirected from delete.php
         if ($action == 'deleted') {
             echo "<div class='alert alert-success'>Record was deleted.</div>";
         }
@@ -44,6 +37,7 @@ if (!isset($_SESSION["cus_username"])) {
             echo "<tr>";
             echo "<th>Order ID</th>";
             echo "<th>Customer Username</th>";
+            echo "<th>Total Amount You Need To Paid:</th>";
             echo "</tr>";
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -51,6 +45,7 @@ if (!isset($_SESSION["cus_username"])) {
                 echo "<tr>";
                 echo "<td>{$orderID}</td>";
                 echo "<td>{$cus_username}</td>";
+                echo "<td>{$total}</td>";
                 echo "<td>";
                 echo "<a href='order_read_one.php?orderID={$orderID}' class='btn btn-info me-2'>Read</a>";
                 echo "<a href='order_update.php?orderID={$orderID}' class='btn btn-primary me-2'>Edit</a>";
@@ -64,21 +59,16 @@ if (!isset($_SESSION["cus_username"])) {
         }
         ?>
 
-
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script type='text/javascript'>
-        // confirm record deletion
         function delete_order(orderID) {
 
             if (confirm('Are you sure?')) {
-                // if user clicked ok,
-                // pass the id to delete.php and execute the delete query
                 window.location = 'order_delete.php?orderID=' + orderID;
             }
         }
     </script>
-
 </body>
 
 </html>
