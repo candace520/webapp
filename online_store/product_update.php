@@ -57,7 +57,7 @@ if (!isset($_SESSION["cus_username"])) {
                     throw new Exception("Please make sure the price is not bigger than RM 1000.");
                 }
                 if ($_POST['price'] < $_POST['promotion_price']) {
-                    throw new Exception("Please make sure the promotion price must be not bigger than normal price.");
+                    throw new Exception("Promotion price cannot bigger than normal price.");
                 }
                 if ($_POST['manufacture_date'] > $_POST['expired_date']) {
                     throw new Exception("Please make sure expired date is later than the manufacture date.");
@@ -113,20 +113,11 @@ if (!isset($_SESSION["cus_username"])) {
                 </tr>
                 <tr>
                     <td>Price </td>
-                    <td>
-                    <div class="input-group">
-                        <span class="input-group-text">RM</span>
-                        <input type='text' value="<?php echo htmlspecialchars($price, ENT_QUOTES); ?>"name='price' id="price" placeholder="xx.xx" class='form-control' />
-                </td>
+                    <td><input type='text' name='price' id="price" value="<?php echo htmlspecialchars($price, ENT_QUOTES); ?>" class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Promotion Price </td>
-                    <td>
-        <div class="input-group">
-            <span class="input-group-text">RM</span>
-            <input type='text' value="<?php echo htmlspecialchars($promotion_price, ENT_QUOTES); ?>"name='promotion_price' id="proPrice" placeholder="xx.xx" class='form-control' />
-
-    </td>
+                    <td><input type='text' name='promotion_price' id="promotion_price" value="<?php echo htmlspecialchars($promotion_price, ENT_QUOTES); ?>" class='form-control' /></td>
                 </tr>
                 <tr>
                     <td>Manufacture Date </td>
@@ -139,7 +130,7 @@ if (!isset($_SESSION["cus_username"])) {
             </table>
             <div class="d-flex justify-content-center">
                 <input type='submit' value='Save Changes' class='btn btn-primary m-2' />
-                <a href='product_read.php' class='btn btn-danger m-2'>Back to read product</a>
+                <a href='product_read.php' class='btn btn-danger m-2'>Back to product list</a>
             </div>
         </form>
     </div>
