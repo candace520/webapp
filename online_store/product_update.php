@@ -139,7 +139,7 @@ if (!isset($_SESSION["cus_username"])) {
             </table>
             <div class="d-flex justify-content-center">
                 <input type='submit' value='Save Changes' class='btn btn-primary m-2' />
-                <a href='product_read.php' class='btn btn-danger m-2'>Back to product list</a>
+                <a href='product_read.php' class='btn btn-danger m-2'>Back to read product</a>
             </div>
         </form>
     </div>
