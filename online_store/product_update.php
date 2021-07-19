@@ -11,11 +11,10 @@ if (!isset($_SESSION["cus_username"])) {
     <title>Homework - Update Product</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
-
-<body>
 <?php
         include 'menu.php';
         ?>
+<body>
     <div class="container">
         
         <div class="page-header">
@@ -51,17 +50,17 @@ if (!isset($_SESSION["cus_username"])) {
                 if (!is_numeric($_POST['price']) || !is_numeric($_POST['promotion_price'])) {
                     throw new Exception("Please make sure the price is a number");
                 }
-                if ($_POST['price'] < 0 || $_POST['promotion_price'] < 0) {
-                    throw new Exception("Please make sure the price must be not a negative value");
+                if ($_POST['price'] <= 0 || $_POST['promotion_price'] <= 0) {
+                    throw new Exception("Please make sure the price must not be a negative value or zero!");
                 }
                 if ($_POST['price'] > 1000 || $_POST['promotion_price'] > 1000) {
                     throw new Exception("Please make sure the price is not bigger than RM 1000.");
                 }
                 if ($_POST['price'] < $_POST['promotion_price']) {
-                    throw new Exception("Promotion price cannot bigger than normal price.");
+                    throw new Exception("Please make sure the promotion price must be not bigger than normal price.");
                 }
                 if ($_POST['manufacture_date'] > $_POST['expired_date']) {
-                    throw new Exception("Please make sure expired date is late than the manufacture date.");
+                    throw new Exception("Please make sure expired date is later than the manufacture date.");
                 }
                 $query = "UPDATE products SET name=:name, nameMalay=:nameMalay, description=:description,
                          price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date WHERE productID = :productID";
@@ -75,7 +74,7 @@ if (!isset($_SESSION["cus_username"])) {
                 $expired_date = htmlspecialchars(strip_tags($_POST['expired_date']));
                 $stmt->bindParam(':productID', $productID);
                 $stmt->bindParam(':name', $name);
-                $stmt->bindParam(':name_malay', $name_malay);
+                $stmt->bindParam(':nameMalay', $nameMalay);
                 $stmt->bindParam(':description', $description);
                 $stmt->bindParam(':price', $price);
                 $stmt->bindParam(':promotion_price', $promotion_price);
@@ -94,51 +93,108 @@ if (!isset($_SESSION["cus_username"])) {
             }
         } ?>
 
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?productID={$productID}"); ?>" method="post">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?productID={$productID}"); ?>" onsubmit="return validation()" method="post">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Product ID</td>
                     <td><?php echo htmlspecialchars($productID, ENT_QUOTES);  ?></td>
                 </tr>
                 <tr>
-                    <td>Name</td>
-                    <td><input type='text' name='name' value="<?php echo htmlspecialchars($name, ENT_QUOTES); ?>" class='form-control' /></td>
+                    <td>Name </td>
+                    <td><input type='text' name='name' id="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES); ?>" class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Malay Name</td>
-                    <td><input type='text' name='nameMalay' value="<?php echo htmlspecialchars($nameMalay, ENT_QUOTES); ?>" class='form-control' /></td>
+                    <td>Malay Name </td>
+                    <td><input type='text' name='nameMalay' id="nameMalay" value="<?php echo htmlspecialchars($nameMalay, ENT_QUOTES); ?>" class='form-control' /></td>
                 </tr>
                 <tr>
-                    <td>Description</td>
-                    <td><textarea name='description' class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES); ?></textarea></td>
+                    <td>Description </span></td>
+                    <td><textarea name='description' id="description" class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES); ?></textarea></td>
                 </tr>
                 <tr>
-                    <td>Price</td>
-                    <td><input type='text' name='price' value="<?php echo htmlspecialchars($price, ENT_QUOTES); ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Promotion Price</td>
-                    <td><input type='text' name='promotion_price' value="<?php echo htmlspecialchars($promotion_price, ENT_QUOTES); ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Manufacture Date</td>
-                    <td><input type='date' name='manufacture_date' value="<?php echo htmlspecialchars($manufacture_date, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td>Expired Date</td>
-                    <td><input type='date' name='expired_date' value="<?php echo htmlspecialchars($expired_date, ENT_QUOTES);  ?>" class='form-control' /></td>
-                </tr>
-                <tr>
-                    <td></td>
+                    <td>Price </td>
                     <td>
-                        <input type='submit' value='Save Changes' class='btn btn-primary' />
-                        <a href='product_read.php' class='btn btn-danger'>Back to read product</a>
-                    </td>
+                    <div class="input-group">
+                        <span class="input-group-text">RM</span>
+                        <input type='text' value="<?php echo htmlspecialchars($price, ENT_QUOTES); ?>"name='price' id="price" placeholder="xx.xx" class='form-control' />
+                </td>
+                </tr>
+                <tr>
+                    <td>Promotion Price </td>
+                    <td>
+        <div class="input-group">
+            <span class="input-group-text">RM</span>
+            <input type='text' value="<?php echo htmlspecialchars($promotion_price, ENT_QUOTES); ?>"name='promotion_price' id="proPrice" placeholder="xx.xx" class='form-control' />
+
+    </td>
+                </tr>
+                <tr>
+                    <td>Manufacture Date </td>
+                    <td><input type='date' name='manufacture_date' id="manufacture_date" value="<?php echo htmlspecialchars($manufacture_date, ENT_QUOTES);  ?>" class='form-control' /></td>
+                </tr>
+                <tr>
+                    <td>Expired Date </td>
+                    <td><input type='date' name='expired_date' id="expired_date" value="<?php echo htmlspecialchars($expired_date, ENT_QUOTES);  ?>" class='form-control' /></td>
                 </tr>
             </table>
+            <div class="d-flex justify-content-center">
+                <input type='submit' value='Save Changes' class='btn btn-primary m-2' />
+                <a href='product_read.php' class='btn btn-danger m-2'>Back to product list</a>
+            </div>
         </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script>
+        function validation() {
+            var name = document.getElementById("name").value;
+            var nameMalay = document.getElementById("nameMalay").value;
+            var description = document.getElementById("description").value;
+            var price = document.getElementById("price").value;
+            var promotion_price = document.getElementById("promotion_price").value;
+            var priceValidation = /^[0-9]*[.]?[0-9]*$/;
+            var manufacture_date = document.getElementById("manufacture_date").value;
+            var expired_date = document.getElementById("expired_date").value;
+            var flag = false;
+            var msg = "";
+            if (name == "" || nameMalay == "" || description == "" || price == "" || promotion_price == "" || manufacture_date == "" || expired_date == "") {
+                flag = true;
+                msg = msg + "Please make sure all fields are not empty!\r\n";
+            }
+            if (price.match(priceValidation)) {
+            } else{
+                flag = true;
+                msg = msg + "Please make sure the price is a number!\r\n";
+            }
+            if (promotion_price.match(priceValidation)) {
+            } else{
+                flag = true;
+                msg = msg + "Please make sure the promotion price is a number!\r\n";
+            }
+            if (price <= 0 || promotion_price <= 0) {
+                flag = true;
+                msg = msg + "Please make sure the price must not be a negative value or zero!\r\n";
+            }
+            if (price > 1000 || promotion_price > 1000) {
+                flag = true;
+                msg = msg + "Please make sure the price is not bigger than RM 1000!\r\n";
+            }
+            if (price < promotion_price) {
+                flag = true;
+                msg = msg + "Please make sure the promotion price must be not bigger than normal price!\r\n";
+            }
+            if (manufacture_date > expired_date) {
+                flag = true;
+                msg = msg + "Please make sure expired date is later than the manufacture date!\r\n";
+            }
+            if (flag == true) {
+                alert(msg);
+                return false;
+            }else{
+                return true;
+            }
+        }
+    </script>
+
 </body>
 
 </html>
