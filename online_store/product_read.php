@@ -1,90 +1,120 @@
 <?php
 session_start();
-if (!isset($_SESSION["cus_username"])) {
-    header("Location: login.php?error=restrictedAccess");
+if ( !isset( $_SESSION['cus_username'] ) ) {
+    header( 'Location: login.php?error=restrictedAccess' );
 }
 ?>
 <!DOCTYPE HTML>
 <html>
 
 <head>
-    <title>Read Product</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-
+<title>Read Product</title>
+<!-- Latest compiled and minified Bootstrap CSS -->
+<link href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css' rel = 'stylesheet' integrity = 'sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin = 'anonymous'>
+<!-- Add icon library -->
+<link rel = 'stylesheet' href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 <body>
-    <?php
-    include 'menu.php';
-    ?>
-    <div class="container">
+<?php
+include 'menu_read.php';
+?>
+<div class = 'container'>
 
-        <div class="page-header">
-            <h1>Read Product</h1>
-        </div>
+<div class = 'page-header'>
+<h1>Read Product</h1>
+</div>
+<table class = 'table table-hover table-responsive table-bordered' >
+<tr style = 'border:none;'>
+<td class = 'col-10' style = 'border:none;'> <div class = 'input-group rounded'><input type = 'text'  class = 'form-control rounded' placeholder = 'Search by product names...' aria-label = 'Search'
+aria-describedby = 'search-addon' id = 'myInput' onkeyup = 'myFunction()' />
+<button type = 'button' class = 'btn btn-primary' >
+<i class = 'fa fa-search' style = 'font-size:20px;color:white'></i>
+</button></div></td>
+<td style = 'border:none;'><a href = 'create.php' class = 'btn btn-primary'>Create New Product</a></td>
+</tr>
+</table>
 
-        <?php
-        include 'config/database.php';
+<?php
+include 'config/database.php';
 
-        $action = isset($_GET['action']) ? $_GET['action'] : "";
-        // if it was redirected from delete.php
-        if ($action == 'productInStock') {
-            echo "<div class='alert alert-success'>Record could not deleted as this product in the order.</div>";
-        }
-        
-        if ($action == 'deleted') {
-            echo "<div class='alert alert-success'>Record was deleted.</div>";
-        }
+$action = isset( $_GET['action'] ) ? $_GET['action'] : '';
+// if it was redirected from delete.php
+if ( $action == 'productInStock' ) {
+    echo "<div class='alert alert-success'>Record could not deleted as this product in the order.</div>";
+}
 
-        $query = "SELECT productID, name, description, price FROM products ORDER BY productID DESC";
-        $stmt = $con->prepare($query);
-        $stmt->execute();
-        $num = $stmt->rowCount();
-        echo "<a href='create.php' class='btn btn-primary mb-2'>Create New Product</a>";
-        if ($num > 0) {
+if ( $action == 'deleted' ) {
+    echo "<div class='alert alert-success'>Record was deleted.</div>";
+}
 
-            echo "<table class='table table-hover table-responsive table-bordered'>";
+$query = 'SELECT productID, name FROM products ORDER BY productID DESC';
+$stmt = $con->prepare( $query );
+$stmt->execute();
+$num = $stmt->rowCount();
+if ( $num > 0 ) {
 
-            echo "<tr>";
-            echo "<th>ID</th>";
-            echo "<th>Name</th>";
-            echo "<th>Description</th>";
-            echo "<th>Price</th>";
-            echo "<th>Action</th>";
-            echo "</tr>";
+    echo "<table class='table table-hover table-responsive table-bordered' id='myTable'>";
 
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                echo "<tr>";
-                echo "<td>{$productID}</td>";
-                echo "<td>{$name}</td>";
-                echo "<td>{$description}</td>";
-                echo "<td>{$price}</td>";
-                echo "<td>";
-                echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info me-2'>Read</a>";
-                echo "<a href='product_update.php?productID={$productID}' class='btn btn-primary me-2'>Edit</a>";
-                echo "<a href='#' onclick='delete_product({$productID});'  class='btn btn-danger'>Delete</a>";
-                echo "</td>";
-                echo "</tr>";
+    echo '<tr>';
+    echo '<th>ID</th>';
+    echo '<th>Name</th>';
+    echo '<th>Action</th>';
+    echo '</tr>';
+
+    while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+        extract( $row );
+        echo '<tr>';
+        echo "<td>{$productID}</td>";
+        echo "<td>{$name}</td>";
+        echo '<td>';
+        echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info me-2'>Read</a>";
+        echo "<a href='product_update.php?productID={$productID}' class='btn btn-primary me-2'>Edit</a>";
+        echo "<a href='#' onclick='delete_product({$productID});'  class='btn btn-danger'>Delete</a>";
+        echo '</td>';
+        echo '</tr>';
+    }
+    echo '</table>';
+} else {
+    echo "<div class='alert alert-danger'>No records found.</div>";
+}
+
+?>
+
+</div>
+<script src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js' integrity = 'sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4' crossorigin = 'anonymous'></script>
+<script type = 'text/javascript'>
+// confirm record deletion
+
+function delete_product( productID ) {
+
+    if ( confirm( 'Are you sure?' ) ) {
+        // if user clicked ok,
+        // pass the id to delete.php and execute the delete query
+        window.location = 'product_delete.php?productID=' + productID;
+    }
+}
+</script>
+<script>
+
+function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById( 'myInput' );
+    filter = input.value.toUpperCase();
+    table = document.getElementById( 'myTable' );
+    tr = table.getElementsByTagName( 'tr' );
+    for ( i = 0; i < tr.length; i++ ) {
+        td = tr[i].getElementsByTagName( 'td' )[1];
+        if ( td ) {
+            txtValue = td.textContent || td.innerText;
+            if ( txtValue.toUpperCase().indexOf( filter ) > -1 ) {
+                tr[i].style.display = '';
+            } else {
+                tr[i].style.display = 'none';
             }
-            echo "</table>";
-        } else {
-            echo "<div class='alert alert-danger'>No records found.</div>";
         }
-        ?>
 
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    <script type='text/javascript'>
-        // confirm record deletion
-        function delete_product(productID) {
-
-            if (confirm('Are you sure?')) {
-                // if user clicked ok,
-                // pass the id to delete.php and execute the delete query
-                window.location = 'product_delete.php?productID=' + productID;
-            }
-        }
-    </script>
-
+    }
+}
+</script>
 </body>
 
 </html>
