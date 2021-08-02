@@ -18,7 +18,7 @@
     .img2{
         width: 25%;
     }
-    h6{
+    .img3,h6{
         font-weight: bold;
     }
     </style>
@@ -165,6 +165,7 @@
                                         <?php 
                                             if (isset($row['fileToUpload']) && !empty($row['fileToUpload'])) {
                                                 echo "<img src='img/$row[fileToUpload]' width='100' height='100'>";
+                                                
                                             } else {
                                                 echo "<img src='img/noPic.jpg' width ='100' height = '100'>";
                                             }
@@ -173,6 +174,7 @@
                                 </div>
                                 <div class="img1">
                                     <div class="img2">
+                                        <div class="img3"><?php echo $fileToUpload;?></div>
                                         <input type="file" value="<?php echo $fileToUpload ?>"  name="fileToUpload" id="fileToUpload">
                                     </div>
                                 </div>

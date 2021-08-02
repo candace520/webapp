@@ -35,6 +35,9 @@
         .img2{
             width: 25%;
         }
+        .img3{
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -227,6 +230,7 @@
                                 </div>
                                 <div class="img1">
                                     <div class="img2">
+                                        <div class="img3"><?php echo $fileToUpload;?></div>
                                         <input type="file" value="<?php echo $fileToUpload ?>"  name="fileToUpload" id="fileToUpload">
                                     </div>
                                 </div>
