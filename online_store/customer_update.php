@@ -1,14 +1,14 @@
 <?php
-session_start();
-if (!isset($_SESSION["cus_username"])) {
-    header("Location: login.php?error=restrictedAccess");
-}
+    session_start();
+    if (!isset($_SESSION["cus_username"])) {
+        header("Location: login.php?error=restrictedAccess");
+    }
 ?>
 <!DOCTYPE HTML>
 <html>
 
 <head>
-    <title>PDO - Read Records - PHP CRUD Tutorial</title>
+    <title>Update Customer</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -28,6 +28,12 @@ if (!isset($_SESSION["cus_username"])) {
 
         .mt0 {
             margin-top: 0;
+        }
+        .img1{
+            display: flex;
+        }
+        .img2{
+            width: 25%;
         }
     </style>
 </head>
@@ -76,6 +82,7 @@ if (!isset($_SESSION["cus_username"])) {
             $firstname = $row['firstname'];
             $lastname = $row['lastname'];
             $dateofbirth = $row['dateofbirth'];
+            $fileToUpload = $row['fileToUpload'];
         }
 
         // show error
@@ -104,11 +111,54 @@ if (!isset($_SESSION["cus_username"])) {
                 if (strlen($_POST["password"]) < 8) {
                     throw new Exception("<div class='alert alert-danger'>Please make sure your password contains 8 characters</div>");
                 }
+                if($fileToUpload!=""){
+                    $preFile = "img/{$fileToUpload}";
+                    if (unlink($preFile)) { 
+                        echo"<div class='alert alert-danger'>$fileToUpload has been deleted!</div>";
+                    } 
+                }
+                        $target_dir = "img/";
+                        $fileToUpload = $_FILES['fileToUpload']['name']; 
+                        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
+                        $isUploadOK = TRUE;
+                        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+                        // Check if image file is a actual image or fake image
+                        if(isset($_POST["upload"])&&!empty($_POST["upload"])) {
+                            
+                            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                        if($check == false) {
+                            $isUploadOK = false;
+                            echo"<div class='alert alert-danger'>Please make sure File is an image!</div>";  
+                        } 
+                        list($width, $height, $type, $attr) = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                            if($width!=$height){
+                                $isUploadOK = false;
+                                echo"<div class='alert alert-danger'>Please make sure File is in square!</div>";  
+                            }
+                        }
+                        
+                        if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                            echo"<div class='alert alert-danger'>Please make sure File is not larger than 512kb!</div>";
+                            $isUploadOK = false;
+                        }
+                        if ($isUploadOK == false) {
+                            echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
+                            $fileToUpload ="";
+                        } 
+                        else {
+                            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                                echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
+                                
+                            } else {
+                                echo "Sorry, there was an error uploading your file.";
+                            }
+                        }
+                        
                 // write update query
                 // in this case, it seemed like we have so many fields to pass and
                 // it is better to label them and not use question marks
                 $query = "UPDATE customer
-                  SET cus_username=:cus_username,gender=:gender,accountstatus=:accountstatus,password=:password, 
+                  SET fileToUpload=:fileToUpload,cus_username=:cus_username,gender=:gender,accountstatus=:accountstatus,password=:password, 
                   confPass=:confPass,lastname=:lastname,firstname=:firstname,dateofbirth=:dateofbirth WHERE id = :id";
                 // prepare query for excecution
                 $stmt = $con->prepare($query);
@@ -122,6 +172,7 @@ if (!isset($_SESSION["cus_username"])) {
                 $lastname = htmlspecialchars(strip_tags($_POST['lastname']));
                 $dateofbirth = htmlspecialchars(strip_tags($_POST['dateofbirth']));
                 // bind the parameters
+                $stmt->bindParam(':fileToUpload', $fileToUpload);
                 $stmt->bindParam(':cus_username', $cus_username);
                 $stmt->bindParam(':gender', $gender);
                 $stmt->bindParam(':accountstatus', $accountstatus);
@@ -148,7 +199,7 @@ if (!isset($_SESSION["cus_username"])) {
 
 
         <!--we have our html form here where new record information can be updated-->
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post"onsubmit="return validateForm()">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?id={$id}"); ?>" method="post"onsubmit="return validateForm()"enctype="multipart/form-data">
             <table class='table table-hover table-responsive table-bordered'>
                 <tr>
                     <td>Customer Name</td>
@@ -158,6 +209,30 @@ if (!isset($_SESSION["cus_username"])) {
                             <div class="input-group">
                                 <input type='text' name='cus_username' placeholder="Enter user name " class='form-control' value="<?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?>"id="cName"/>
                     </td>
+                </tr>
+                <tr>
+                        <td>Product Image(*Optional)</td>
+                        <td>
+                            <div class="image">
+                                <div class="img3">
+                                    <h4>
+                                        <?php 
+                                            if (isset($row['fileToUpload']) && !empty($row['fileToUpload'])) {
+                                                echo "<img src='img/$row[fileToUpload]' width='100' height='100'>";
+                                            } else {
+                                                echo "<img src='img/noPic.jpg' width ='100' height = '100'>";
+                                            }
+                                        ?>
+                                    </h4>
+                                </div>
+                                <div class="img1">
+                                    <div class="img2">
+                                        <input type="file" value="<?php echo $fileToUpload ?>"  name="fileToUpload" id="fileToUpload">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </td>
                 </tr>
                 <tr>
                 <td>Gender</td>
