@@ -1,19 +1,20 @@
 <?php
-session_start();
-if (!isset($_SESSION["cus_username"])) {
-    header("Location: login.php?error=restrictedAccess");
-}
+    session_start();
+    if ( !isset( $_SESSION['cus_username'] ) ) {
+        header( 'Location: login.php?error=restrictedAccess' );
+    }
 ?>
 <!DOCTYPE HTML>
 <html>
 
-<head>
-    <title>PDO - Create a Record - PHP CRUD Tutorial</title>
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <head>
+        <title>Contact Page</title>
+        <!-- Latest compiled and minified Bootstrap CSS -->
+        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css' rel='stylesheet'
+            integrity='sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin='anonymous'>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
-    <style>
+        <style>
         #leftrow {
             width: 30%;
 
@@ -74,37 +75,38 @@ if (!isset($_SESSION["cus_username"])) {
             background-color: #f2f2f2;
             padding: 20px;
         }
-    </style>
-</head>
+        </style>
+    </head>
 
-<body>
-<?php
-       include 'menu.php';
-    ?>
-    <div class="container">
-        <h3>Contact Form</h3><br>
-        <form action="/action_page.php">
-            <label for="fname">First Name</label>
-            <input type="text" id="fname" name="firstname" placeholder="Your name..">
-
-            <label for="lname">Last Name</label>
-            <input type="text" id="lname" name="lastname" placeholder="Your last name..">
-
-            <label for="country">Country</label>
-            <select id="country" name="country">
-                <option value="australia">Australia</option>
-                <option value="canada">Canada</option>
-                <option value="usa">USA</option>
-            </select>
-
-            <label for="subject">Subject</label>
-            <textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-
-            <input type="submit" value="Submit">
-        </form>
+    <body>
         <?php
-    include 'footer.php';
-    ?>
-    </div>
-</body>
+        include 'menu.php';
+        ?>
+        <div class='container'>
+            <h3>Contact Form</h3><br>
+            <form action='/action_page.php'>
+                <label for='fname'>First Name</label>
+                <input type='text' id='fname' name='firstname' placeholder='Your name..'>
+
+                <label for='lname'>Last Name</label>
+                <input type='text' id='lname' name='lastname' placeholder='Your last name..'>
+
+                <label for='country'>Country</label>
+                <select id='country' name='country'>
+                    <option value='australia'>Australia</option>
+                    <option value='canada'>Canada</option>
+                    <option value='usa'>USA</option>
+                </select>
+
+                <label for='subject'>Subject</label>
+                <textarea id='subject' name='subject' placeholder='Write something..' style='height:200px'></textarea>
+
+                <input type='submit' value='Submit'>
+            </form>
+            <?php
+            include 'footer.php';
+            ?>
+        </div>
+    </body>
+
 </html>
