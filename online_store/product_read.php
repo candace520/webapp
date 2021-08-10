@@ -8,7 +8,7 @@
 <html>
 
     <head>
-        <title>Read Product</title>
+        <title>Read Product </title>
         <!-- Latest compiled and minified Bootstrap CSS -->
         <link href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css' rel = 'stylesheet' integrity = 'sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin = 'anonymous'>
         <!-- Add icon library -->
@@ -24,14 +24,14 @@
         .title2{
            margin-top: 8px;
         }
-        </style>
+    </style>
     <body>
         <?php
         include 'menu.php';
         ?>
         <div class = 'container'>
                     <div class = 'page-header'>
-                            <div class = 'title'><h1>Read Product</div>
+                            <div class = 'title'><h1>Product List <img src='img/read.png' style='width: 15%;'></div>
                             <div class = 'title2'><a href = 'create.php' class = 'btn btn-primary'>Create         New           Product</h1></a>
                             </div>
                     </div>
@@ -85,7 +85,7 @@
 
                         echo '<tr>';
                         echo '<th>ID</th>';
-                        echo '<th>Images</th>';
+                        echo '<th>Product Image</th>';
                         echo '<th>Name</th>';
                         echo '<th>Action</th>';
                         echo '</tr>';
@@ -101,7 +101,7 @@
                             }
                             echo "<td>{$name}</td>";
                             echo '<td>';
-                            echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info me-2'>Read</a>";
+                            echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info me-2'>Details</a>";
                             echo "<a href='product_update.php?productID={$productID}' class='btn btn-primary me-2'>Edit</a>";
                             echo "<a href='#' onclick='delete_product({$productID});'  class='btn btn-danger'>Delete</a>";
                             echo '</td>';

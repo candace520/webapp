@@ -21,7 +21,7 @@
         <!-- container -->
         <div class="container">
             <div class="page-header">
-                <h1>Read Product</h1>
+                <h1>Product Details <img src='img/detail.png' style='width: 3%;'></h1>
             </div>
 
             <!-- PHP read one record will be here -->
@@ -106,7 +106,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <a href='product_read.php' class='btn btn-danger'>Back to read products</a>
+                        <a href='product_read.php' class='btn btn-danger'>Back to Product List</a>
                     </td>
                 </tr>
             </table>

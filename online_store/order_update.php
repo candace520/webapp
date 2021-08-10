@@ -18,23 +18,14 @@
         <div class="container">
             
             <div class="page-header">
-                <h1>Update Order</h1>
-                <h6>**Please assign quantity=0 if you wish to delete product!</h6>
+                <h1>Update Order  <img src='img/edit.png' style='width: 4%;'></h1>
             </div>
-            <?php
-                $orderID = isset($_GET['orderID']) ? $_GET['orderID'] : die('ERROR: Order record not found.');
-                $action = isset( $_GET['action'] ) ? $_GET['action'] : '';
-                    // if it was redirected from delete.php
-                    if ( $action == 'productInStock' ) {
-                        echo "<div class='alert alert-success'>Record could not deleted as this product in the order.</div>";
-                    }
-
-                    if ( $action == 'deleted' ) {
-                        echo "<div class='alert alert-success'>Record was deleted.</div>";
-                    }
+            <?php 
+                    
                 include 'config/database.php';
                 try {
                     $query = "SELECT * FROM orders WHERE orderID = :orderID ";
+                    $orderID = isset($_GET['orderID']) ? $_GET['orderID'] : die('ERROR: Order record not found.');
                     $stmt = $con->prepare($query);
                     $stmt->bindParam(":orderID", $orderID);
                     $stmt->execute();
@@ -44,7 +35,14 @@
                 } catch (PDOException $exception) {
                     die('ERROR: ' . $exception->getMessage());
                 }
-
+                    $action = isset($_GET['action']) ? $_GET['action'] : "";
+                    if ($action == 'onlyOneProduct') {
+                        echo "<div class='alert alert-danger'>Product could not be deleted due to only one product placed in order</div>";
+                    }
+                    if ($action == 'deleted') {
+                        echo "<div class='alert alert-success'>Product was deleted.</div>";
+                    }
+                
                 if ($_POST) {
                     try {
                         $con->beginTransaction();//avoid duplicate
@@ -73,7 +71,6 @@
                         $delete_query = "DELETE FROM order_detail WHERE orderID = :orderID";
                         $delete_stmt = $con->prepare($delete_query);
                         $delete_stmt->bindParam(':orderID', $orderID);
-                        $delete_stmt->execute();
                         if ($delete_stmt->execute()) {
                             for ($i = 0; $i < count($_POST['productID']); $i++) {
                                 $getPrice = htmlspecialchars(strip_tags($_POST['productID'][$i]));
@@ -107,9 +104,9 @@
                                     throw new Exception("Please make sure the product and quantity is selected.");
                                 }
                             }
-                            echo "<div class='alert alert-success'>Record was updated.</div>";
+                            echo "<div class='alert alert-success'>Order had been updated.</div>";
                         } else {
-                            echo "<div class='alert alert-danger'>Unable to update record. Please try again.</div>";
+                            echo "<div class='alert alert-danger'>Unable to update order. Please try again.</div>";
                         }
                         $con->commit();
                     } catch (PDOException $exception) {
@@ -176,7 +173,7 @@
                             echo "<td>";
                             echo "<select class='form-select' id='autoSizingSelect' name='quantity[]'>";
                             echo "<option value='' disabled selected> -- Select Quantity -- </option>";
-                            for ($i = 0; $i <= 20; $i++) {
+                            for ($i = 1; $i <= 20; $i++) {
                                 $result = $productQuantity == $i ? 'selected' : '';
                                 echo "<option value='$i' $result> $i </option>";
                             }
@@ -185,8 +182,10 @@
                             $productPrice = sprintf('%.2f', $od_row['price']);
                             echo "<td>RM $productPrice</td>";
                             $productTotal = sprintf('%.2f', $od_row['total']);
-                            echo "<td>RM $productTotal</td>
-                            <td><button type='button' onclick='myFunction()'/></button></td>";
+                            echo "<td>RM $productTotal</td>";
+                            echo "<td>";
+                            echo "<a href='#' onclick='delete_product({$productID},{$orderID});'  class='btn btn-danger'>Delete</a>";
+                            echo "</td>";
                             echo "</tr>";
                         }  
                         
@@ -216,7 +215,7 @@
                             <select class='form-select' id='autoSizingSelect' name='quantity[]'>
                                 <option value='' disabled selected>-- Select Quantity --</option>
                                 <?php
-                                for ($i = 0; $i <= 20; $i++) {
+                                for ($i = 1; $i <= 20; $i++) {
                                     echo "<option value='$i'> $i </option>";
                                 }
                                 ?>
@@ -247,46 +246,54 @@
                     <button type="button" class="add_one btn btn-info text-light m-2">Add More Product</button>
                     <button type="button" class="delete_one btn btn-warning text-light m-2">Delete Last Product</button>
                     <input type='submit' value='Save Changes' class='btn btn-primary m-2' />
-                    <a href='order_read.php' class='btn btn-danger m-2'>Back to read order</a>
+                    <a href='order_read.php' class='btn btn-danger m-2'>Back to Order List</a>
                 </div>
             </form>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-        <script type = 'text/javascript'>
-            // confirm record deletion
-
-            function delete_product( productID ) {
-
-                if ( confirm( 'Are you sure?' ) ) {
-                    // if user clicked ok,
-                    // pass the id to delete.php and execute the delete query
-                    window.location = 'product_delete.php?productID=' + productID;
-                }
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target.matches('.add_one')) {
+                var element = document.querySelector('.productQuantity');
+                var clone = element.cloneNode(true);
+                element.after(clone);
             }
-            </script>
-        <script>
-            document.addEventListener('click', function(event) {
-                if (event.target.matches('.add_one')) {
+            if (event.target.matches('.delete_one')) {
+                var total = document.querySelectorAll('.productQuantity').length;
+                if (total > 1) {
                     var element = document.querySelector('.productQuantity');
-                    var clone = element.cloneNode(true);
-                    element.after(clone);
+                    element.remove(element);
                 }
-                if (event.target.matches('.delete_one')) {
-                    var total = document.querySelectorAll('.productQuantity').length;
-                    if (total > 1) {
-                        var element = document.querySelector('.productQuantity');
-                        element.remove(element);
-                    }
-                }
-                
-            }, false);
-        </script>
-        <script>
-            function myFunction() {
-                var x = document.getElementById("mySelect");
-            x.remove(x.selectedIndex);
             }
-        </script>
+        }, false);
+
+        function delete_product(productID,orderID) {
+            if (confirm('Are you sure?')) {
+                window.location = "order_detail_delete.php?productID=" + productID + "&orderID="  + orderID;
+            }
+        }
+
+        function validation() {
+            var product = document.querySelectorAll('.product').length;
+            var quantity = document.querySelector('.quantity').value;
+            var flag = false;
+            var msg = "";
+            if (product == 1) {
+                if(quantity == 0){
+                    flag = true;
+                    msg = msg + "Product cannot be deleted!\r\n";
+                    msg = msg + "An order must buy at least one product!\r\n";
+                    msg = msg + "Please re-enter the quantity other then zero!\r\n";
+                }
+            }
+            if (flag == true) {
+                alert(msg);
+                return false;
+            }else{
+                return true;
+            }
+        }
+    </script>
     </body>
 
 </html>

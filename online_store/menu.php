@@ -8,31 +8,31 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="create.php" id="navbarDarkDropdownMenuLink" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    Product Page
+                    Product
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><a class="dropdown-item" href="create.php">Create Product</a></li>
-                    <li><a class="dropdown-item" href="product_read.php">Read Product</a></li>
+                    <li><a class="dropdown-item" href="create.php">Create Product <img src='img/create.png' style='width: 15%;'></a></li>
+                    <li><a class="dropdown-item" href="product_read.php">Product List <img src='img/read.png' style='width: 15%;'></a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="customer.php" id="navbarDarkDropdownMenuLink" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    Customer Page
+                    Customer
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><a class="dropdown-item" href="customer.php">Create Customer</a></li>
-                    <li><a class="dropdown-item" href="customer_read.php">Read Customer</a></li>
+                    <li><a class="dropdown-item" href="customer.php">Create Customer <img src='img/create.png' style='width: 15%;'></a></li>
+                    <li><a class="dropdown-item" href="customer_read.php">Customer  List <img src='img/read.png' style='width: 15%;'></a></li>
                 </ul>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="orders.php" id="navbarDarkDropdownMenuLink" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    Order Page
+                    Order
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><a class="dropdown-item" href="orders.php">Create Order</a></li>
-                    <li><a class="dropdown-item" href="order_read.php">Read Order</a></li>
+                    <li><a class="dropdown-item" href="orders.php">Create Order <img src='img/create.png' style='width: 15%;'></a></li>
+                    <li><a class="dropdown-item" href="order_read.php">Order List <img src='img/read.png' style='width: 15%;'></a></li>
                 </ul>
             </li>
             <li class="nav-item">

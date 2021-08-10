@@ -8,7 +8,7 @@
 <html>
 
     <head>
-        <title>Customer Detail</title>
+        <title>Customer Details</title>
         <!-- Latest compiled and minified Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,7 +21,7 @@
         <!-- container -->
         <div class="container">
             <div class="page-header">
-                <h1>Read Customer</h1>
+                <h1>Customer Details  <img src='img/detail.png' style='width: 3%;'></h1>
             </div>
 
             <!-- PHP read one record will be here -->
@@ -57,6 +57,10 @@
                 // values to fill up our form
                 $cus_username = $row['cus_username'];
                 $gender = $row['gender'];
+                $accountstatus = $row['accountstatus'];
+                $password = $row['password'];
+                $confPass = $row['confPass'];
+                $firstname = $row['firstname'];
                 $lastname = $row['lastname'];
                 $dateofbirth = $row['dateofbirth'];
                 $registrationdatetime = $row['registrationdatetime'];
@@ -78,6 +82,18 @@
                     <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
                 </tr>
                 <tr>
+                    <td>Password</td>
+                    <td><?php echo htmlspecialchars($password, ENT_QUOTES);  ?></td>
+                </tr>
+                <tr>
+                    <td>Confirm Password</td>
+                    <td><?php echo htmlspecialchars($confPass, ENT_QUOTES);  ?></td>
+                </tr>
+                <tr>
+                    <td>First Name</td>
+                    <td><?php echo htmlspecialchars($firstname, ENT_QUOTES);  ?></td>
+                </tr>
+                <tr>
                     <td>Last Name</td>
                     <td><?php echo htmlspecialchars($lastname, ENT_QUOTES);  ?></td>
                 </tr>
@@ -85,6 +101,7 @@
                     <td>Gender</td>
                     <td><?php echo htmlspecialchars($gender, ENT_QUOTES);  ?></td>
                 </tr>
+                
                 <tr>
                     <td>Date Of birth</td>
                     <td><?php echo htmlspecialchars($dateofbirth, ENT_QUOTES);  ?></td>
@@ -94,9 +111,13 @@
                     <td><?php echo htmlspecialchars($registrationdatetime, ENT_QUOTES);  ?></td>
                 </tr>
                 <tr>
+                    <td>Account Status</td>
+                    <td><?php echo htmlspecialchars($accountstatus, ENT_QUOTES);  ?></td>
+                </tr>
+                <tr>
                     <td></td>
                     <td>
-                        <a href='customer_read.php' class='btn btn-danger'>Back to read customer</a>
+                        <a href='customer_read.php' class='btn btn-danger'>Back to Customer List</a>
                     </td>
                 </tr>
             </table>

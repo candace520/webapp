@@ -34,11 +34,15 @@
     background: #125688;
     color: white;
 }
+
+.foot {
+    font-size: 30px;
+}
 </style>
 
 <div class="footer__content">
     <div class="footer__heading">
-        <h2>Contact us on</h2>
+        <div class="foot">Contact us on</div>
     </div>
     <a href="#" class="fa fa-facebook"></a>
     <a href="#" class="fa fa-google"></a>

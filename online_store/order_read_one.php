@@ -18,7 +18,7 @@
         <div class="container">
             
             <div class="page-header">
-                <h1>Read Order</h1>
+                <h1>Order Details <img src='img/detail.png' style='width: 3%;'></h1>
             </div>
 
             <?php
@@ -82,7 +82,7 @@
                 ?>   
             </table>
             <div class="d-flex justify-content-center">
-                <a href='order_read.php' class='btn btn-danger'>Back to read order</a>
+                <a href='order_read.php' class='btn btn-danger'>Back to Order List</a>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     </body>

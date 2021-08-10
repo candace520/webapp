@@ -60,7 +60,8 @@ if (!isset($_SESSION["cus_username"])) {
 
         <div class="container">
             <div class="page-header">
-                <h1>Create Customer</h1>
+                <h1>Create Customer <img src='img/create.png' style='width: 8%;'></h1>
+                <h6>**Please fill in all fields of relevant data!(except Optional)</h6>
             </div>
 
             <!-- PHP insert code will be here -->
@@ -94,33 +95,32 @@ if (!isset($_SESSION["cus_username"])) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
                         }
                         // include database connection
-                        $target_dir = "img/";
-                        $fileToUpload = $_FILES['fileToUpload']['name']; 
-                        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
-                        $isUploadOK = TRUE;
-                        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-                        // Check if image file is a actual image or fake image
-                        if(isset($_POST["submit"])&&!empty($_POST["submit"])) {
+                            $target_dir = "pic/";
+                            $fileToUpload = $_FILES['fileToUpload']['name']; 
+                            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
+                            $isUploadOK = TRUE;
                             
-                            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                         if($check == false) {
-                            $isUploadOK = false;
-                            echo"<div class='alert alert-danger'>Please make sure File is an image!</div>";  
-                          } 
+                            // Check if image file is a actual image or fake image
+                            if($fileToUpload!=""){
+                                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                                if($check == false) {
+                                    echo "File is not an image.";
+                                        $isUploadOK = 0;
+                                }
+                                
+                                list($width, $height, $type, $attr) = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                                    if($width!=$height){
+                                        $isUploadOK = false;
+                                        echo"<div class='alert alert-danger'>Please make sure the width and height of your image is same!</div>";  
+                                    }
+                            
+                            
+                            if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                                echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
+                                $isUploadOK = false;
+                            }
+                            
                         }
-                        list($width, $height, $type, $attr) = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                        if($width!=$height){
-                            $isUploadOK = false;
-                            echo"<div class='alert alert-danger'>Please make sure File is in square!</div>";  
-                        }
-                        if ($_FILES["fileToUpload"]["size"] > 5120000) {
-                            echo"<div class='alert alert-danger'>Please make sure File is not larger than 512kb!</div>";
-                            $isUploadOK = false;
-                        }
-                        if ($isUploadOK == false) {
-                            echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
-                            $fileToUpload ="";
-                        } 
                         // insert query
                         $query = "INSERT INTO customer SET fileToUpload=:fileToUpload,cus_username=:cus_username,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
                         accountstatus=:accountstatus";
@@ -150,9 +150,21 @@ if (!isset($_SESSION["cus_username"])) {
                         $stmt->bindParam(':accountstatus', $accountstatus);
                         // Execute the query
                         if ($stmt->execute()) {
-                            echo "<div class='alert alert-success'>Record was saved.</div>";
+                            if($fileToUpload!=""){
+                                if ($isUploadOK == false) {
+                                    echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
+                                    $fileToUpload ="";
+                                }
+                                else {
+                                    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                                        echo "Sorry, there was an error uploading your file.";
+                                        
+                                    }
+                                }
+                            }
+                            echo "<div class='alert alert-success'>Customer had been created.</div>";
                         } else {
-                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                            echo "<div class='alert alert-danger'>Unable to create customer.</div>";
                         }
                     }
                     // show error
@@ -264,7 +276,7 @@ if (!isset($_SESSION["cus_username"])) {
                                 <td></td>
                                 <td>
                                     <input type='submit' name="submit" value='Save' class='btn btn-primary' />
-                                    <a href='customer_read.php' class='btn btn-danger'>View Customer</a>
+                                    <a href='customer_read.php' class='btn btn-danger'>Back to Customer List</a>
 
                                 </td>
                             </tr>
@@ -302,19 +314,19 @@ if (!isset($_SESSION["cus_username"])) {
                     flag = true;
                 msg = msg + "Please make sure all fields are not empty!\r\n";
                 }
-                else if(cName.length <= 6){
+                if(cName.length <= 6){
                     flag = true;
                 msg = msg + "Please make sure your name should be greater than 6 characters!\r\n";
                 }
-                else if(pass != conPass){
+                if(pass != conPass){
                     flag = true;
                 msg = msg + "Please make sure your password same as confirm password!\r\n";
                 }
-                else if(!pass.match(passw)){ 
+                if(!pass.match(passw)){ 
                     flag = true;
                 msg = msg + "Please make sure your password which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character in at least 8 characters!\r\n";
                 }
-                else if(yearsDiff < 18){
+                if(yearsDiff < 18){
                     flag = true;
                 msg = msg + "Please make sure your ages are 18 years old and above!\r\n";
                 }

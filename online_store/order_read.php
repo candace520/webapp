@@ -32,8 +32,8 @@
         <div class='container'>
 
             <div class = 'page-header'>
-                <div class = 'title'><h1>Read Order</div>
-                <div class = 'title2'><a href = 'create.php' class = 'btn btn-primary'>Create         New           Order</h1></a>
+                <div class = 'title'><h1>Order List  <img src='img/read.png' style='width: 15%;'></div>
+                <div class = 'title2'><a href = 'orders.php' class = 'btn btn-primary'>Create         New           Order</h1></a>
                 </div>
             </div>
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
@@ -84,7 +84,7 @@
                         echo "<td>{$orderID}</td>";
                         echo "<td>{$cus_username}</td>";
                         echo '<td>';
-                        echo "<a href='order_read_one.php?orderID={$orderID}' class='btn btn-info me-2'>Read</a>";
+                        echo "<a href='order_read_one.php?orderID={$orderID}' class='btn btn-info me-2'>Details</a>";
                         echo "<a href='order_update.php?orderID={$orderID}' class='btn btn-primary me-2'>Edit</a>";
                         echo "<a href='#' onclick='delete_order({$orderID});'  class='btn btn-danger'>Delete</a>";
                         echo '</td>';

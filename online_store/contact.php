@@ -72,7 +72,6 @@
 
         .container {
             border-radius: 5px;
-            background-color: #f2f2f2;
             padding: 20px;
         }
         </style>
@@ -102,7 +101,7 @@
                 <textarea id='subject' name='subject' placeholder='Write something..' style='height:200px'></textarea>
 
                 <input type='submit' value='Submit'>
-            </form>
+            </form><br>
             <?php
             include 'footer.php';
             ?>

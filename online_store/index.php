@@ -14,15 +14,20 @@
             integrity='sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin='anonymous'>
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <style>
         .row {
             padding: 16px;
-            border-style: inset;
+            border: 2px solid black;
+            border-radius: 12px;
 
         }
 
         .container-fluid {
             padding: 20px;
+
         }
 
         .container {
@@ -30,7 +35,7 @@
         }
 
         .container {
-            border-style: groove;
+            border-style: dotted;
             background-color: plum;
         }
 
@@ -41,25 +46,132 @@
             font-family: sans-serif;
         }
 
-        span {
+
+
+        .header {
+            position: relative;
+        }
+
+        h1 {
+            position: relative;
+            bottom: 127px;
+            color: black;
+        }
+
+        h2 {
+            padding-left: 130px;
+            color: #F05454;
+            font-weight: bold;
+            font-size: 50px;
+        }
+
+        h5 {
+            text-align: center;
+            font-size: 50px;
+            color: #1597BB;
+        }
+
+
+
+        h4 {
+            position: relative;
+            font-weight: bold;
+            font-size: 25px;
+        }
+
+        .heading {
+            font-weight: bolder;
+            color: #F05454;
+            font-size: 40px;
+        }
+
+        .title {
             font-weight: bolder;
             color: black;
             padding: 16px;
             font-size: 20px;
-            border-style: outset;
-            background-color: pink;
+            border: 2px solid black;
+            border-radius: 12px;
         }
 
-        .header {
-            padding: 80px;
-            text-align: center;
-            background: plum;
-            color: black;
+        .itemsub1 {
+            padding-left: 150px;
+            padding-top: 100px;
+            text-shadow: 2px 2px #000;
+            line-height: 40px;
+        }
+
+        .item_active1 {
+            padding-left: 40px;
+            padding-top: 100px;
+            font-size: 30px;
+            width: 45%;
+            text-shadow: 2px 1px #A0C1B8;
+            line-height: 40px;
+
+        }
+
+        .ite2 {
+            padding-top: 160px;
+            padding-left: 160px;
             position: relative;
+            bottom: 69px;
+            color: black;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        p.one {
+            border-style: dotted;
+            border-radius: 8px;
+            border-width: 20%;
+            border-left: 20px;
+        }
+
+        p {
+            color: #726A95;
+            font-weight: bold;
+            font-size: 30px;
+        }
+
+        .ite1 {
+            display: flex;
+            padding-left: 160px;
+
+        }
+
+        .ite3 {
+            display: flex;
+            padding-left: 143px;
+        }
+
+        .itesub2 {
+            font-size: 30px;
+            padding-left: 20px;
+            padding-top: 70px;
+            border-style: dotted;
+            border-radius: 8px;
+            border-width: 20%;
+            border-left: 20px;
+            font-weight: bold;
+        }
+
+        .itesub4 {
+            font-size: 30px;
+            padding-top: 80px;
+            border-style: dotted;
+            border-radius: 8px;
+            border-width: 20%;
+            border-left: 20px;
+            font-weight: bold;
+        }
+
+        .itesub3 {
+            padding-top: 10px;
         }
 
         .content {
-            border-style: groove;
+            border-style: dotted;
         }
 
         .aboutUs {
@@ -72,228 +184,299 @@
             bottom: 157px;
         }
 
+
         h3 {
             position: absolute;
             left: 120px;
             bottom: 57px;
+        }
+
+        .welcome {
+            position: relative;
+            color: black;
+            font-weight: bold;
+            font-size: 40px;
+        }
+
+        h6 {
+            font-size: 20px;
+        }
+
+        .main {
+            font-size: 40px;
+            text-shadow: 2px 1px white;
         }
         </style>
     </head>
 
     <body>
         <?php
-        include 'menu.php';
-        ?>
-        <div class='header'>
-                    <?php
-            echo"<img src='img/shopping.jpg'>";
-            echo "<h1 class='text-center text-dark p-5'> Hi, $_SESSION[cus_username].</h1>
-                <br><h3 class='text-center text-dark p-5'>Welcome to <span>Candace's Online Store.</span></h3>";
-            echo'</div>';
-            ?>
+                include 'menu.php';
+                ?><div class="header">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
 
-        </div>
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
 
-        <div class='container-fluid'>
-            <div class='aboutUs text-center'>
-                <h2 class='p-2'>About Us</h2>
+                    <div class="item active">
+                        <div class="bg-image" div
+                            style="background-image: url('img/shopping.jpeg'); background-repeat: no-repeat;height: 100vh;background-size: cover;">
+                            <div class="item1">
+                                <div class="itemsub1">
+                                    <?php
+                                        echo"<h4>HI, $_SESSION[cus_username].</h4>"?>
+                                    <br>
+                                    <div class="welcome">Welcome to<br><br>
+                                        <div class="heading">CANDACE'S <br>ONLINE<br>
+                                            STORE.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="bg-image" div
+                            style="background-image: url('img/shopping2.jpeg'); background-repeat: no-repeat;height: 100vh;background-size: cover;">
+                            <div class="item_active1">
+                                <h5><img src="img/team.png" alt="New York" style="width:10%;"> About Us</h5><br>
+                                <div class="welcome"><img src="img/story.png" alt="New York" style="width:5%;">OUR
+                                    STORY<img src="img/story.png" alt="New York" style="width:5%;"></h3><br>
+                                    <br>
+                                    <p class="one"><img src="img/happy.png" alt="New York" style="width:5%;"> We love
+                                        shopping
+                                        <img src="img/happy.png" alt="New York" style="width:5%;"><br><br>
+                                        -- We have created a fictional band website. Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit.-
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item">
+                        <div class="bg-image" div
+                            style="background-image: url('img/shopping2.jpeg'); background-repeat: no-repeat;height: 100vh;background-size: cover;">
+                            <div class="ite2">
+                                <img src="img/new.png" width="8%"> NEW PRODUCTS:
+                            </div>
+                            <div class="ite1">
+
+                                <div class="itesub1">
+                                    <br><img src="img/headphones.png" alt="New York" width="100%">
+                                </div>
+                                <div class="itesub2">
+                                    Earphone is the smartest.
+                                </div>
+                            </div><br><br><br>
+                            <div class="ite3">
+
+
+                                <div class="itesub4">
+                                    Mouse is the sensitiveness.
+                                </div>
+                                <div class="itesub3">
+                                    <br><img src="img/mouse.png" width="30%">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
             </div>
-            <?php
-                echo"<div class = 'row'>";
-                    echo'<span >TOTAL CALCULATION:</span>';
 
-                    echo"<div class = 'col-sm-4'>";
-                        echo"<div class='pic p-1'>";
-                            echo"<img src='img/product.jpg' style='width: 70%;'>";
-                        echo'</div>';
-                        include 'config/database.php';
 
-                        $productQuery = 'SELECT * FROM products';
-                        $productStmt = $con->prepare( $productQuery );
-                        $productStmt->execute();
-                        $productTot = $productStmt->rowCount();
-                        echo"<h2>Total number of products: $productTot</h2>";
-                        echo '<a href=product_read.php> <h7>CLICK TO SEE THE LISTING OF products</h7> </a>';
+            <div class='container-fluid'>
+                <div class='aboutUs text-center'>
+                    <div class="main">Summary</div>
+                </div>
+                <?php
+                        echo"<div class = 'row'>";
+                            echo"<div class = 'title'>TOTAL CALCULATION:</div>";
 
-                    echo '</div>';
-                        echo"<div class = 'col-sm-4'>";
-                            echo"<div class='pic p-1'>";
-                                echo"<img src='img/customer.jpg' style='width: 40%;'>";
-                            echo'</div>';
+                            echo"<div class = 'col-sm-4'>";
+                                echo"<div class='pic p-1'>";
+                                    echo"<img src='img/product.png' style='width: 30%;'>";
+                                echo'</div>';
                                 include 'config/database.php';
 
-                            $custQuery = 'SELECT * FROM customer';
-                            $custStmt = $con->prepare( $custQuery );
-                            $custStmt->execute();
-                            $custTot = $custStmt->rowCount();
-                            echo"<h2>Total number of customer:$custTot</h2>";
-                            echo '<a href=customer_read.php> <h7>CLICK TO SEE THE LISTING OF customer</h7> </a>';
+                                $productQuery = 'SELECT * FROM products';
+                                $productStmt = $con->prepare( $productQuery );
+                                $productStmt->execute();
+                                $productTot = $productStmt->rowCount();
+                                echo "<a href=product_read.php> <h6 class='p-2 text-dark'>$productTot products</h6> </a>";
+
+                            echo '</div>';
+                                echo"<div class = 'col-sm-4'>";
+                                    echo"<div class='pic p-1'>";
+                                        echo"<img src='img/customer.png' style='width: 30%;'>";
+                                    echo'</div>';
+                                        include 'config/database.php';
+
+                                    $custQuery = 'SELECT * FROM customer';
+                                    $custStmt = $con->prepare( $custQuery );
+                                    $custStmt->execute();
+                                    $custTot = $custStmt->rowCount();
+                                    echo "<a href=customer_read.php> <h6 class='p-2 text-dark'>$custTot customers</h6> </a>";
+                                echo '</div>';
+
+                            echo"<div class = 'col-sm-4'>";
+                                echo"<div class='pic p-1'>";
+                                    echo"<img src='img/box.png' style='width: 30%;'>";
+                                echo'</div>';
+                                include 'config/database.php';
+
+                                $ordQuery = 'SELECT * FROM orders';
+                                $ordStmt = $con->prepare( $ordQuery );
+                                $ordStmt->execute();
+                                $ordTot = $ordStmt->rowCount();
+                                echo "<a href=order_read.php> <h6 class='p-2 text-dark'>$ordTot orders</h6> </a>";
+                            echo '</div>';
+
+                            include 'config/database.php';
+                            echo"<div class = 'title'>LATEST ORDER:</div>";
+                            $query = 'SELECT * FROM orders ORDER BY orderId DESC LIMIT 1';
+                            $stmt = $con->prepare( $query );
+                            $stmt->execute();
+                            $num = $stmt->rowCount();
+                            if ( $num > 0 ) {
+                                echo "<table class = 'table table-hover table-responsive table-bordered'>";
+
+                                    echo '<tr>';
+                                        echo "<th class = 'col-sm-3'>Order ID</th>";
+                                        echo "<th class = 'col-sm-3'>Customer Username</th>";
+                                    echo '</tr>';
+
+                                    while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                                        extract( $row );
+                                        echo '<tr>';
+                                            echo "<td>$orderID</td>";
+                                            echo "<td>$cus_username</td>";
+                                        echo '</tr>';
+                                        $od_query = "SELECT p.productID, name, quantity, price
+                                        FROM order_detail od
+                                        INNER JOIN products p ON od.productID = p.productID
+                                        WHERE orderID = :orderID";
+                                        $od_stmt = $con->prepare( $od_query );
+                                        $od_stmt->bindParam( ':orderID', $orderID );
+                                        $od_stmt->execute();
+                                        echo "<th class = 'col-3'>Product</th>";
+                                        echo "<th class = 'col-3'>Quantity</th>";
+                                        echo "<th class = 'col-3'>Price( Per Piece )</th>";
+                                        $total = 0;
+                                        while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
+
+                                            echo '<tr>';
+                                                echo "<td>$od_row[name]</td>";
+                                                echo "<td>$od_row[quantity]</td>";
+                                                echo "<td>RM $od_row[price]</td>";
+                                                $quantity = $od_row['quantity'];
+                                            echo '<tr>';
+                                        }
+                                            
+
+                                    }
+                                echo '</table>';
+                            }
+
+                            include 'config/database.php';
+                            echo"<div class = 'title'>HIGHEST PURCHARSE ORDER:</div>";
+                            $query = "SELECT p.productID, name, total, od.orderID FROM order_detail od INNER JOIN products p ON od.productID = p.productID GROUP BY od.orderID ORDER BY total DESC LIMIT 1;
+                                    ";
+                            $stmt = $con->prepare( $query );
+                            $stmt->execute();
+                            $num = $stmt->rowCount();
+                            if ( $num > 0 ) {
+                                echo "<table class = 'table table-hover table-responsive table-bordered'>";
+
+                                    echo '<tr>';
+                                    echo '<th>Order ID</th>';
+                                    echo '</tr>';
+
+                                    while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                                        extract( $row );
+                                        echo '<tr>';
+                                        echo "<td> 
+                                            $orderID
+                                            </td>";
+                                        echo '</td>';
+                                        echo '</tr>';
+                                        $od_query = "SELECT p.productID, name, quantity, sum(total)amount
+                                            FROM order_detail od
+                                            INNER JOIN products p ON od.productID = p.productID
+                                            WHERE orderID = :orderID";
+                                        $od_stmt = $con->prepare( $od_query );
+                                        $od_stmt->bindParam( ':orderID', $orderID );
+                                        $od_stmt->execute();
+                                        echo "<th class = 'col-4'>Product</th>";
+                                        echo "<th class = 'col-4'>Quantity</th>";
+                                        echo "<th class = 'col-4'>Total amount spend:</th>";
+                                        $total = 0;
+                                        while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                                            echo '<tr>';
+                                                echo "<td>$od_row[name]</td>";
+                                                echo "<td>$od_row[quantity]</td>";
+                                                echo "<td>RM $od_row[amount]</td>";
+                                            echo'</tr>';
+                                        }
+                                        
+
+                                    }
+                                echo '</table>';
+                            } else {
+                                    echo "<div class = 'alert alert-danger'>No records found.</div>";
+                                }
+
+                                include 'config/database.php';
+                                echo"<div class = 'title'>TOP 5 SELLING PRODUCT:</div>";
+                                $query = 'SELECT p.productID, name, quantity, SUM( quantity )quan FROM order_detail od INNER JOIN products p ON od.productID = p.productID GROUP BY productID ORDER BY quan DESC LIMIT 5';
+                                $stmt = $con->prepare( $query );
+                                $stmt->execute();
+                                $num = $stmt->rowCount();
+                                if ( $num > 0 ) {
+                                    echo "<table class = 'table table-hover table-responsive table-bordered'>";
+
+                                        echo '<tr>';
+                                            echo '<th>NAME</th>';
+                                            echo '<th>Total quantity</th>';
+                                        echo '</tr>';
+
+                                        while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                                            extract( $row );
+                                            echo '<tr>';
+                                                echo "<td>$name</td>";
+                                                echo "<td>$quan</td>";
+                                                echo '<td>';
+                                                echo '</td>';
+                                            echo '</tr>';
+                                        }
+                                    echo '</table>';
+                                } else {
+                                    echo "<div class = 'alert alert-danger'>No records found.</div>";
+                                }
                         echo '</div>';
 
-                    echo"<div class = 'col-sm-4'>";
-                        echo"<div class='pic p-1'>";
-                            echo"<img src='img/order.png' style='width: 60%;'>";
-                        echo'</div>';
-                        include 'config/database.php';
+                    ?>
+                <br>
+                <?php
+                        include 'footer.php';
+                    ?>
 
-                        $ordQuery = 'SELECT * FROM orders';
-                        $ordStmt = $con->prepare( $ordQuery );
-                        $ordStmt->execute();
-                        $ordTot = $ordStmt->rowCount();
-                        echo"<h2>Total number of orders: $ordTot</h2>";
-                        echo '<a href=order_read.php> <h7>CLICK TO SEE THE LISTING OF order</h7> </a>';
-                    echo '</div>';
-
-                    include 'config/database.php';
-                    echo'<span>LATEST ORDER:</span>';
-                    $query = 'SELECT * FROM orders ORDER BY orderId DESC LIMIT 1';
-                    $stmt = $con->prepare( $query );
-                    $stmt->execute();
-                    $num = $stmt->rowCount();
-                    if ( $num > 0 ) {
-                        echo "<table class = 'table table-hover table-responsive table-bordered'>";
-
-                            echo '<tr>';
-                                echo "<th class = 'col-sm-3'>Order ID</th>";
-                                echo "<th class = 'col-sm-3'>Customer Username</th>";
-                            echo '</tr>';
-
-                            while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
-                                extract( $row );
-                                echo '<tr>';
-                                    echo "<td>$orderID</td>";
-                                    echo "<td>$cus_username</td>";
-                                echo '</tr>';
-                                $od_query = "SELECT p.productID, name, quantity, price
-                                FROM order_detail od
-                                INNER JOIN products p ON od.productID = p.productID
-                                WHERE orderID = :orderID";
-                                $od_stmt = $con->prepare( $od_query );
-                                $od_stmt->bindParam( ':orderID', $orderID );
-                                $od_stmt->execute();
-                                echo "<th class = 'col-3'>Product</th>";
-                                echo "<th class = 'col-3'>Quantity</th>";
-                                echo "<th class = 'col-3'>Price( Per Piece )</th>";
-                                $total = 0;
-                                while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
-
-                                    echo '<tr>';
-                                        echo "<td>$od_row[name]</td>";
-                                        echo "<td>$od_row[quantity]</td>";
-                                        echo "<td>RM $od_row[price]</td>";
-                                        $quantity = $od_row['quantity'];
-                                    echo '<tr>';
-                                }
-                                    
-
-                            }
-                        echo '</table>';
-                    }
-
-                    include 'config/database.php';
-                    echo'<span>HIGHEST PURCHARSE ORDER:</span>';
-                    $query = "SELECT p.productID, name, total, od.orderID FROM order_detail od INNER JOIN products p ON od.productID = p.productID GROUP BY od.orderID ORDER BY total DESC LIMIT 1;
-                            ";
-                    $stmt = $con->prepare( $query );
-                    $stmt->execute();
-                    $num = $stmt->rowCount();
-                    if ( $num > 0 ) {
-                        echo "<table class = 'table table-hover table-responsive table-bordered'>";
-
-                            echo '<tr>';
-                            echo '<th>Order ID</th>';
-                            echo '</tr>';
-
-                            while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
-                                extract( $row );
-                                echo '<tr>';
-                                echo "<td> 
-                                    $orderID
-                                    </td>";
-                                echo '</td>';
-                                echo '</tr>';
-                                $od_query = "SELECT p.productID, name, quantity, sum(total)amount
-                                    FROM order_detail od
-                                    INNER JOIN products p ON od.productID = p.productID
-                                    WHERE orderID = :orderID";
-                                $od_stmt = $con->prepare( $od_query );
-                                $od_stmt->bindParam( ':orderID', $orderID );
-                                $od_stmt->execute();
-                                echo "<th class = 'col-4'>Product</th>";
-                                echo "<th class = 'col-4'>Quantity</th>";
-                                echo "<th class = 'col-4'>Total amount spend:</th>";
-                                $total = 0;
-                                while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
-                                    echo '<tr>';
-                                        echo "<td>$od_row[name]</td>";
-                                        echo "<td>$od_row[quantity]</td>";
-                                        echo "<td>RM $od_row[amount]</td>";
-                                    echo'</tr>';
-                                }
-                                
-
-                            }
-                        echo '</table>';
-                    } else {
-                            echo "<div class = 'alert alert-danger'>No records found.</div>";
-                        }
-
-                        include 'config/database.php';
-                        echo'<span>TOP 5 SELLING PRODUCT:</span>';
-                        $query = 'SELECT p.productID, name, quantity, SUM( quantity )quan FROM order_detail od INNER JOIN products p ON od.productID = p.productID GROUP BY productID ORDER BY quan DESC LIMIT 5';
-                        $stmt = $con->prepare( $query );
-                        $stmt->execute();
-                        $num = $stmt->rowCount();
-                        if ( $num > 0 ) {
-                            echo "<table class = 'table table-hover table-responsive table-bordered'>";
-
-                                echo '<tr>';
-                                    echo '<th>NAME</th>';
-                                    echo '<th>Total quantity</th>';
-                                echo '</tr>';
-
-                                while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
-                                    extract( $row );
-                                    echo '<tr>';
-                                        echo "<td>$name</td>";
-                                        echo "<td>$quan</td>";
-                                        echo '<td>';
-                                        echo '</td>';
-                                    echo '</tr>';
-                                }
-                            echo '</table>';
-                        } else {
-                            echo "<div class = 'alert alert-danger'>No records found.</div>";
-                        }
-                echo '</div>';
-
-            ?>
-            <!-- Band Description -->
-            <div class='container'>
-                <section class="w3-container w3-center w3-content' style='max-width:600px">
-                    <h2 class='w3-wide'>ONLINE_STORE</h2>
-                    <p class='w3-opacity'><i>We love shopping</i></p>
-
-                    <p class='w3-justify'>We have created a fictional band website. Lorem ipsum dolor sit amet, consectetur
-                        adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                        irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-                        est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua.</p>
-
-                    <article class='w3-third'>
-                        <p><span>Earphone</span></p>
-                        <img src='img/earphone.jpg' alt='Random Name' style='width:50%'>
-                        <p><span>Earphone is the smartest.</span></p>
-                    </article>
-                    <article class='w3-third'>
-                        <br>
-                        <p><span>Mouse</span></p>
-                        <img src='img/mouse.jpg' alt='Random Name' style='width:50%'>
-                        <p><span>Mouse is the prettiest.</span></p>
-                    </article>
-                </section>
                 <script>
                 // Automatic Slideshow - change image every 3 seconds
                 var myIndex = 0;
@@ -313,10 +496,6 @@
                     setTimeout(carousel, 3000);
                 }
                 </script>
-            </div>
     </body>
-        <?php
-            include 'footer.php';
-        ?>
 
 </html>

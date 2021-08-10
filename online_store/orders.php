@@ -59,7 +59,8 @@
         <div class="container">
             
         <div class="page-header">
-                <h1>Create Order</h1>
+                <h1>Create Order <img src='img/create.png' style='width: 8%;'></h1>
+                <h6>**Please fill in all fields of relevant data!</h6>
             </div>
             <?php
             if ($_POST) {
@@ -117,9 +118,9 @@
                                 throw new Exception("Please make sure the product and quantity is selected.");
                             }
                         }
-                        echo "<div class='alert alert-success'>Record was saved. Order ID is $lastID.</div>";
+                        echo "<div class='alert alert-success'>Order had been created. Order ID is $lastID.</div>";
                     } else {
-                        throw new Exception("Unable to save record.");
+                        throw new Exception("Unable to create order.");
                     }
                     $con->commit();
                 } catch (PDOException $exception) {
@@ -189,7 +190,7 @@
                             <button type="button" class="add_one btn btn-info text-light">Add More Product</button>
                             <button type="button" class="delete_one btn btn-warning text-light">Delete Last Product</button>
                             <input type='submit' value='Save' class='btn btn-primary' />
-                            <a href='order_read.php' class='btn btn-danger'>View Order</a>
+                            <a href='order_read.php' class='btn btn-danger'>Back to Order List</a>
                         </td>
                     </tr>
                 </table>

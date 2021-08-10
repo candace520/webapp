@@ -45,7 +45,8 @@
         <!-- container -->
         <div class="container">
             <div class="page-header">
-                <h1>Create Product</h1>
+                <h1>Create Product <img src='img/create.png' style='width: 8%;'></h1>
+                <h6>**Please fill in all fields of relevant data!(except Optional)</h6>
             </div>
             <!-- PHP insert code will be here -->
             <?php
@@ -63,11 +64,11 @@
                         if (!is_numeric($_POST['price']) || !is_numeric($_POST['promotion_price'])) {
                             throw new Exception(" <div class='alert alert-danger'>Please make sure the price is a number.</div>");
                         }
-                        if ($_POST['price'] < 0 && $_POST['promotion_price'] < 0) {
+                        if ($_POST['price'] < 0 || $_POST['promotion_price'] < 0) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure the price must be not a negative value.</div>");
                         }
 
-                        if ($_POST['price'] > 1000 && $_POST['promotion_price'] > 1000) {
+                        if ($_POST['price'] > 1000 || $_POST['promotion_price'] > 1000) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure the price must be not bigger than RM 1000.</div>");
                         }
                         if ($_POST['price'] < $_POST['promotion_price']) {
@@ -77,42 +78,33 @@
                         if ($_POST['manufacture_date'] > $_POST['expired_date']) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure the expired date is later than the manufacture date.</div>");
                         }
-                        $target_dir = "img/";
-                        $fileToUpload = $_FILES['fileToUpload']['name']; 
-                        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
-                        $isUploadOK = TRUE;
-                        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-                        // Check if image file is a actual image or fake image
-                        if(isset($_POST["submit"])&&!empty($_POST["submit"])) {
+                            $target_dir = "img/";
+                            $fileToUpload = $_FILES['fileToUpload']['name']; 
+                            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
+                            $isUploadOK = TRUE;
                             
-                            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                            if($check == false) {
+                            // Check if image file is a actual image or fake image
+                            if($fileToUpload!=""){
+                                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                                if($check == false) {
+                                    echo "Please make sure the file uploaded is an image!";
+                                        $isUploadOK = 0;
+                                }
+                                
+                                list($width, $height, $type, $attr) = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+                                    if($width!=$height){
+                                        $isUploadOK = false;
+                                        echo"<div class='alert alert-danger'>Please make sure the width and height of your image is same!</div>";  
+                                    }
+                            
+                            
+                            if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                                echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
                                 $isUploadOK = false;
-                                echo"<div class='alert alert-danger'>Please make sure File is an image!</div>";  
-                            } 
-                            list($width, $height, $type, $attr) = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-                            if($width!=$height){
-                                $isUploadOK = false;
-                                echo"<div class='alert alert-danger'>Please make sure File is in square!</div>";  
                             }
+                            
                         }
                         
-                        if ($_FILES["fileToUpload"]["size"] > 5120000) {
-                            echo"<div class='alert alert-danger'>Please make sure File is not larger than 512kb!</div>";
-                            $isUploadOK = false;
-                        }
-                        if ($isUploadOK == false) {
-                            echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
-                            $fileToUpload ="";
-                        }
-                        else {
-                            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                                echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-                                
-                            } else {
-                                echo "Sorry, there was an error uploading your file.";
-                            }
-                        }
                         $name = $_POST['name'];
                         $nameMalay = $_POST['nameMalay'];
                         $description = $_POST['description'];
@@ -143,9 +135,21 @@
                        
                         // Execute the query
                         if ($stmt->execute()) {
-                            echo "<div class='alert alert-success'>Record was saved.</div>";
+                            if($fileToUpload!=""){
+                                if ($isUploadOK == false) {
+                                    echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
+                                    $fileToUpload ="";
+                                }
+                                else {
+                                    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                                        echo "Sorry, there was an error uploading your file.";
+                                        
+                                    }
+                                }
+                            }
+                            echo "<div class='alert alert-success'>Product had been created.</div>";
                         } else {
-                            echo "<div class='alert alert-danger'>Unable to save record.</div>";
+                            echo "<div class='alert alert-danger'>Unable to create product.</div>";
                         }
                     }
                 
@@ -164,7 +168,7 @@
 
                 <table class='table table-hover table-responsive table-bordered'>
                     <tr>
-                        <td>Product Image(*Optional)</td>
+                        <td>Product Image(Optional)</td>
                         <td>
                             <input type="file" name="fileToUpload" id="fileToUpload">
                         </td>
@@ -184,7 +188,7 @@
                     </tr>
                     <tr>
                         <td>Description</td>
-                        <td><textarea name='description' id="desc" placeholder="Enter description" class='form-control' /></textarea></td>
+                        <td><textarea name='description' id="desc" placeholder="Enter description" class='form-control'></textarea></td>
                     </tr>
                     <tr>
                         <td> Price</td>
@@ -219,7 +223,7 @@
                         <td></td>
                         <td>
                             <input type='submit' name="submit" value='Save' class='btn btn-primary'/>
-                            <a href='product_read.php' class='btn btn-danger'>Views Product</a>
+                            <a href='product_read.php' class='btn btn-danger'>Back to Product List</a>
                         </td>
                     </tr>
                 </table>
@@ -232,16 +236,18 @@
         <!-- end .container -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
         <script>
-            function validateForm() {
+             function validateForm() {
                 var name = document.getElementById("name").value;
                 var Mname = document.getElementById("Mname").value;
                 var price = document.getElementById("price").value;
+                var desc = document.getElementById("desc").value;
                 var proPrice = document.getElementById("proPrice").value;
+                
                 var man_date = document.getElementById("man_date").value;
                 var exp_date = document.getElementById("exp_date").value;
                 var flag = false;
                 var msg = "";
-                if (name == ""||Mname == "" ||proPrice == ""|| price == ""||man_date == ""|| exp_date == "") {
+                if (name == ""||Mname == "" ||desc==""||proPrice ==""|| price == ""||man_date == ""|| exp_date == "") {
                 flag = true;
                 msg = msg + "Please make sure all fields are not empty!\r\n";
                 }
@@ -257,8 +263,10 @@
                 flag = true;
                 msg = msg + "Please make sure the price must be not a negative value.\r\n";
                 }
-                if (price < proPrice ) {
+                
+                if (parseFloat(price) < parseFloat(proPrice) ) {
                 flag = true;
+                
                 msg = msg + "Please make sure the promotion price must be not bigger than normal price.\r\n";
                 }
                 if (exp_date < man_date ) {
@@ -266,10 +274,10 @@
                 msg = msg + "Please make sure the expired date is later than the manufacture date.\r\n";
                 }
                 if (flag == true) {
-                alert(msg);
-                return false;
+                    alert(msg);
+                    return false;
                 } else {
-                return true;
+                    return true;
                 }
             }
         </script>
