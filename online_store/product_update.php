@@ -128,6 +128,9 @@
                                 else{
                                     echo"<div class='alert alert-danger'>Photo cant been deleted due to no photo uploaded!</div>";
                                 }
+                                if(isset($newfilename)&&!empty($newfilename)){
+                                    echo"yes file name";
+                                }
                             }
                         
                             
@@ -196,11 +199,11 @@
                                         <?php 
                                             if (isset($photo) && !empty($photo)) {
                                                 echo "<img src='img/$photo' width='100' height='100'>";
+                                                echo"<button type='submit' name='delete_pic'>Delete Picture</button>";
                                             } 
                                             else{
                                                 echo "<img src='img/noPic.jpg' width='100' height='100'>";
                                             }
-                                                echo"<button type='submit' name='delete_pic'>Delete Picture</button>";
                                         ?>
                                     </h4>
                                 </div>
