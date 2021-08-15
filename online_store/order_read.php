@@ -26,13 +26,13 @@
     </style>
 
     <body> 
-        <?php
-        include 'menu.php';
-        ?>
+        
         <div class='container'>
-
+        <?php
+            include 'menu.php';
+        ?>
             <div class = 'page-header'>
-                <div class = 'title'><h1>Order List  <img src='img/read.png' style='width: 15%;'></div>
+                <div class = 'title'><h1>Order List  <img src='picture/img/read.png' style='width: 15%;'></div>
                 <div class = 'title2'><a href = 'orders.php' class = 'btn btn-primary'>Create         New           Order</h1></a>
                 </div>
             </div>
@@ -96,7 +96,9 @@
                 }
 
             ?>
-
+            <?php
+                include 'footer.php';
+            ?>
         </div>
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js'
             integrity='sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4' crossorigin='anonymous'>

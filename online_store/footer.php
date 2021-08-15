@@ -1,10 +1,7 @@
+<head>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <style>
-.footer__content {
-    padding: 20px;
-    text-align: center;
-    color: #fff;
-    background-color: pink;
-}
+
 
 .fa {
     padding: 20px;
@@ -34,17 +31,38 @@
     background: #125688;
     color: white;
 }
-
-.foot {
-    font-size: 30px;
-}
 </style>
+</head>
+<footer class="bg-dark text-center text-white">
+  <!-- Grid container -->
+  <div class="footer p-4 pb-0">
+    <!-- Section: Social media -->
+    <section class="mb-4">
+      <!-- Facebook -->
+      <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+        ><i class="fab fa-facebook-f" ></i
+      ></a>
 
-<div class="footer__content">
-    <div class="footer__heading">
-        <div class="foot">Contact us on</div>
-    </div>
-    <a href="#" class="fa fa-facebook"></a>
-    <a href="#" class="fa fa-google"></a>
-    <a href="#" class="fa fa-instagram"></a>
-</div>
+
+      <!-- Google -->
+      <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+        ><i class="fab fa-google"></i
+      ></a>
+
+      <!-- Instagram -->
+      <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"
+        ><i class="fab fa-instagram"></i
+      ></a>
+
+
+    </section>
+    <!-- Section: Social media -->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    <a class="text-white" href="http://candaceonlinestore.rf.gd/">Candace Online Store</a>
+  </div>
+  <!-- Copyright -->
+</footer>

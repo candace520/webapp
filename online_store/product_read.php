@@ -9,7 +9,6 @@
 
     <head>
         <title>Read Product </title>
-        <!-- Latest compiled and minified Bootstrap CSS -->
         <link href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css' rel = 'stylesheet' integrity = 'sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin = 'anonymous'>
         <!-- Add icon library -->
         <link rel = 'stylesheet' href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -26,12 +25,13 @@
         }
     </style>
     <body>
-        <?php
-        include 'menu.php';
-        ?>
+        
         <div class = 'container'>
+            <?php
+                include 'menu.php';
+            ?>
                     <div class = 'page-header'>
-                            <div class = 'title'><h1>Product List <img src='img/read.png' style='width: 15%;'></div>
+                            <div class = 'title'><h1>Product List <img src='picture/img/read.png' style='width: 15%;'></div>
                             <div class = 'title2'><a href = 'create.php' class = 'btn btn-primary'>Create         New           Product</h1></a>
                             </div>
                     </div>
@@ -82,23 +82,19 @@
                     if ( $num > 0 ) {
 
                         echo "<table class='table table-hover table-responsive table-bordered' id='myTable'>";
-
+                        echo "<div class ='rowMain'>";
                         echo '<tr>';
                         echo '<th>ID</th>';
                         echo '<th>Product Image</th>';
                         echo '<th>Name</th>';
                         echo '<th>Action</th>';
                         echo '</tr>';
-
+                        echo '</div>';
                         while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
                             extract( $row );
                             echo '<tr>';
                             echo "<td>{$productID}</td>";
-                            if (isset($row['fileToUpload']) && !empty($row['fileToUpload'])) {
-                                echo "<td><img src='img/$row[fileToUpload]' width='100' height='100'></td>";
-                            } else {
-                                echo "<td><img src='img/noPic.jpg' width ='100' height = '100'></td>";
-                            }
+                            echo "<td><img src='$row[fileToUpload]' width='100' height='100'></td>";
                             echo "<td>{$name}</td>";
                             echo '<td>';
                             echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info me-2'>Details</a>";
@@ -113,19 +109,17 @@
                     }
                 
             ?>
-        
-            
+            <?php
+                include 'footer.php';
+            ?>
         </div>
         
         <script src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js' integrity = 'sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4' crossorigin = 'anonymous'></script>
         <script type = 'text/javascript'>
-        // confirm record deletion
 
         function delete_product( productID ) {
 
             if ( confirm( 'Are you sure?' ) ) {
-                // if user clicked ok,
-                // pass the id to delete.php and execute the delete query
                 window.location = 'product_delete.php?productID=' + productID;
             }
         }

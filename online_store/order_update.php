@@ -11,14 +11,14 @@
         <title>Update Order</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     </head>
-        <?php
-        include 'menu.php';
-        ?>
+        
     <body>
         <div class="container">
-            
+            <?php
+                include 'menu.php';
+            ?>
             <div class="page-header">
-                <h1>Update Order  <img src='img/edit.png' style='width: 4%;'></h1>
+                <h1>Update Order  <img src='picture/img/edit.png' style='width: 4%;'></h1>
             </div>
             <?php 
                     
@@ -133,11 +133,11 @@
                     </tr>
                 </table>
                 <table class='table table-hover table-responsive table-bordered'>
-                    <th class='col-3'>Product</th>
-                    <th class='col-3'>Quantity</th>
-                    <th class='col-2'>Price per Piece</th>
-                    <th class='col-2'>Total</th>
-                    <th class='col-2'>Action</th>
+                    <th class='col-4 text-center'>Product</th>
+                    <th class='col-2 text-center'>Quantity</th>
+                    <th class='col-2 text-center'>Price per Piece</th>
+                    <th class='col-2 text-center'>Total</th>
+                    <th class='col-2 text-center'>Action</th>
                     <?php
                         $od_query = "SELECT orderID, p.productID, name, quantity, price, total
                                 FROM order_detail od
@@ -180,10 +180,10 @@
                             echo "</select>";
                             echo "</td>";
                             $productPrice = sprintf('%.2f', $od_row['price']);
-                            echo "<td>RM $productPrice</td>";
+                            echo "<td class= 'text-end'>RM $productPrice</td>";
                             $productTotal = sprintf('%.2f', $od_row['total']);
-                            echo "<td>RM $productTotal</td>";
-                            echo "<td>";
+                            echo "<td class= 'text-end'>RM $productTotal</td>";
+                            echo "<td class= 'text-center'>";
                             echo "<a href='#' onclick='delete_product({$productID},{$orderID});'  class='btn btn-danger'>Delete</a>";
                             echo "</td>";
                             echo "</tr>";
@@ -211,7 +211,7 @@
                             </select>
                         </td>
                         <td>
-                            **if have 
+                            If have 
                             <select class='form-select' id='autoSizingSelect' name='quantity[]'>
                                 <option value='' disabled selected>-- Select Quantity --</option>
                                 <?php
@@ -225,7 +225,7 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td>You need to pay:</td>
+                        <td class= 'text-end'>You need to pay:</td>
                         <?php 
                         $query = "SELECT * FROM orders WHERE orderID = :orderID ";
                         $stmt = $con->prepare($query);
@@ -233,7 +233,7 @@
                         $stmt->execute();
                         $row = $stmt->fetch(PDO::FETCH_ASSOC);
                         $total = sprintf('%.2f', $row['total']);
-                        echo "<td>RM $total</td>"; ?>
+                        echo "<td class= 'text-end'>RM $total</td>"; ?>
                     </tr>
                 
 
@@ -249,6 +249,9 @@
                     <a href='order_read.php' class='btn btn-danger m-2'>Back to Order List</a>
                 </div>
             </form>
+            <?php
+                include 'footer.php';
+            ?>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script>

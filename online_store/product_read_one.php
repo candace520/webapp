@@ -15,13 +15,14 @@
     </head>
 
     <body>
-        <?php
-        include 'menu.php';
-        ?>
+        
         <!-- container -->
         <div class="container">
+            <?php
+                include 'menu.php';
+            ?>
             <div class="page-header">
-                <h1>Product Details <img src='img/detail.png' style='width: 3%;'></h1>
+                <h1>Product Details <img src='picture/img/detail.png' style='width: 3%;'></h1>
             </div>
 
             <!-- PHP read one record will be here -->
@@ -110,7 +111,9 @@
                     </td>
                 </tr>
             </table>
-
+            <?php
+                include 'footer.php';
+            ?>
 
         </div> <!-- end .container -->
 

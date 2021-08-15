@@ -15,13 +15,11 @@
         <!-- Add icon library -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
-            #leftrow {
-                width: 25%;
-
+            td{
+                font-size: 15px;
             }
-
             .container {
-                width: 50%;
+                width: 70%;
             }
             .nav {
                 padding-left: 30px;
@@ -37,7 +35,6 @@
 
             .input-container {
                 display: -ms-flexbox;
-                /* IE10 */
                 display: flex;
                 width: 100%;
                 margin-bottom: 15px;
@@ -52,14 +49,14 @@
             }
         </style>
     </head>
-        <?php
-        include 'menu.php';
-        ?>
+        
     <body>
         <div class="container">
-            
+            <?php
+            include 'menu.php';
+            ?>
         <div class="page-header">
-                <h1>Create Order <img src='img/create.png' style='width: 8%;'></h1>
+                <h1>Create Order <img src='picture/img/create.png' style='width: 8%;'></h1>
                 <h6>**Please fill in all fields of relevant data!</h6>
             </div>
             <?php

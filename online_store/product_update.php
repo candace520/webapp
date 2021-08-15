@@ -25,14 +25,14 @@
         font-weight: bold;
     }
     </style>
-    <?php
-        include 'menu.php';
-    ?>
+    
     <body>
         <div class="container">
-            
+            <?php
+                include 'menu.php';
+            ?>
             <div class="page-header">
-                <h1>Update Product <img src='img/edit.png' style='width: 4%;'></h1>
+                <h1>Update Product <img src='picture/img/edit.png' style='width: 4%;'></h1>
                 <h5>**Please refresh this page if you did not see any changes!**</h5>
             </div>
             <?php
@@ -85,7 +85,7 @@
                     if ($_POST['manufacture_date'] > $_POST['expired_date']) {
                         throw new Exception("<div class='alert alert-danger'>Please make sure the expired date is later than the manufacture date.</div>");
                     }
-                            $target_dir = "img/";
+                            $target_dir = "picture/img/";
                             $fileToUpload = $_FILES['fileToUpload']['name']; 
                             $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
                             $temp = explode(".", $_FILES['fileToUpload']['name']);
@@ -116,20 +116,13 @@
                             }
                         
                             if(isset($_POST["delete_pic"])) {
-                                $preFile = "img/".$photo;
-                                if($photo!="noPic.jpg"){
-                                    if (unlink($preFile)) {   
-                                        $photo = "noPic.jpg";
-                                    } 
-                                    else{
-                                        echo"<div class='alert alert-danger'>Photo cant been deleted!</div>";
-                                    }
-                                }
-                                else{
+                                if($photo =="picture/img/noPic.jpg"){
                                     echo"<div class='alert alert-danger'>Photo cant been deleted due to no photo uploaded!</div>";
                                 }
-                                if(isset($newfilename)&&!empty($newfilename)){
-                                    echo"yes file name";
+                                else {
+                                    if (unlink($photo)){
+                                        $photo = "picture/img/noPic.jpg";
+                                    }
                                 }
                             }
                         
@@ -137,15 +130,15 @@
                                 $query = "UPDATE products SET fileToUpload=:fileToUpload,name=:name, nameMalay=:nameMalay, description=:description,
                                 price=:price, promotion_price=:promotion_price, manufacture_date=:manufacture_date, expired_date=:expired_date WHERE productID = :productID";
                                 $stmt = $con->prepare($query);
-                                $name = htmlspecialchars(strip_tags($_POST['name']));
-                                $nameMalay = htmlspecialchars(strip_tags($_POST['nameMalay']));
-                                $description = htmlspecialchars(strip_tags($_POST['description']));
+                                $name = htmlspecialchars(strip_tags(ucwords($_POST['name'])));
+                                $nameMalay = htmlspecialchars(strip_tags(ucwords($_POST['nameMalay'])));
+                                $description = htmlspecialchars(strip_tags(ucfirst($_POST['description'])));
                                 $price = htmlspecialchars(strip_tags($_POST['price']));
                                 $promotion_price = htmlspecialchars(strip_tags($_POST['promotion_price']));
                                 $manufacture_date = htmlspecialchars(strip_tags($_POST['manufacture_date']));
                                 $expired_date = htmlspecialchars(strip_tags($_POST['expired_date']));
                                 if($fileToUpload!=""){
-                                    $stmt->bindParam(':fileToUpload', $newfilename);
+                                    $stmt->bindParam(':fileToUpload', $newtarget_file);
                                 }
                                 else{
                                     $stmt->bindParam(':fileToUpload', $photo);
@@ -198,11 +191,11 @@
                                     <h4>
                                         <?php 
                                             if (isset($photo) && !empty($photo)) {
-                                                echo "<img src='img/$photo' width='100' height='100'>";
+                                                echo "<img src='$photo' width='100' height='100'>";
                                                 echo"<button type='submit' name='delete_pic'>Delete Picture</button>";
                                             } 
                                             else{
-                                                echo "<img src='img/noPic.jpg' width='100' height='100'>";
+                                                echo "<img src='picture/img/noPic.jpg' width='100' height='100'>";
                                             }
                                         ?>
                                     </h4>
@@ -210,7 +203,7 @@
                                 <div class="img1">
                                     <div class="img2">
                                         <div class="img3"><?php echo  $photo;?></div>
-                                        <input type="file" value=" <?php echo htmlentities($photo, ENT_QUOTES);  ?>"  name="fileToUpload" id="fileToUpload">
+                                        <input type="file" value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']): htmlspecialchars($photo, ENT_QUOTES);?>"  name="fileToUpload" id="fileToUpload" >
                                     </div>
                                 </div>
                                 
@@ -219,31 +212,31 @@
                         </tr>
                     <tr>
                         <td>Name </td>
-                        <td><input type='text' name='name' id="name" value="<?php echo htmlspecialchars($name, ENT_QUOTES); ?>" class='form-control' /></td>
+                        <td><input type='text' name='name' id="name" value="<?php echo (isset($_POST['name']))?($_POST['name']): htmlspecialchars($name, ENT_QUOTES);?>"class='form-control' /></td>
                     </tr>
                     <tr>
                         <td>Malay Name </td>
-                        <td><input type='text' name='nameMalay' id="Mname" value="<?php echo htmlspecialchars($nameMalay, ENT_QUOTES); ?>" class='form-control' /></td>
+                        <td><input type='text' name='nameMalay' id="Mname"  value="<?php echo (isset($_POST['nameMalay']))?($_POST['nameMalay']):htmlspecialchars($nameMalay, ENT_QUOTES);?>" class='form-control' /></td>
                     </tr>
                     <tr>
                         <td>Description </span></td>
-                        <td><textarea name='description' id="desc" class='form-control'><?php echo htmlspecialchars($description, ENT_QUOTES); ?></textarea></td>
+                        <td><textarea name='description' id="desc" class='form-control'><?php echo (isset($_POST['description']))?($_POST['description']):htmlspecialchars($description, ENT_QUOTES); ?></textarea></td>
                     </tr>
                     <tr>
                         <td>Price </td>
-                        <td><input type='text' name='price' id="price" value="<?php echo htmlspecialchars($price, ENT_QUOTES); ?>" class='form-control' /></td>
+                        <td><input type='text' name='price' id="price" value="<?php echo (isset($_POST['price']))?($_POST['price']):htmlspecialchars($price, ENT_QUOTES);?>" class='form-control' /></td>
                     </tr>
                     <tr>
                         <td>Promotion Price </td>
-                        <td><input type='text' name='promotion_price' id="proPrice" value="<?php echo htmlspecialchars($promotion_price, ENT_QUOTES); ?>" class='form-control' /></td>
+                        <td><input type='text' name='promotion_price' id="proPrice" value="<?php echo (isset($_POST['promotion_price']))?($_POST['promotion_price']):htmlspecialchars($promotion_price, ENT_QUOTES);?>" class='form-control' /></td>
                     </tr>
                     <tr>
                         <td>Manufacture Date </td>
-                        <td><input type='date' name='manufacture_date' id="man_date" value="<?php echo htmlspecialchars($manufacture_date, ENT_QUOTES);  ?>" class='form-control' /></td>
+                        <td><input type='date' name='manufacture_date' id="man_date" value="<?php echo (isset($_POST['manufacture_date']))?($_POST['manufacture_date']):htmlspecialchars($manufacture_date, ENT_QUOTES);?>" class='form-control' /></td>
                     </tr>
                     <tr>
                         <td>Expired Date </td>
-                        <td><input type='date' name='expired_date' id="exp_date" value="<?php echo htmlspecialchars($expired_date, ENT_QUOTES);  ?>" class='form-control' /></td>
+                        <td><input type='date' name='expired_date' id="exp_date" value="<?php echo (isset($_POST['expired_date']))?($_POST['expired_date']):htmlspecialchars($expired_date, ENT_QUOTES);?>" class='form-control' /></td>
                     </tr>
                 </table>
                 <div class="d-flex justify-content-center">
@@ -251,6 +244,9 @@
                     <a href='product_read.php' class='btn btn-danger m-2'>Back to Product List</a>
                 </div>
             </form>
+            <?php
+                include 'footer.php';
+            ?>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
         <script>

@@ -46,16 +46,16 @@
 
 
     <body>
-        <?php
-            include 'menu.php';
-            ?>
+        
         <div class="container">
+            <?php
+                include 'menu.php';
+            ?>
             <div class="page-header">
-                <h1>Update Customer <img src='img/edit.png' style='width: 4%;'></h1>
+                <h1>Update Customer <img src='picture/img/edit.png' style='width: 4%;'></h1>
                 <h5>**Please refresh this page if you did not see any changes!**</h5>
             </div>
             <?php
-                //PHP read record by ID will be here 
 
                 // get passed parameter value, in this case, the record ID
                 // isset() is a PHP function used to verify if a value is there or not
@@ -101,16 +101,13 @@
                 ?>
 
             <?php
-
-                //PHP post to update record will be here
-                // check if form was submitted
                 if ($_POST) {
                     try {
                         if (
                             empty($_POST['cus_username']) ||   empty($_POST['password'])
                             ||  empty($_POST['firstname'])  ||  empty($_POST['lastname'])
                             ||  empty($_POST['gender'])  || empty($_POST['dateofbirth'])
-                            ||  empty($_POST['registrationdatetime']) ||  empty($_POST['accountstatus'])
+                            ||  empty($_POST['accountstatus'])
                             ||  empty($_POST['confPass'])
                         ) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty</div>");
@@ -134,7 +131,7 @@
                         if ($years < 18) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
                         }
-                        $target_dir = "pic/";
+                        $target_dir = "picture/pic/";
                         $fileToUpload = $_FILES['fileToUpload']['name']; 
                         $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
                         $temp = explode(".", $_FILES['fileToUpload']['name']);
@@ -165,36 +162,31 @@
                         }
 
                         if(isset($_POST["delete_pic"])) {
-                            $preFile = "pic/$photo";
-                            if (unlink($preFile)) { 
-                                $photo = "noPic.jpg";
-                            } 
-                            else{
-                                echo"<div class='alert alert-danger'>$photo cant been deleted!</div>";
+                            if($photo =="picture/pic/noPic.jpg"){
+                                echo"<div class='alert alert-danger'>Photo cant been deleted due to no photo uploaded!</div>";
+                            }
+                            else {
+                                if (unlink($photo)){
+                                    $photo = "picture/pic/noPic.jpg";
+                                }
                             }
                         }
                                 
-                        // write update query
-                        // in this case, it seemed like we have so many fields to pass and
-                        // it is better to label them and not use question marks
                             $query = "UPDATE customer
-                            SET fileToUpload=:fileToUpload,cus_username=:cus_username,gender=:gender,accountstatus=:accountstatus,password=:password,registrationdatetime=:registrationdatetime,
+                            SET fileToUpload=:fileToUpload,cus_username=:cus_username,gender=:gender,accountstatus=:accountstatus,password=:password,
                             confPass=:confPass,lastname=:lastname,firstname=:firstname,dateofbirth=:dateofbirth WHERE id = :id";
-                            // prepare query for excecution
                             $stmt = $con->prepare($query);
-                            // posted values
-                            $cus_username = htmlspecialchars(strip_tags($_POST['cus_username']));
+                            $cus_username = htmlspecialchars(strip_tags(ucwords($_POST['cus_username'])));
                             $gender = htmlspecialchars(strip_tags($_POST['gender']));
                             $accountstatus = htmlspecialchars(strip_tags($_POST['accountstatus']));
                             $password = htmlspecialchars(strip_tags($_POST['password']));
                             $confPass = htmlspecialchars(strip_tags($_POST['confPass']));
-                            $firstname = htmlspecialchars(strip_tags($_POST['firstname']));
-                            $lastname = htmlspecialchars(strip_tags($_POST['lastname']));
+                            $firstname = htmlspecialchars(strip_tags(ucwords($_POST['firstname'])));
+                            $lastname = htmlspecialchars(strip_tags(ucwords($_POST['lastname'])));
                             $dateofbirth = htmlspecialchars(strip_tags($_POST['dateofbirth']));
-                            $registrationdatetime = htmlspecialchars(strip_tags($_POST['registrationdatetime']));
                             // bind the parameters
                             if($fileToUpload!=""){
-                                $stmt->bindParam(':fileToUpload', $newfilename);  
+                                $stmt->bindParam(':fileToUpload', $newtarget_file);  
                             }
                             else{
                                 $stmt->bindParam(':fileToUpload', $photo);  
@@ -207,7 +199,6 @@
                             $stmt->bindParam(':firstname', $firstname);
                             $stmt->bindParam(':lastname', $lastname);
                             $stmt->bindParam(':dateofbirth', $dateofbirth);
-                            $stmt->bindParam(':registrationdatetime', $registrationdatetime);
                             $stmt->bindParam(':id', $id);
                             // Execute the query
                             if ($stmt->execute()) {
@@ -246,12 +237,11 @@
                                         <h4>
                                             <?php 
                                                         if (isset($photo) && !empty($photo)) {
-                                                            echo "<img src='pic/$photo' width='100' height='100'>";
+                                                            echo "<img src='$photo' width='100' height='100'>";
                                                         echo"<button type='submit' name='delete_pic'>Delete Picture</button>";
                                                         } 
                                                         else{
-                                                            echo "<img src='pic/noPic.jpg' width='100' height='100'>";
-                                                            echo "no photo uploaded";
+                                                            echo "<img src='picture/pic/noPic.jpg' width='100' height='100'>";
                                                         }
                                                     ?>
 
@@ -261,7 +251,7 @@
                                     <div class="img1">
                                         <div class="img2">
                                             <div class="img3"><?php echo  $photo;?></div>
-                                            <input type="file" value=" <?php echo htmlentities($photo, ENT_QUOTES);  ?>"
+                                            <input type="file" value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):htmlentities($photo, ENT_QUOTES);?>"
                                                 name="fileToUpload" id="fileToUpload">
                                         </div>
                                     </div>
@@ -277,7 +267,7 @@
                                     <div class="input-group">
                                         <input type='text' name='cus_username' placeholder="Enter user name "
                                             class='form-control'
-                                            value="<?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?>" id="cName" />
+                                            value="<?php echo (isset($_POST['cus_username']))?($_POST['cus_username']):htmlspecialchars($cus_username, ENT_QUOTES);?>" id="cName" />
                             </td>
                         </tr>
                         <tr>
@@ -287,7 +277,7 @@
                                     <i class="fa fa-key icon"></i>
                                     <div class="input-group">
                                         <input type='password' name='password' placeholder="Enter password "
-                                            class='form-control' value="<?php echo htmlspecialchars($password, ENT_QUOTES);  ?>"
+                                            class='form-control' value="<?php echo (isset($_POST['password']))?($_POST['password']):htmlspecialchars($password, ENT_QUOTES);?>"
                                             id="pass" />
                                     </div>
                                 </div>
@@ -301,7 +291,7 @@
                                     <i class="fa fa-key icon"></i>
                                     <div class="input-group">
                                         <input type='password' name='confPass' placeholder="Enter confirm password "
-                                            value="<?php echo htmlspecialchars($confPass, ENT_QUOTES);  ?>" class='form-control'
+                                        value="<?php echo (isset($_POST['confPass']))?($_POST['confPass']):htmlspecialchars($confPass, ENT_QUOTES);?>" class='form-control'
                                             id="conPass" />
                                     </div>
                                 </div>
@@ -312,7 +302,7 @@
                         <td>First Name</td>
                         <td>
                             <input type='text' name='firstname' id="fname" placeholder="Enter Firstname"
-                                value="<?php echo htmlspecialchars($firstname, ENT_QUOTES);  ?>" class='form-control' />
+                            value="<?php echo (isset($_POST['firstname']))?($_POST['firstname']):htmlspecialchars($firstname, ENT_QUOTES);?>"class='form-control' />
                         </td>
                         </tr>
                         <tr>
@@ -320,17 +310,32 @@
                             <td>
                                 <div class="input-group">
                                     <input type='text' name='lastname' id="lname" placeholder="Enter Lastname"
-                                        value="<?php echo htmlspecialchars($lastname, ENT_QUOTES);  ?>" class='form-control' />
+                                    value="<?php echo (isset($_POST['lastname']))?($_POST['lastname']):htmlspecialchars($lastname, ENT_QUOTES);?>" class='form-control' />
 
                             </td>
                         </tr>
                         <tr>
                             <td>Gender</td>
                             <td><input type="radio" name="gender" id="gen1" value="male"
-                                    <?php echo ($gender=='male')?'checked':'' ?>>
+                                    <?php 
+                                        if(isset($_POST['gender'])){
+                                            echo($_POST['gender']== "male")?'checked':"";
+                                        }
+                                        else{
+                                            echo ($gender=='male')?'checked':'';
+                                        }
+                                    ?>>
                                   <label for="male">Male</label><br>
                                   <input type="radio" name="gender" id="gen2" value="female"
-                                    <?php echo ($gender=='female')?'checked':'' ?>>
+                                    <?php 
+                                        if(isset($_POST['gender'])){
+                                            echo($_POST['gender']== "female")?'checked':"";
+                                        }
+                                        else{
+                                            echo ($gender=='female')?'checked':'';
+                                        }
+                                    ?>
+                                    >
                                   <label for="female">Female</label>
                             </td>
                         </tr>
@@ -340,21 +345,31 @@
                                 <div class="input-container">
                                     <i class="fa fa-birthday-cake icon"></i>
                                     <input type='date' name='dateofbirth' class='form-control' id="datbir"
-                                        value="<?php echo htmlspecialchars($dateofbirth, ENT_QUOTES);  ?>" />
+                                    value="<?php echo (isset($_POST['dateofbirth']))?($_POST['dateofbirth']):htmlspecialchars($dateofbirth, ENT_QUOTES);?>" />
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td>Registration Date And Time</td>
-                            <td><input type='datetime-local' name='registrationdatetime' class='form-control' id="reDate"  value="<?php echo htmlspecialchars($registrationdatetime, ENT_QUOTES);  ?>"/></td>
-                        </tr>
-                        <tr>
                             <td>Accounts Status</td>
                             <td><input type="radio" name="accountstatus" id="acc1" value="active"
-                                    <?php echo ($accountstatus=='active')?'checked':'' ?>>
+                                    <?php 
+                                        if(isset($_POST['accountstatus'])){
+                                            echo($_POST['accountstatus']== "active")?'checked':"";
+                                        }
+                                        else{
+                                            echo ($accountstatus=='active')?'checked':'';
+                                        }
+                                    ?>>
                                   <label for="active">Active</label><br>
                                   <input type="radio" name="accountstatus" id="acc2" value="inactive"
-                                    <?php echo ($accountstatus=='inactive')?'checked':'' ?>>
+                                    <?php 
+                                        if(isset($_POST['accountstatus'])){
+                                            echo($_POST['accountstatus']== "inactive")?'checked':"";
+                                        }
+                                        else{
+                                            echo ($accountstatus=='inactive')?'checked':'';
+                                        }
+                                    ?>>
                                   <label for="inactive">Inactive</label>
                             </td>
                         </tr>
@@ -367,57 +382,11 @@
                         </tr>
                 </table>
             </form>
-
+            <?php
+                include 'footer.php';
+            ?>
         </div>
-        <script>
-            function validateForm() {
-                var cName = document.getElementById("cName").value;
-                var nameC = /^[a-zA-Z0-9.\-_$@*!]{6,}$/;
-                var pass = document.getElementById("pass").value;
-                var conPass = document.getElementById("conPass").value;
-                var fname = document.getElementById("fname").value;
-                var lname = document.getElementById("lname").value;
-                var gen1 = document.getElementById("gen1").checked;
-                var gen2 = document.getElementById("gen2").checked;
-                var datbir = document.getElementById("datbir").value;
-                var reDate = document.getElementById("reDate").value;
-                var acc1 = document.getElementById("acc1").checked;
-                var acc2 = document.getElementById("acc2").checked;
-                var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
-                var date1 = new Date().getFullYear();
-                var date2 = new Date(datbir);
-                var yearsDiff =  date1 - date2.getFullYear();
-                var flag = false;
-                var msg = "";
-                if (cName == ""||pass == "" ||conPass == ""|| fname == ""||lname == "" ||datbir =="" || reDate == "" ||(gen1 == false && gen2 == false)||(acc1 == false && acc2 == false)){ 
-                    flag = true;
-                msg = msg + "Please make sure all fields are not empty!\r\n";
-                }
-                if(cName.length <= 6){
-                    flag = true;
-                msg = msg + "Please make sure your name should be greater than 6 characters!\r\n";
-                }
-                if(pass != conPass){
-                    flag = true;
-                msg = msg + "Please make sure your password same as confirm password!\r\n";
-                }
-                if(!pass.match(passw)){ 
-                    flag = true;
-                msg = msg + "Please make sure your password which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character in at least 8 characters!\r\n";
-                }
-                if(yearsDiff < 18){
-                    flag = true;
-                msg = msg + "Please make sure your ages are 18 years old and above!\r\n";
-                }
-                
-                if (flag == true) {
-                alert(msg);
-                return false;
-                } else {
-                return true;
-                }
-            }
-        </script>
+        
     </body>
 
 </html>

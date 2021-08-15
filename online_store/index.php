@@ -31,10 +31,6 @@
         }
 
         .container {
-            background-color: plum;
-        }
-
-        .container {
             border-style: dotted;
             background-color: plum;
         }
@@ -45,8 +41,6 @@
             font-weight: normal;
             font-family: sans-serif;
         }
-
-
 
         .header {
             position: relative;
@@ -178,11 +172,7 @@
             background-color: pink;
         }
 
-        h1 {
-            position: absolute;
-            left: 180px;
-            bottom: 157px;
-        }
+        
 
 
         h3 {
@@ -204,15 +194,17 @@
 
         .main {
             font-size: 40px;
-            text-shadow: 2px 1px white;
+            border: 2px solid black;
+            border-radius: 12px;
         }
         </style>
     </head>
 
     <body>
         <?php
-                include 'menu.php';
-                ?><div class="header">
+            include 'menu.php';
+        ?>
+        <div class="header">
             <div id="myCarousel" class="carousel slide" data-ride="carousel">
                 <!-- Indicators -->
                 <ol class="carousel-indicators">
@@ -225,8 +217,11 @@
                 <div class="carousel-inner">
 
                     <div class="item active">
-                        <div class="bg-image" div
-                            style="background-image: url('img/shopping.jpeg'); background-repeat: no-repeat;height: 100vh;background-size: cover;">
+                        <div class="bg-image" style="
+                        background-image: url('picture/img/shopping.jpeg');
+                        height: 100vh;background-size: cover;
+                        ">
+                            
                             <div class="item1">
                                 <div class="itemsub1">
                                     <?php
@@ -241,16 +236,18 @@
                         </div>
                     </div>
                     <div class="item">
-                        <div class="bg-image" div
-                            style="background-image: url('img/shopping2.jpeg'); background-repeat: no-repeat;height: 100vh;background-size: cover;">
+                    <div class="bg-image" style="
+                        background-image: url('picture/img/shopping2.jpeg');
+                        height: 100vh;background-size: cover;
+                        ">
                             <div class="item_active1">
-                                <h5><img src="img/team.png" alt="New York" style="width:10%;"> About Us</h5><br>
-                                <div class="welcome"><img src="img/story.png" alt="New York" style="width:5%;">OUR
-                                    STORY<img src="img/story.png" alt="New York" style="width:5%;"></h3><br>
+                                <h5><img src="picture/img/team.png" alt="New York" style="width:10%;"> About Us</h5><br>
+                                <div class="welcome"><img src="picture/img/story.png" alt="New York" style="width:5%;">OUR
+                                    STORY<img src="picture/img/story.png" alt="New York" style="width:5%;"></h3><br>
                                     <br>
-                                    <p class="one"><img src="img/happy.png" alt="New York" style="width:5%;"> We love
+                                    <p class="one"><img src="picture/img/happy.png" alt="New York" style="width:5%;"> We love
                                         shopping
-                                        <img src="img/happy.png" alt="New York" style="width:5%;"><br><br>
+                                        <img src="picture/img/happy.png" alt="New York" style="width:5%;"><br><br>
                                         -- We have created a fictional band website. Lorem ipsum dolor sit amet, consectetur
                                         adipiscing elit.-
                                     </p>
@@ -260,15 +257,17 @@
                     </div>
 
                     <div class="item">
-                        <div class="bg-image" div
-                            style="background-image: url('img/shopping2.jpeg'); background-repeat: no-repeat;height: 100vh;background-size: cover;">
+                    <div class="bg-image" style="
+                        background-image: url('picture/img/shopping2.jpeg');
+                        height: 100vh;background-size: cover;
+                        ">
                             <div class="ite2">
-                                <img src="img/new.png" width="8%"> NEW PRODUCTS:
+                                <img src="picture/img/new.png" width="8%"> NEW PRODUCTS:
                             </div>
                             <div class="ite1">
 
                                 <div class="itesub1">
-                                    <br><img src="img/headphones.png" alt="New York" width="100%">
+                                    <br><img src="picture/img/headphones.png" alt="New York" width="100%">
                                 </div>
                                 <div class="itesub2">
                                     Earphone is the smartest.
@@ -281,7 +280,7 @@
                                     Mouse is the sensitiveness.
                                 </div>
                                 <div class="itesub3">
-                                    <br><img src="img/mouse.png" width="30%">
+                                    <br><img src="picture/img/mouse.png" width="30%">
                                 </div>
                             </div>
                         </div>
@@ -299,6 +298,7 @@
                     </a>
                 </div>
             </div>
+        </div>
 
 
             <div class='container-fluid'>
@@ -311,7 +311,7 @@
 
                             echo"<div class = 'col-sm-4'>";
                                 echo"<div class='pic p-1'>";
-                                    echo"<img src='img/product.png' style='width: 30%;'>";
+                                    echo"<img src='picture/img/product.png' style='width: 30%;'>";
                                 echo'</div>';
                                 include 'config/database.php';
 
@@ -324,7 +324,7 @@
                             echo '</div>';
                                 echo"<div class = 'col-sm-4'>";
                                     echo"<div class='pic p-1'>";
-                                        echo"<img src='img/customer.png' style='width: 30%;'>";
+                                        echo"<img src='picture/img/customer.png' style='width: 30%;'>";
                                     echo'</div>';
                                         include 'config/database.php';
 
@@ -337,7 +337,7 @@
 
                             echo"<div class = 'col-sm-4'>";
                                 echo"<div class='pic p-1'>";
-                                    echo"<img src='img/box.png' style='width: 30%;'>";
+                                    echo"<img src='picture/img/box.png' style='width: 30%;'>";
                                 echo'</div>';
                                 include 'config/database.php';
 
@@ -379,12 +379,13 @@
                                         echo "<th class = 'col-3'>Quantity</th>";
                                         echo "<th class = 'col-3'>Price( Per Piece )</th>";
                                         $total = 0;
-                                        while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
 
+                                        while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                                            $price = sprintf('%.2f', $od_row['price']);
                                             echo '<tr>';
                                                 echo "<td>$od_row[name]</td>";
                                                 echo "<td>$od_row[quantity]</td>";
-                                                echo "<td>RM $od_row[price]</td>";
+                                                echo "<td>RM $price</td>";
                                                 $quantity = $od_row['quantity'];
                                             echo '<tr>';
                                         }
@@ -428,10 +429,11 @@
                                         echo "<th class = 'col-4'>Total amount spend:</th>";
                                         $total = 0;
                                         while ( $od_row = $od_stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                                            $amount = sprintf('%.2f', $od_row['amount']);
                                             echo '<tr>';
                                                 echo "<td>$od_row[name]</td>";
                                                 echo "<td>$od_row[quantity]</td>";
-                                                echo "<td>RM $od_row[amount]</td>";
+                                                echo "<td>RM $amount</td>";
                                             echo'</tr>';
                                         }
                                         
@@ -471,31 +473,32 @@
                                 }
                         echo '</div>';
 
-                    ?>
-                <br>
-                <?php
-                        include 'footer.php';
-                    ?>
+                ?>
+                        <br>
+                        <?php
+                            include 'footer.php';
+                        ?>
 
                 <script>
-                // Automatic Slideshow - change image every 3 seconds
-                var myIndex = 0;
-                carousel();
+                    // Automatic Slideshow - change image every 3 seconds
+                    var myIndex = 0;
+                    carousel();
 
-                function carousel() {
-                    var i;
-                    var x = document.getElementsByClassName('mySlides');
-                    for (i = 0; i < x.length; i++) {
-                        x[i].style.display = 'none';
+                    function carousel() {
+                        var i;
+                        var x = document.getElementsByClassName('mySlides');
+                        for (i = 0; i < x.length; i++) {
+                            x[i].style.display = 'none';
+                        }
+                        myIndex++;
+                        if (myIndex > x.length) {
+                            myIndex = 1
+                        }
+                        x[myIndex - 1].style.display = 'block';
+                        setTimeout(carousel, 3000);
                     }
-                    myIndex++;
-                    if (myIndex > x.length) {
-                        myIndex = 1
-                    }
-                    x[myIndex - 1].style.display = 'block';
-                    setTimeout(carousel, 3000);
-                }
                 </script>
+            </div>
     </body>
 
 </html>

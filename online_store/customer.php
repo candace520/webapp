@@ -10,26 +10,17 @@ if (!isset($_SESSION["cus_username"])) {
 
     <head>
         <title>Create Customer</title>
-        <!-- Latest compiled and minified Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <!-- Add icon library -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
         <style>
-            #leftrow {
-                width: 25%;
 
+            td{
+                font-size: 15px;
             }
-
             .container {
-                width: 50%;
+                width: 70%;
             }
-            .nav {
-                padding-left: 30px;
-                font-size: 18px;
-                font-weight: normal;
-                font-family: sans-serif;
-            }
-
             span {
                 font-weight: bolder;
                 color: white;
@@ -54,13 +45,14 @@ if (!isset($_SESSION["cus_username"])) {
     </head>
 
     <body>
-        <?php
-        include 'menu.php';
-        ?>
+        
 
         <div class="container">
+            <?php
+                include 'menu.php';
+            ?>
             <div class="page-header">
-                <h1>Create Customer <img src='img/create.png' style='width: 8%;'></h1>
+                <h1>Create Customer <img src='picture/img/create.png' style='width: 8%;'></h1>
                 <h6>**Please fill in all fields of relevant data!(except Optional)</h6>
             </div>
 
@@ -94,11 +86,20 @@ if (!isset($_SESSION["cus_username"])) {
                         if ($years < 18) {
                             throw new Exception("<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
                         }
-                        // include database connection
-                            $target_dir = "pic/";
+                        $checkQuery = "SELECT * FROM customer WHERE cus_username= :cus_username";
+                        $checkStmt = $con->prepare($checkQuery);
+                        $check_username = ucwords($_POST['cus_username']);
+                        $checkStmt->bindParam(':cus_username', $check_username);
+                        $checkStmt->execute();
+                        $num = $checkStmt->rowCount();
+                        if($num >= 1){
+                            throw new Exception("Please make sure that username is NOT EXIST!");
+                        }
+                            $target_dir = "picture/pic/";
                             $fileToUpload = $_FILES['fileToUpload']['name']; 
                             $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
                             $isUploadOK = TRUE;
+                             
                             
                             // Check if image file is a actual image or fake image
                             if($fileToUpload!=""){
@@ -121,24 +122,25 @@ if (!isset($_SESSION["cus_username"])) {
                             }
                             
                         }
+
                         // insert query
-                        $query = "INSERT INTO customer SET fileToUpload=:fileToUpload,cus_username=:cus_username,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
+                        $query = "INSERT INTO customer SET cus_username=:cus_username,password=:password,confPass=:confPass,firstname=:firstname,lastname=:lastname, gender=:gender,dateofbirth=:dateofbirth,registrationdatetime=:registrationdatetime,
                         accountstatus=:accountstatus";
                         // prepare query for execution
                         $stmt = $con->prepare($query);
                         // posted values
                         
-                        $cus_username = $_POST['cus_username'];
+                        $cus_username = ucwords($_POST['cus_username']);
                         $password = $_POST['password'];
                         $confPass = $_POST['confPass'];
-                        $firstname = $_POST['firstname'];
-                        $lastname = $_POST['lastname'];
+                        $firstname = ucwords($_POST['firstname']);
+                        $lastname = ucwords($_POST['lastname']);
                         $gender = $_POST['gender'];
                         $dateofbirth = $_POST['dateofbirth'];
                         $registrationdatetime = $_POST['registrationdatetime'];
                         $accountstatus = $_POST['accountstatus'];
                         // bind the parameters
-                        $stmt->bindParam(':fileToUpload', $fileToUpload);
+                        
                         $stmt->bindParam(':cus_username', $cus_username);
                         $stmt->bindParam(':password', $password);
                         $stmt->bindParam(':confPass', $confPass);
@@ -150,21 +152,37 @@ if (!isset($_SESSION["cus_username"])) {
                         $stmt->bindParam(':accountstatus', $accountstatus);
                         // Execute the query
                         if ($stmt->execute()) {
-                            if($fileToUpload!=""){
-                                if ($isUploadOK == false) {
-                                    echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
-                                    $fileToUpload ="";
-                                }
-                                else {
-                                    if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                                        echo "Sorry, there was an error uploading your file.";
-                                        
+                            $lastID = $con->lastInsertId();
+                            $temp = explode(".", $_FILES["fileToUpload"]["name"]);
+                            $newfilename = $lastID .'.' . end($temp);
+                            $newtarget_file = $target_dir  . $newfilename;
+                            $default = "picture/pic/noPic.jpg";
+                                    $insertcuQuery = "UPDATE customer SET fileToUpload=:fileToUpload WHERE id = :id";
+                                    $insertcuStmt = $con->prepare($insertcuQuery); 
+                                    $insertcuStmt->bindParam(':id', $lastID);
+                                    if($fileToUpload!=""){
+                                        $insertcuStmt->bindParam(':fileToUpload', $newtarget_file);
                                     }
-                                }
-                            }
-                            echo "<div class='alert alert-success'>Customer had been created.</div>";
+                                    else{
+                                    $insertcuStmt->bindParam(':fileToUpload', $default);
+                                    }
+                                   
+                                    if($insertcuStmt->execute()){
+                                        if($fileToUpload!=""){
+                                            if ($isUploadOK == false) {
+                                                echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
+                                            }
+                                            else {
+                                                if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $newtarget_file)) {
+                                                    echo "Sorry, there was an error uploading your file.";
+                                                    
+                                                }
+                                            }
+                                        }
+                                    echo "<div class='alert alert-success'>Customer had been created.</div>";
                         } else {
                             echo "<div class='alert alert-danger'>Unable to create customer.</div>";
+                        }
                         }
                     }
                     // show error
@@ -175,14 +193,13 @@ if (!isset($_SESSION["cus_username"])) {
                     }
                 }
             ?>
-            <!-- html form here where the product information will be entered -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"  onsubmit="return validateForm()"enctype="multipart/form-data">
 
                 <table class='table table-hover table-responsive table-bordered'>
                     <tr>
                         <td>Profile Image(*Optional)</td>
                         <td>
-                            <input type="file" name="fileToUpload" id="fileToUpload">
+                            <input type="file" name="fileToUpload" id="fileToUpload" value="<?php echo (isset($_FILES["fileToUpload"]["name"]))?($_FILES["fileToUpload"]["name"]):'';?>">
                         </td>
                     </tr>
                     <tr>
@@ -191,7 +208,7 @@ if (!isset($_SESSION["cus_username"])) {
                             <div class="input-container">
                                 <i class="fa fa-user icon"></i>
                                 <div class="input-group">
-                                    <input type='text' name='cus_username' placeholder="Enter user name " class='form-control' id="cName"/>
+                                    <input type='text' name='cus_username' placeholder="Enter user name " class='form-control' id="cName"   value="<?php echo (isset($_POST['cus_username']))?($_POST['cus_username']):'';?>"/>
                         
                                 </div>
                             </div>
@@ -204,7 +221,7 @@ if (!isset($_SESSION["cus_username"])) {
                                     <div class="input-container">
                                         <i class="fa fa-key icon"></i>
                                         <div class="input-group">
-                                            <input type='password' name='password' placeholder="Enter password " class='form-control' id="pass"/>
+                                            <input type='password' name='password' placeholder="Enter password " class='form-control' id="pass" value="<?php echo (isset($_POST['password']))?($_POST['password']):'';?>"/>
                                 
                                         </div>
                                     </div>
@@ -216,7 +233,7 @@ if (!isset($_SESSION["cus_username"])) {
                                     <div class="input-container">
                                         <i class="fa fa-key icon"></i>
                                         <div class="input-group">
-                                            <input type='password' name='confPass' placeholder="Enter confirm password " class='form-control' id="conPass"/>
+                                            <input type='password' name='confPass' placeholder="Enter confirm password " class='form-control' id="conPass" value="<?php echo (isset($_POST['confPass']))?($_POST['confPass']):'';?>"/>
                                         </div>
                                     </div>
                                 </td>
@@ -226,7 +243,7 @@ if (!isset($_SESSION["cus_username"])) {
 
                                 <td>First Name</td>
                                 <td>
-                                    <input type='text' name='firstname' placeholder="Enter Firstname" class='form-control' id="fname"/>
+                                    <input type='text' name='firstname' placeholder="Enter Firstname" class='form-control' id="fname" older="Enter confirm password " class='form-control' id="conPass" value="<?php echo (isset($_POST['firstname']))?($_POST['firstname']):'';?>"/>
                                 </td>
                                 </div>
                             </tr>
@@ -234,7 +251,7 @@ if (!isset($_SESSION["cus_username"])) {
                                 <td>Last Name</td>
                                 <td>
                                     <div class="input-group">
-                                        <input type='text' name='lastname' id="lname" placeholder="Enter Lastname" class='form-control' />
+                                        <input type='text' name='lastname' id="lname" placeholder="Enter Lastname" class='form-control' value="<?php echo (isset($_POST['lastname']))?($_POST['lastname']):'';?>"/>
                                     </div>
                                 </td>
                             </tr>
@@ -242,9 +259,19 @@ if (!isset($_SESSION["cus_username"])) {
                             <tr>
                                 <td>Gender</td>
                                 <td>
-                                    <input type="radio" name="gender" value="male" id="gen1">
+                                    <input type="radio" name="gender" 
+                                    <?php 
+                                        if(isset($_POST['gender'])){
+                                            echo($_POST['gender']== "male")?'checked':"";
+                                        }
+                                    ?>  value="male" id="gen1">
                                       <label for="html">Male</label><br>
-                                      <input type="radio" name="gender" value="female" id="gen2">
+                                      <input type="radio" name="gender" 
+                                    <?php 
+                                        if(isset($_POST['gender'])){
+                                            echo($_POST['gender']== "female")?'checked':"";
+                                        }
+                                    ?> value="female"  id="gen2">
                                       <label for="css">Female</label>
                                 </td>
                             </tr>
@@ -254,21 +281,29 @@ if (!isset($_SESSION["cus_username"])) {
                                 <td>
                                     <div class="input-container">
                                         <i class="fa fa-birthday-cake icon"></i>
-                                        <input type='date' name='dateofbirth' class='form-control' id="datbir"/>
+                                        <input type='date' name='dateofbirth' class='form-control' id="datbir" value="<?php echo (isset($_POST['dateofbirth']))?($_POST['dateofbirth']):'';?>"/>
                                     </div>
                                 </td>
                             </tr>
                             
                             <tr>
                                 <td>Registration Date And Time</td>
-                                <td><input type='datetime-local' name='registrationdatetime' class='form-control' id="reDate" /></td>
+                                <td><input type='datetime-local' name='registrationdatetime' class='form-control' id="reDate" value="<?php echo (isset($_POST['registrationdatetime']))?($_POST['registrationdatetime']):'';?>"/></td>
                             </tr>
 
                             <tr>
                                 <td>Accounts Status</td>
-                                <td><input type="radio" name="accountstatus" value="active" id="acc1">
+                                <td><input type="radio" name="accountstatus" <?php 
+                                        if(isset($_POST['accountstatus'])){
+                                            echo($_POST['accountstatus']== "active")?'checked':"";
+                                        }
+                                    ?> value="active" id="acc1">
                                       <label for="html">Active</label><br>
-                                      <input type="radio" name="accountstatus" value="inactive" id="acc2">
+                                      <input type="radio" name="accountstatus" <?php 
+                                        if(isset($_POST['accountstatus'])){
+                                            echo($_POST['accountstatus']== "inactive")?'checked':"";
+                                        }
+                                    ?> value="inactive" id="acc2">
                                       <label for="css">Inactive</label>
                                 </td>
                             </tr>
@@ -303,8 +338,6 @@ if (!isset($_SESSION["cus_username"])) {
                 var acc1 = document.getElementById("acc1").checked;
                 var acc2 = document.getElementById("acc2").checked;
                 var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
-                
-                
                 var date1 = new Date().getFullYear();
                 var date2 = new Date(datbir);
                 var yearsDiff =  date1 - date2.getFullYear();
@@ -312,30 +345,30 @@ if (!isset($_SESSION["cus_username"])) {
                 var msg = "";
                 if (cName == ""||pass == "" ||conPass == ""|| fname == ""||lname == "" ||datbir =="" || reDate == "" ||(gen1 == false && gen2 == false)||(acc1 == false && acc2 == false)){ 
                     flag = true;
-                msg = msg + "Please make sure all fields are not empty!\r\n";
+                    msg = msg + "Please make sure all fields are not empty!\r\n";
                 }
-                if(cName.length <= 6){
+                else if(cName.length <= 6){
                     flag = true;
-                msg = msg + "Please make sure your name should be greater than 6 characters!\r\n";
+                    msg = msg + "Please make sure your name should be greater than 6 characters!\r\n";
                 }
-                if(pass != conPass){
+                else if(pass != conPass){
                     flag = true;
-                msg = msg + "Please make sure your password same as confirm password!\r\n";
+                    msg = msg + "Please make sure your password same as confirm password!\r\n";
                 }
-                if(!pass.match(passw)){ 
+                else if(!pass.match(passw)){ 
                     flag = true;
-                msg = msg + "Please make sure your password which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character in at least 8 characters!\r\n";
+                    msg = msg + "Please make sure your password which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character in at least 8 characters!\r\n";
                 }
-                if(yearsDiff < 18){
+                else if(yearsDiff < 18){
                     flag = true;
-                msg = msg + "Please make sure your ages are 18 years old and above!\r\n";
+                    msg = msg + "Please make sure your ages are 18 years old and above!\r\n";
                 }
                 
                 if (flag == true) {
-                alert(msg);
-                return false;
+                    alert(msg);
+                    return false;
                 } else {
-                return true;
+                    return true;
                 }
             }
         </script>
