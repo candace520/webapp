@@ -46,14 +46,8 @@
                 if ($_POST) {
                     try {
                         $con->beginTransaction();//avoid duplicate
-                        for ($i = 0; $i < count($_POST['productID']); $i++) {
-                            if (!isset($_POST['quantity'][$i])) {
-                                throw new Exception("Please make sure all fields are not empty!");
-                            }
-                            $checkQuantity = htmlspecialchars(strip_tags($_POST['quantity'][$i]));
-                            if (count($_POST['productID']) == 1 && $checkQuantity == 0) {
-                                throw new Exception("Sorry! The product cannot be deleted!");
-                            }
+                        if (empty($_POST['cus_username'])||empty($_POST['productID'])||empty($_POST['quantity'])) {
+                            throw new Exception("Please make sure all fields are not empty!");
                         }
                         $updateTotalAmountQuery = "UPDATE orders SET total=:total WHERE orderID=:orderID";
                         $updateTotalAmountStmt = $con->prepare($updateTotalAmountQuery);
