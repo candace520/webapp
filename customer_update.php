@@ -143,7 +143,7 @@
                         if($fileToUpload!=""){
                                 $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                             if($check == false) {
-                                echo "Please make sure the image uploaded is an image!";
+                                echo"<div class='alert alert-danger'>Please make sure the file uploaded is an image!</div>";
                                     $isUploadOK = 0;
                             }
                             
@@ -185,7 +185,7 @@
                             $lastname = htmlspecialchars(strip_tags(ucwords($_POST['lastname'])));
                             $dateofbirth = htmlspecialchars(strip_tags($_POST['dateofbirth']));
                             // bind the parameters
-                            if($fileToUpload!=""){
+                            if($fileToUpload!=""&&$isUploadOK == true){
                                 $stmt->bindParam(':fileToUpload', $newtarget_file);  
                             }
                             else{
