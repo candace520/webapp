@@ -55,11 +55,11 @@
                 $action = isset( $_GET['action'] ) ? $_GET['action'] : '';
                 // if it was redirected from delete.php
                 if ( $action == 'productInStock' ) {
-                    echo "<div class='alert alert-success'>Record could not deleted as this product in the order.</div>";
+                    echo "<div class='alert alert-success'>Product record could not deleted as this product in the order.</div>";
                 }
 
                 if ( $action == 'deleted' ) {
-                    echo "<div class='alert alert-success'>Record was deleted.</div>";
+                    echo "<div class='alert alert-success'>Product record was deleted.</div>";
                 }
                 include 'config/database.php';
                 $query = 'SELECT * FROM products ORDER BY productID DESC';

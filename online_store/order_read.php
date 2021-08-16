@@ -56,7 +56,7 @@
                 include 'config/database.php';
                 $action = isset( $_GET['action'] ) ? $_GET['action'] : '';
                 if ( $action == 'deleted' ) {
-                    echo "<div class='alert alert-success'>Record was deleted.</div>";
+                    echo "<div class='alert alert-success'>Order Record was deleted.</div>";
                 }
                 $query = 'SELECT * FROM orders ORDER BY orderID DESC';
                 $stmt = $con->prepare( $query );

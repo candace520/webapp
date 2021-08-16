@@ -68,23 +68,23 @@ if (!isset($_SESSION["cus_username"])) {
                             ||  empty($_POST['registrationdatetime']) ||  empty($_POST['accountstatus'])
                             ||  empty($_POST['confPass'])
                         ) {
-                            throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty</div>");
+                            throw new Exception("<div class='alert alert-danger'>Please make sure all fields are not empty!</div>");
                         }
                         $namelength = strlen($_POST['cus_username']);
                         if ($namelength <= 6) {
-                            throw new Exception("<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters</div>");
+                            throw new Exception("<div class='alert alert-danger'>Please make sure your name should be greater than 6 characters!</div>");
                         }
                         if ($_POST['password'] != $_POST['confPass']) {
-                            throw new Exception("<div class='alert alert-danger'>Please make sure your password same as confirm password</div>");
+                            throw new Exception("<div class='alert alert-danger'>Please make sure your password same as confirm password!</div>");
                         }
                         if (!preg_match('/[A-Za-z]/', $_POST['password']) || !preg_match('/[0-9]/', $_POST['password'])||strlen($_POST["password"]) < 8) {
-                            throw new Exception("<div class='alert alert-danger'>Please make sure your password which contain at least one lowercase letter, uppercase letter, numeric digit, and special character in at least 8 characters</div>");
+                            throw new Exception("<div class='alert alert-danger'>Please make sure your password which contain at least one lowercase letter, uppercase letter, numeric digit, and special character in at least 8 characters!</div>");
                         }
                         $date1 = "Y";
                         $diff = abs(strtotime($date1) - strtotime($_POST['dateofbirth']));
                         $years = floor($diff / (365 * 60 * 60 * 24));
                         if ($years < 18) {
-                            throw new Exception("<div class='alert alert-danger'>Please make sure your ages are 18 years old and above</div>");
+                            throw new Exception("<div class='alert alert-danger'>Please make sure your ages are 18 years old and above!</div>");
                         }
                         $checkQuery = "SELECT * FROM customer WHERE cus_username= :cus_username";
                         $checkStmt = $con->prepare($checkQuery);

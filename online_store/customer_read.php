@@ -62,11 +62,11 @@
             $action = isset($_GET['action']) ? $_GET['action'] : "";
             // if it was redirected from delete.php
             if ($action == 'customerInOrder') {
-                echo "<div class='alert alert-success'>Record could not deleted as this customer in the order.</div>";
+                echo "<div class='alert alert-success'>Customer record could not deleted as this customer in the order.</div>";
             }
             
             if ($action == 'deleted') {
-                echo "<div class='alert alert-success'>Record was deleted.</div>";
+                echo "<div class='alert alert-success'>>Customer record was deleted.</div>";
             }
             // select all data
             $query = "SELECT * FROM customer ORDER BY id DESC";
