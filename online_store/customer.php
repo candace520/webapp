@@ -116,7 +116,7 @@ if (!isset($_SESSION["cus_username"])) {
                                     }
                             
                             
-                            if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                            if ($_FILES["fileToUpload"]["size"] > 512000) {
                                 echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
                                 $isUploadOK = false;
                             }

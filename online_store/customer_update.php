@@ -154,7 +154,7 @@
                                 }
                         
                         
-                            if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                            if ($_FILES["fileToUpload"]["size"] > 512000) {
                                 echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
                                 $isUploadOK = false;
                             }
@@ -252,7 +252,7 @@
                                         <div class="img2">
                                             <div class="img3"><?php echo  $photo;?></div>
                                             <input type="file" value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):htmlentities($photo, ENT_QUOTES);?>"
-                                                name="fileToUpload" id="fileToUpload">
+                                                name="fileToUpload" id="fileToUpload"><?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):"";?>
                                         </div>
                                     </div>
 
@@ -397,7 +397,6 @@
                 var gen1 = document.getElementById("gen1").checked;
                 var gen2 = document.getElementById("gen2").checked;
                 var datbir = document.getElementById("datbir").value;
-                var reDate = document.getElementById("reDate").value;
                 var acc1 = document.getElementById("acc1").checked;
                 var acc2 = document.getElementById("acc2").checked;
                 var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
@@ -406,7 +405,7 @@
                 var yearsDiff =  date1 - date2.getFullYear();
                 var flag = false;
                 var msg = "";
-                if (cName == ""||pass == "" ||conPass == ""|| fname == ""||lname == "" ||datbir =="" || reDate == "" ||(gen1 == false && gen2 == false)||(acc1 == false && acc2 == false)){ 
+                if (cName == ""||pass == "" ||conPass == ""|| fname == ""||lname == "" ||datbir =="" ||(gen1 == false && gen2 == false)||(acc1 == false && acc2 == false)){ 
                     flag = true;
                     msg = msg + "Please make sure all fields are not empty!\r\n";
                 }

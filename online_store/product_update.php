@@ -108,7 +108,7 @@
                                     }
                             
                             
-                                if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                                if ($_FILES["fileToUpload"]["size"] > 512000) {
                                     echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
                                     $isUploadOK = false;
                                 }
@@ -203,7 +203,7 @@
                                 <div class="img1">
                                     <div class="img2">
                                         <div class="img3"><?php echo  $photo;?></div>
-                                        <input type="file" value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']): htmlspecialchars($photo, ENT_QUOTES);?>"  name="fileToUpload" id="fileToUpload" >
+                                        <input type="file" value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']): htmlspecialchars($photo, ENT_QUOTES);?>"  name="fileToUpload" id="fileToUpload" ><?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']): "";?>
                                     </div>
                                 </div>
                                 

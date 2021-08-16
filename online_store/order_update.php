@@ -46,6 +46,15 @@
                 if ($_POST) {
                     try {
                         $con->beginTransaction();//avoid duplicate
+                        for ($i = 0; $i < count($_POST['productID']); $i++) {
+                            if (!isset($_POST['quantity'][$i])) {
+                                throw new Exception("Please make sure all fields are not empty!");
+                            }
+                            $checkQuantity = htmlspecialchars(strip_tags($_POST['quantity'][$i]));
+                            if (count($_POST['productID']) == 1 && $checkQuantity == 0) {
+                                throw new Exception("Sorry! The product cannot be deleted!");
+                            }
+                        }
                         $updateTotalAmountQuery = "UPDATE orders SET total=:total WHERE orderID=:orderID";
                         $updateTotalAmountStmt = $con->prepare($updateTotalAmountQuery);
                         $total = 0;
@@ -282,12 +291,9 @@
             var flag = false;
             var msg = "";
             if (product == 1) {
-                if(quantity == 0){
                     flag = true;
                     msg = msg + "Product cannot be deleted!\r\n";
                     msg = msg + "An order must buy at least one product!\r\n";
-                    msg = msg + "Please re-enter the quantity other then zero!\r\n";
-                }
             }
             if (flag == true) {
                 alert(msg);

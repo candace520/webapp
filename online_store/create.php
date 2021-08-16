@@ -89,9 +89,9 @@
                                         $isUploadOK = false;
                                         echo"<div class='alert alert-danger'>Please make sure the width and height of your image is same!</div>";  
                                     }
+                                    
                             
-                            
-                            if ($_FILES["fileToUpload"]["size"] > 5120000) {
+                            if ($_FILES["fileToUpload"]["size"] > 512000) {
                                 echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
                                 $isUploadOK = false;
                             }
@@ -235,7 +235,50 @@
                 ?>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-        
+        <script>
+            function validation() {
+                var name = document.getElementById("name").value;
+                var Mname = document.getElementById("Mname").value;
+                var desc = document.getElementById("desc").value;
+                var price = document.getElementById("price").value;
+                var proPrice = document.getElementById("proPrice").value;
+                var priceValidation = /^[0-9]*[.]?[0-9]*$/;
+                var man_date = document.getElementById("man_date").value;
+                var exp_date = document.getElementById("exp_date").value;
+                var flag = false;
+                var msg = "";
+                if (name == "" || Mname == "" || desc == "" || price == "" || proPrice == "" || man_date == "" || exp_date == "") {
+                    flag = true;
+                    msg = msg + "Please make sure all fields are not empty!\r\n";
+                }
+                if(isNaN(price)||isNaN(proPrice)){
+                    flag = true;
+                    msg = msg  + " Please make sure the price is a number.\r\n";
+                }
+                if (price <= 0 || proPrice <= 0) {
+                    flag = true;
+                    msg = msg + "Please make sure the price must not be a negative value or zero!\r\n";
+                }
+                if (price > 1000 || proPrice > 1000) {
+                    flag = true;
+                    msg = msg + "Please make sure the price is not bigger than RM 1000!\r\n";
+                }
+                if (parseFloat(price) < parseFloat(proPrice) ) {
+                    flag = true;
+                    msg = msg + "Please make sure the promotion price must be not bigger than normal price!\r\n";
+                }
+                if (man_date > exp_date) {
+                    flag = true;
+                    msg = msg + "Please make sure expired date is later than the manufacture date!\r\n";
+                }
+                if (flag == true) {
+                    alert(msg);
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        </script>
     </body>
 
 </html>
