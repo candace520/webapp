@@ -386,7 +386,55 @@
                 include 'footer.php';
             ?>
         </div>
-        
+        <script>
+            function validateForm() {
+                var cName = document.getElementById("cName").value;
+                var nameC = /^[a-zA-Z0-9.\-_$@*!]{6,}$/;
+                var pass = document.getElementById("pass").value;
+                var conPass = document.getElementById("conPass").value;
+                var fname = document.getElementById("fname").value;
+                var lname = document.getElementById("lname").value;
+                var gen1 = document.getElementById("gen1").checked;
+                var gen2 = document.getElementById("gen2").checked;
+                var datbir = document.getElementById("datbir").value;
+                var reDate = document.getElementById("reDate").value;
+                var acc1 = document.getElementById("acc1").checked;
+                var acc2 = document.getElementById("acc2").checked;
+                var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
+                var date1 = new Date().getFullYear();
+                var date2 = new Date(datbir);
+                var yearsDiff =  date1 - date2.getFullYear();
+                var flag = false;
+                var msg = "";
+                if (cName == ""||pass == "" ||conPass == ""|| fname == ""||lname == "" ||datbir =="" || reDate == "" ||(gen1 == false && gen2 == false)||(acc1 == false && acc2 == false)){ 
+                    flag = true;
+                    msg = msg + "Please make sure all fields are not empty!\r\n";
+                }
+                else if(cName.length <= 6){
+                    flag = true;
+                    msg = msg + "Please make sure your name should be greater than 6 characters!\r\n";
+                }
+                else if(pass != conPass){
+                    flag = true;
+                    msg = msg + "Please make sure your password same as confirm password!\r\n";
+                }
+                else if(!pass.match(passw)){ 
+                    flag = true;
+                    msg = msg + "Please make sure your password which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character in at least 8 characters!\r\n";
+                }
+                else if(yearsDiff < 18){
+                    flag = true;
+                    msg = msg + "Please make sure your ages are 18 years old and above!\r\n";
+                }
+                
+                if (flag == true) {
+                    alert(msg);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        </script>
     </body>
 
 </html>

@@ -120,10 +120,10 @@
 
 
               <label for="uname"><b>Username</b></label>
-              <input type="text" placeholder="Enter Username" name="cus_username">
+              <input type="text" placeholder="Enter Username" name="cus_username" value="<?php echo (isset($_POST['cus_username']))?($_POST['cus_username']):'';?>">
 
               <label for="psw"><b>Password</b></label>
-              <input type="password" placeholder="Enter Password" name="password">
+              <input type="password" placeholder="Enter Password" name="password" value="<?php echo (isset($_POST['password']))?($_POST['password']):'';?>">
 
               <input type='submit' value='Login' class='btn btn-primary' />
           </div>
