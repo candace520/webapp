@@ -46,9 +46,11 @@
                 if ($_POST) {
                     try {
                         $con->beginTransaction();//avoid duplicate
-                        if (empty($_POST['cus_username'])||empty($_POST['productID'])||empty($_POST['quantity'])) {
+                        for ($i = 0; $i < count($_POST['productID']); $i++) {
+                        if (empty(($_POST['quantity'][$i]))) {
                             throw new Exception("Please make sure all fields are not empty!");
                         }
+                    }
                         $updateTotalAmountQuery = "UPDATE orders SET total=:total WHERE orderID=:orderID";
                         $updateTotalAmountStmt = $con->prepare($updateTotalAmountQuery);
                         $total = 0;
@@ -124,7 +126,7 @@
                     }
                 } 
             ?>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?orderID={$orderID}"); ?>" method="post">
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"] . "?orderID={$orderID}"); ?>" method="post" onsubmit="return validation()">
                 <table class='table table-hover table-responsive table-bordered'>
                     <tr>
                         <td>Order ID</td>
@@ -159,9 +161,9 @@
                             $productID = htmlspecialchars($productID, ENT_QUOTES);
                             $productName = htmlspecialchars($name, ENT_QUOTES);
                             $productQuantity = htmlspecialchars($quantity, ENT_QUOTES);
-                            echo "<tr id='mySelect'>";
+                            echo "<tr class='product'>";
                             echo "<td>";
-                            echo "<select class='form-select' id='autoSizingSelect' name='productID[]'> ";
+                            echo "<select class='productID form-select' id='autoSizingSelect' name='productID[]'> ";
                             echo "<option value='' disabled selected>-- Select Product --</option> ";
                             $select_product_query = "SELECT productID, name FROM products";
                             $select_product_stmt = $con->prepare($select_product_query);
@@ -174,7 +176,7 @@
                             echo "</select>";
                             echo "</td>";
                             echo "<td>";
-                            echo "<select class='form-select' id='autoSizingSelect' name='quantity[]'>";
+                            echo "<select class='quantity form-select' id='autoSizingSelect' name='quantity[]'>";
                             echo "<option value='' disabled selected> -- Select Quantity -- </option>";
                             for ($i = 1; $i <= 20; $i++) {
                                 $result = $productQuantity == $i ? 'selected' : '';
@@ -200,7 +202,7 @@
                     <tr class='productQuantity'>
                         
                         <td>Optional choice: (Add more product)
-                            <select class='form-select' id='autoSizingSelect' name='productID[]'>
+                            <select class='productID form-select' id='autoSizingSelect' name='productID[]'>
                                 <option value='' disabled selected>-- Select Product --</option>
                                 <?php
                                 include 'config/database.php';
@@ -215,7 +217,7 @@
                         </td>
                         <td>
                             If have 
-                            <select class='form-select' id='autoSizingSelect' name='quantity[]'>
+                            <select class='quantity form-select' id='autoSizingSelect' name='quantity[]'>
                                 <option value='' disabled selected>-- Select Quantity --</option>
                                 <?php
                                 for ($i = 1; $i <= 20; $i++) {
@@ -278,24 +280,23 @@
                 window.location = "order_detail_delete.php?productID=" + productID + "&orderID="  + orderID;
             }
         }
-
         function validation() {
-            var product = document.querySelectorAll('.product').length;
-            var quantity = document.querySelector('.quantity').value;
-            var flag = false;
-            var msg = "";
-            if (product == 1) {
+                var productID = document.querySelector('.productID').value;
+                var quantity = document.querySelector('.quantity').value;
+                var flag = false;
+                var msg = "";
+                if (productID == ""||quantity == "") {
                     flag = true;
-                    msg = msg + "Product cannot be deleted!\r\n";
-                    msg = msg + "An order must buy at least one product!\r\n";
+                    msg = msg + "Please make sure all fields are not empty!";
+                }
+                if (flag == true) {
+                    alert(msg);
+                    return false;
+                }else{
+                    return true;
+                }
             }
-            if (flag == true) {
-                alert(msg);
-                return false;
-            }else{
-                return true;
-            }
-        }
+        </script>
     </script>
     </body>
 
