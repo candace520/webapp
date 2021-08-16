@@ -105,7 +105,7 @@ if (!isset($_SESSION["cus_username"])) {
                             if($fileToUpload!=""){
                                     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                                 if($check == false) {
-                                    echo "File is not an image.";
+                                    echo"<div class='alert alert-danger'>Please make sure the file uploaded is an image!</div>";
                                         $isUploadOK = 0;
                                 }
                                 
@@ -160,7 +160,7 @@ if (!isset($_SESSION["cus_username"])) {
                                     $insertcuQuery = "UPDATE customer SET fileToUpload=:fileToUpload WHERE id = :id";
                                     $insertcuStmt = $con->prepare($insertcuQuery); 
                                     $insertcuStmt->bindParam(':id', $lastID);
-                                    if($fileToUpload!=""){
+                                    if($fileToUpload!=""&&$isUploadOK == true){
                                         $insertcuStmt->bindParam(':fileToUpload', $newtarget_file);
                                     }
                                     else{
@@ -199,7 +199,7 @@ if (!isset($_SESSION["cus_username"])) {
                     <tr>
                         <td>Profile Image(*Optional)</td>
                         <td>
-                            <input type="file" name="fileToUpload" id="fileToUpload" value="<?php echo (isset($_FILES["fileToUpload"]["name"]))?($_FILES["fileToUpload"]["name"]):'';?>">
+                            <input type="file" name="fileToUpload" id="fileToUpload" value="<?php echo (isset($_FILES["fileToUpload"]["name"]))?($_FILES["fileToUpload"]["name"]):'';?>"><?php echo (isset($_FILES["fileToUpload"]["name"]))?($_FILES["fileToUpload"]["name"]):'';?>
                         </td>
                     </tr>
                     <tr>

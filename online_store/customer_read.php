@@ -66,7 +66,7 @@
             }
             
             if ($action == 'deleted') {
-                echo "<div class='alert alert-success'>>Customer record was deleted.</div>";
+                echo "<div class='alert alert-success'>Customer record was deleted.</div>";
             }
             // select all data
             $query = "SELECT * FROM customer ORDER BY id DESC";

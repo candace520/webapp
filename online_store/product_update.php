@@ -97,7 +97,7 @@
                             if($fileToUpload!=""){
                                     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                                 if($check == false) {
-                                    echo "Please make sure file uploaded is an image!";
+                                    echo"<div class='alert alert-danger'>Please make sure the file uploaded is an image!</div>";
                                         $isUploadOK = 0;
                                 }
                                 
@@ -137,7 +137,7 @@
                                 $promotion_price = htmlspecialchars(strip_tags($_POST['promotion_price']));
                                 $manufacture_date = htmlspecialchars(strip_tags($_POST['manufacture_date']));
                                 $expired_date = htmlspecialchars(strip_tags($_POST['expired_date']));
-                                if($fileToUpload!=""){
+                                if($fileToUpload!=""&&$isUploadOK == true){
                                     $stmt->bindParam(':fileToUpload', $newtarget_file);
                                 }
                                 else{

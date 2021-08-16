@@ -80,7 +80,7 @@
                             if($fileToUpload!=""){
                                     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                                 if($check == false) {
-                                    echo "Please make sure the file uploaded is an image!";
+                                    echo"<div class='alert alert-danger'>Please make sure the file uploaded is an image!</div>";
                                         $isUploadOK = 0;
                                 }
                                 
@@ -130,11 +130,11 @@
                                     $insertcuQuery = "UPDATE products SET fileToUpload=:fileToUpload WHERE productID = :productID";
                                     $insertcuStmt = $con->prepare($insertcuQuery); 
                                     $insertcuStmt->bindParam(':productID', $lastID);
-                                    if($fileToUpload!=""){
+                                    if($fileToUpload!=""&&$isUploadOK == true){
                                         $insertcuStmt->bindParam(':fileToUpload', $newtarget_file);
                                     }
                                     else{
-                                    $insertcuStmt->bindParam(':fileToUpload', $default);
+                                        $insertcuStmt->bindParam(':fileToUpload', $default);
                                     }
                                     if($insertcuStmt->execute()){
                                         if($fileToUpload!=""){
@@ -170,7 +170,7 @@
                     <tr>
                         <td>Product Image(Optional)</td>
                         <td>
-                            <input type="file" name="fileToUpload" id="fileToUpload" value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>" >
+                            <input type="file" name="fileToUpload" id="fileToUpload"value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>"><?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>
                         </td>
                     </tr>
                     <tr>
@@ -235,51 +235,7 @@
                 ?>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-        <script>
-             function validateForm() {
-                var name = document.getElementById("name").value;
-                var Mname = document.getElementById("Mname").value;
-                var price = document.getElementById("price").value;
-                var desc = document.getElementById("desc").value;
-                var proPrice = document.getElementById("proPrice").value;
-                var man_date = document.getElementById("man_date").value;
-                var exp_date = document.getElementById("exp_date").value;
-                var flag = false;
-                var msg = "";
-                if (name == ""||Mname == "" ||desc==""||proPrice ==""|| price == ""||man_date == ""|| exp_date == "") {
-                    flag = true;
-                    msg = msg + "Please make sure all fields are not empty!\r\n";
-                }
-                else if(isNaN(price)||isNaN(proPrice)){
-                    flag = true;
-                    msg = msg  + " Please make sure the price is a number.\r\n";
-                }
-                else if (proPrice > 1000|| price > 1000) {
-                    flag = true;
-                    msg = msg + "Please make sure the price must be not bigger than RM 1000.\r\n";
-                }
-                else if (proPrice < 0 || price < 0) {
-                    flag = true;
-                    msg = msg + "Please make sure the price must be not a negative value.\r\n";
-                }
-                
-                else if (parseFloat(price) < parseFloat(proPrice) ) {
-                    flag = true;
-                    
-                    msg = msg + "Please make sure the promotion price must be not bigger than normal price.\r\n";
-                }
-                else if (exp_date < man_date ) {
-                    flag = true;
-                    msg = msg + "Please make sure the expired date is later than the manufacture date.\r\n";
-                }
-                if (flag == true) {
-                    alert(msg);
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        </script>
+        
     </body>
 
 </html>
