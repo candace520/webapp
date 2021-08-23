@@ -1,7 +1,7 @@
 <?php
     session_start();
     if ( !isset( $_SESSION['cus_username'] ) ) {
-        header( 'Location: login.php?error=restrictedAccess' );
+        header( 'Location: index.php?error=restrictedAccess' );
     }
 ?>
 <!DOCTYPE HTML>
@@ -26,26 +26,24 @@
     </style>
 
     <body> 
-        
-        <div class='container'>
         <?php
             include 'menu.php';
         ?>
+        <div class='container'>
+        
             <div class = 'page-header'>
-                <div class = 'title'><h1>Order List  <img src='picture/img/read.png' style='width: 15%;'></div>
+                <div class = 'title'><h1>Order List  <img src='picture/product/read.png' style='width: 15%;'></div>
                 <div class = 'title2'><a href = 'orders.php' class = 'btn btn-primary'>Create         New           Order</h1></a>
                 </div>
             </div>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
+            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return validation()"> 
                     <table class = 'table table-hover table-responsive table-bordered' >
                         <tr style = 'border:none;'>
                             <td class = 'col-10' style = 'border:none;'>
                                 <div class = 'input-group rounded'>
                                     <input type = 'text'  class = 'form-control rounded' placeholder = 'Search by order ID OR names...' aria-label = 'Search'
-                                    aria-describedby = 'search-addon' id = 'myInput' onkeyup = 'myFunction()' name="sear"/>
-                                    <button type = 'button' class = 'btn btn-primary' >
-                                    <i class = 'fa fa-search' style = 'font-size:20px;color:white'></i>
-                                    </button>
+                                    aria-describedby = 'search-addon' id = 'sear' onkeyup = 'myFunction()' name="sear" value="<?php echo (isset($_POST['sear']))?($_POST['sear']):'';?>"/>
+                                    <input type='submit' value='Search' id="searchBtn" class='btn' />
                                 </div>
                             </td>
                             
@@ -61,11 +59,24 @@
                 $query = 'SELECT * FROM orders ORDER BY orderID DESC';
                 $stmt = $con->prepare( $query );
                 if ($_POST) {
-                    $sear = $_POST['sear'];
-                    $query = 'SELECT * FROM orders  WHERE orderID LIKE :sear OR cus_username LIKE :sear ORDER BY orderId DESC';
-                    $stmt = $con->prepare( $query );
-                    $stmt->bindParam(':sear', $sear);
-                }   
+                    try {
+                        if (
+                            empty($_POST['sear'])
+                        ) {
+                            throw new Exception("Please make sure your name or id not empty before searching!");
+                        }
+                        $sear = "%" . $_POST['sear'] . "%";
+                        $query = 'SELECT * FROM orders  WHERE cus_username LIKE :sear OR orderID LIKE :sear ORDER BY orderID DESC';
+                        $stmt = $con->prepare($query);
+                        $stmt->bindParam(':sear', $sear);
+                    }
+                        catch (PDOException $exception) {
+                            echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                        } catch (Exception $exception) {
+                            echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                        }
+                
+                }    
                 
                 
                 $stmt->execute();
@@ -74,16 +85,17 @@
                     echo "<table class='table table-hover table-responsive table-bordered' id='myTable'>";
 
                     echo '<tr>';
-                    echo '<th>Order ID</th>';
-                    echo '<th>Customer Username</th>';
+                    echo '<th class="col-1 text-center">Order ID</th>';
+                    echo '<th class="col-1 text-center">Customer Username</th>';
+                    echo '<th class="col-1 text-center">Action</th>';
                     echo '</tr>';
 
                     while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
                         extract( $row );
                         echo '<tr>';
-                        echo "<td>{$orderID}</td>";
-                        echo "<td>{$cus_username}</td>";
-                        echo '<td>';
+                        echo "<td class='col-1 text-center'>{$orderID}</td>";
+                        echo "<td class='col-1 text-center'>{$cus_username}</td>";
+                        echo '<td class ="text-center">';
                         echo "<a href='order_read_one.php?orderID={$orderID}' class='btn btn-info me-2'>Details</a>";
                         echo "<a href='order_update.php?orderID={$orderID}' class='btn btn-primary me-2'>Edit</a>";
                         echo "<a href='#' onclick='delete_order({$orderID});'  class='btn btn-danger'>Delete</a>";
@@ -96,9 +108,7 @@
                 }
 
             ?>
-            <?php
-                include 'footer.php';
-            ?>
+            
         </div>
         <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js'
             integrity='sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4' crossorigin='anonymous'>
@@ -110,8 +120,25 @@
                 window.location = 'order_delete.php?orderID=' + orderID;
             }
         }
+        function validation() {
+                var sear = document.getElementById("sear").value;
+                var flag = false;
+                var msg = "";
+                if (sear == "") {
+                    flag = true;
+                    msg = msg + "Please make sure your name or id not empty before searching!\r\n";
+                }
+                if (flag == true) {
+                    alert(msg);
+                    return false;
+                }else{
+                    return true;
+                }
+        }
         </script>
         
     </body>
-
+            <?php
+                include 'footer.php';
+            ?>
 </html>

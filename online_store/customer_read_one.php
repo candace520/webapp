@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION["cus_username"])) {
-        header("Location: login.php?error=restrictedAccess");
+        header("Location: index.php?error=restrictedAccess");
     }
 ?>
 <!DOCTYPE HTML>
@@ -14,13 +14,13 @@
     </head>
 
     <body>
-        
-        <div class="container">
-            <?php
+        <?php
                 include 'menu.php';
             ?>
+        <div class="container">
+            
             <div class="page-header">
-                <h1>Customer Details  <img src='picture/img/detail.png' style='width: 3%;'></h1>
+                <h1>Customer Details  <img src='picture/product/detail.png' style='width: 3%;'></h1>
             </div>
 
             <?php
@@ -61,6 +61,7 @@
                 $lastname = $row['lastname'];
                 $dateofbirth = $row['dateofbirth'];
                 $registrationdatetime = $row['registrationdatetime'];
+                $photo = $row['fileToUpload'];
             }
 
             // show error
@@ -72,6 +73,11 @@
                 <tr>
                     <td>Name</td>
                     <td><?php echo htmlspecialchars($cus_username, ENT_QUOTES);  ?></td>
+                </tr>
+                <tr>
+                    <td>Profile Image</td>
+                    <td> <img src=<?php echo htmlspecialchars($photo, ENT_QUOTES); ?> width='100'
+                                                height='100' /></td>
                 </tr>
                 <tr>
                     <td>Password</td>

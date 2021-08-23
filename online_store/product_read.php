@@ -1,7 +1,7 @@
 <?php
     session_start();
     if ( !isset( $_SESSION['cus_username'] ) ) {
-        header( 'Location: login.php?error=restrictedAccess' );
+        header( 'Location: index.php?error=restrictedAccess' );
     }
 ?>
 <!DOCTYPE HTML>
@@ -25,31 +25,29 @@
         }
     </style>
     <body>
-        
-        <div class = 'container'>
-            <?php
+        <?php
                 include 'menu.php';
             ?>
+        <div class = 'container'>
+            
                     <div class = 'page-header'>
-                            <div class = 'title'><h1>Product List <img src='picture/img/read.png' style='width: 15%;'></div>
+                            <div class = 'title'><h1>Product List <img src='picture/product/read.png' style='width: 15%;'></div>
                             <div class = 'title2'><a href = 'create.php' class = 'btn btn-primary'>Create         New           Product</h1></a>
                             </div>
                     </div>
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
-                <table class = 'table table-hover table-responsive table-bordered' >
-                    <tr style = 'border:none;'>
-                        <td class = 'col-10' style = 'border:none;'>
-                            <div class = 'input-group rounded'>
-                                <input type = 'text'  class = 'form-control rounded' placeholder = 'Search by product ID OR names...' aria-label = 'Search'
-                                aria-describedby = 'search-addon' id = 'myInput' onkeyup = 'myFunction()' name="sear"/>
-                                <button type = 'button' class = 'btn btn-primary' >
-                                <i class = 'fa fa-search' style = 'font-size:20px;color:white'></i>
-                                </button>
-                            </div>
-                        </td>
-                        
-                    </tr>
-                </table>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" onsubmit="return validation()" method="post">
+                    <table class = 'table table-hover table-responsive table-bordered' >
+                        <tr style = 'border:none;'>
+                            <td class = 'col-10' style = 'border:none;'>
+                                <div class = 'input-group rounded'>
+                                    <input type = 'text'  class = 'form-control rounded' placeholder = 'Search by product ID OR names...' aria-label = 'Search'
+                                    aria-describedby = 'search-addon' id = 'sear' onkeyup = 'myFunction()' name="sear" value="<?php echo (isset($_POST['sear']))?($_POST['sear']):'';?>"/>
+                                    <input type='submit' value='Search' id="searchBtn" class='btn' />
+                                </div>
+                            </td>
+                            
+                        </tr>
+                    </table>
             </form>
             <?php
                 $action = isset( $_GET['action'] ) ? $_GET['action'] : '';
@@ -67,13 +65,24 @@
                 $stmt = $con->prepare( $query );
                 
                 if ($_POST) {
-                    $sear = $_POST['sear'];
-                    $query = 'SELECT * FROM products  WHERE name LIKE :sear OR productID LIKE :sear ORDER BY productID DESC';
-                    $stmt = $con->prepare( $query );
-                    $stmt->bindParam(':sear', $sear);
-                }    
+                    try {
+                        if (
+                            empty($_POST['sear'])
+                        ) {
+                            throw new Exception("Please make sure your name or id not empty before searching!");
+                        }
+                        $sear = "%" . $_POST['sear'] . "%";
+                        $query = 'SELECT * FROM products  WHERE name LIKE :sear OR productID LIKE :sear ORDER BY productID DESC';
+                        $stmt = $con->prepare($query);
+                        $stmt->bindParam(':sear', $sear);
+                    }
+                        catch (PDOException $exception) {
+                            echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                        } catch (Exception $exception) {
+                            echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                        }
                 
-                    
+                }    
 
                   $stmt->execute();  
                     
@@ -84,19 +93,19 @@
                         echo "<table class='table table-hover table-responsive table-bordered' id='myTable'>";
                         echo "<div class ='rowMain'>";
                         echo '<tr>';
-                        echo '<th>ID</th>';
-                        echo '<th>Product Image</th>';
-                        echo '<th>Name</th>';
-                        echo '<th>Action</th>';
+                        echo "<th class='col-1 text-center'>ID</th>";
+                        echo "<th class='col-1 text-center'>Picture</th>";
+                        echo "<th class='col-2 col-lg-1 text-center'>Name</th>";
+                        echo "<th class='col-lg-2 text-center'>Action</th>";
                         echo '</tr>';
                         echo '</div>';
                         while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
                             extract( $row );
                             echo '<tr>';
-                            echo "<td>{$productID}</td>";
-                            echo "<td><img src='$row[fileToUpload]' width='100' height='100'></td>";
-                            echo "<td>{$name}</td>";
-                            echo '<td>';
+                            echo "<td class ='text-center'>{$productID}</td>";
+                            echo "<td class ='text-center'><img src='$row[fileToUpload]' width='100' height='100'></td>";
+                            echo "<td class ='text-center'>{$name}</td>";
+                            echo '<td class ="text-center">';
                             echo "<a href='product_read_one.php?productID={$productID}' class='btn btn-info me-2'>Details</a>";
                             echo "<a href='product_update.php?productID={$productID}' class='btn btn-primary me-2'>Edit</a>";
                             echo "<a href='#' onclick='delete_product({$productID});'  class='btn btn-danger'>Delete</a>";
@@ -108,9 +117,6 @@
                         echo "<div class='alert alert-danger'>No records found.</div>";
                     }
                 
-            ?>
-            <?php
-                include 'footer.php';
             ?>
         </div>
         
@@ -126,26 +132,25 @@
         </script>
         <script>
 
-        /*function myFunction() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById( 'myInput' );
-            filter = input.value.toUpperCase();
-            table = document.getElementById( 'myTable' );
-            tr = table.getElementsByTagName( 'tr' );
-            for ( i = 0; i < tr.length; i++ ) {
-                td = tr[i].getElementsByTagName( 'td' )[1];
-                if ( td ) {
-                    txtValue = td.textContent || td.innerText;
-                    if ( txtValue.toUpperCase().indexOf( filter ) > -1 ) {
-                        tr[i].style.display = '';
-                    } else {
-                        tr[i].style.display = 'none';
-                    }
+        function validation() {
+                var sear = document.getElementById("sear").value;
+                var flag = false;
+                var msg = "";
+                if (sear == "") {
+                    flag = true;
+                    msg = msg + "Please make sure your name or id not empty before searching!\r\n";
                 }
-
-            }
-        }*/
+                if (flag == true) {
+                    alert(msg);
+                    return false;
+                }else{
+                    return true;
+                }
+        }
         </script>
     </body>
-
+        
+        <?php
+            include 'footer.php';
+        ?>
 </html>

@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION["cus_username"])) {
-        header("Location: login.php?error=restrictedAccess");
+        header("Location: index.php?error=restrictedAccess");
     }
 ?>
 <!DOCTYPE HTML>
@@ -15,14 +15,14 @@
     </head>
 
     <body>
-        
-        <!-- container -->
-        <div class="container">
-            <?php
+        <?php
                 include 'menu.php';
             ?>
+        <!-- container -->
+        <div class="container">
+            
             <div class="page-header">
-                <h1>Product Details <img src='picture/img/detail.png' style='width: 3%;'></h1>
+                <h1>Product Details <img src='picture/product/detail.png' style='width: 3%;'></h1>
             </div>
 
             <!-- PHP read one record will be here -->
@@ -63,6 +63,7 @@
                     $promotion_price = $row['promotion_price'];
                     $manufacture_date = $row['manufacture_date'];
                     $expired_date = $row['expired_date'];
+                    $photo = $row['fileToUpload'];
                     // shorter way to do that is extract($row)
                 }
 
@@ -79,6 +80,11 @@
                 <tr>
                     <td>Name</td>
                     <td><?php echo htmlspecialchars($name, ENT_QUOTES);  ?></td>
+                </tr>
+                <tr>
+                    <td>Peoduct Image</td>
+                    <td><img src=<?php echo htmlspecialchars($photo, ENT_QUOTES); ?> width='100'
+                                height='100' /></td>
                 </tr>
                 <tr>
                     <td>Description</td>
@@ -111,12 +117,12 @@
                     </td>
                 </tr>
             </table>
-            <?php
-                include 'footer.php';
-            ?>
+            
 
         </div> <!-- end .container -->
 
     </body>
-
+        <?php
+            include 'footer.php';
+        ?>
 </html>

@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION["cus_username"])) {
-        header("Location: login.php?error=restrictedAccess");
+        header("Location: index.php?error=restrictedAccess");
     }
 ?>
 <!DOCTYPE HTML>
@@ -11,15 +11,16 @@
         <title>Order Detail</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     </head>
-        
+    <style>
+        </style>
     <body>
-        
-        <div class="container">
-            <?php
+        <?php
                 include 'menu.php';
             ?>
+        <div class="container">
+            
             <div class="page-header">
-                <h1>Order Details <img src='picture/img/detail.png' style='width: 3%;'></h1>
+                <h1>Order Details <img src='picture/product/detail.png' style='width: 3%;'></h1>
             </div>
 
             <?php
@@ -60,25 +61,25 @@
                 $od_stmt = $con->prepare($od_query);
                 $od_stmt->bindParam(":orderID", $orderID);
                 $od_stmt->execute();
-                echo "<th class='col-3'>Product</th>";
-                echo "<th class='col-3'>Quantity</th>";
-                echo "<th class='col-3'>Price per piece</th>";
-                echo "<th class='col-3'>Total Price</th>";
+                echo "<th class='col-4 text-center'>Product</th>";
+                echo "<th class='col-2 text-center'>Quantity</th>";
+                echo "<th class='col-3 text-center'>Price per piece</th>";
+                echo "<th class='col-3 text-center'>Total Price</th>";
                 while ($od_row = $od_stmt->fetch(PDO::FETCH_ASSOC)) {
                     echo "<tr>";
-                    echo "<td>$od_row[name]</td>";
-                    echo "<td>$od_row[quantity]</td>";
+                    echo "<td class='text-center'>$od_row[name]</td>";
+                    echo "<td class='text-center'>$od_row[quantity]</td>";
                     $productPrice = sprintf('%.2f', $od_row['price']);
-                    echo "<td>RM $productPrice</td>";
+                    echo "<td class='text-end'>RM $productPrice</td>";
                     $productTotal = sprintf('%.2f', $od_row['total']);
-                    echo "<td>RM $productTotal</td>";
+                    echo "<td class='text-end'>RM $productTotal</td>";
                     echo "</tr>";
                 }
                 echo "<tr>";
                 echo "<td></td>";
                 echo "<td></td>";
-                echo "<th>Total amount you need to pay:</th>";
-                echo "<td>RM $total</td>";
+                echo "<th class='text-end'>Total amount you need to pay:</th>";
+                echo "<td class='text-end'>RM $total</td>";
                 echo "</tr>";
                 ?>   
             </table>
@@ -86,8 +87,10 @@
                 <a href='order_read.php' class='btn btn-danger'>Back to Order List</a>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-    </body>
-        <?php
-            include 'footer.php';
-        ?>
+            
+        </div>
+    </body><br><br><br><br><br><br><br>   
+             <?php
+                include 'footer.php';
+            ?>    
 </html>

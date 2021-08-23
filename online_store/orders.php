@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION["cus_username"])) {
-        header("Location: login.php?error=restrictedAccess");
+        header("Location: index.php?error=restrictedAccess");
         
     }
 ?>
@@ -17,9 +17,6 @@
         <style>
             td{
                 font-size: 15px;
-            }
-            .container {
-                width: 70%;
             }
             .nav {
                 padding-left: 30px;
@@ -51,22 +48,32 @@
     </head>
         
     <body>
-        <div class="container">
             <?php
-            include 'menu.php';
+                include 'menu.php';
             ?>
+        <div class="container">
+            
         <div class="page-header">
-                <h1>Create Order <img src='picture/img/create.png' style='width: 8%;'></h1>
+                <h1>Create Order <img src='picture/product/create.png' style='width: 4%;'></h1>
                 <h6>**Please fill in all fields of relevant data!</h6>
             </div>
             <?php
             if ($_POST) {
                 include 'config/database.php';
                 try {
-                    if (empty($_POST['cus_username'])||empty($_POST['productID'])||empty($_POST['quantity'])) {
+                    $con->beginTransaction();
+                    if(empty($_POST['cus_username'])&& empty($_POST['productID'])&& empty($_POST['quantity'])){
                         throw new Exception("Please make sure all fields are not empty!");
                     }
-                    $con->beginTransaction();
+                    if (empty($_POST['cus_username'])) {
+                        throw new Exception("Please choose the customer username!");
+                    }
+                    if (empty($_POST['productID'])) {
+                        throw new Exception("Please select at least one product!");
+                    }
+                    if (empty($_POST['quantity'])) {
+                        throw new Exception("Please select the quantity of the product you chose!");
+                    }
                     $query = "INSERT INTO orders SET cus_username=:cus_username, total=:total";
                     $stmt = $con->prepare($query);
                     $cus_username = $_POST['cus_username'];
@@ -115,9 +122,9 @@
                                 throw new Exception("Please make sure the product and quantity is selected.");
                             }
                         }
-                        echo "<div class='alert alert-success'>Order had been created. Order ID is $lastID.</div>";
+                        echo "<div class='alert alert-success'>Order ID $lastID had been created.</div>";
                     } else {
-                        throw new Exception("Unable to create order.");
+                        throw new Exception("Unable to create order ID $lastID.");
                     }
                     $con->commit();
                 } catch (PDOException $exception) {
@@ -192,9 +199,7 @@
                     </tr>
                 </table>
             </form>
-            <?php
-            include 'footer.php';
-            ?>
+            
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
         <script>
@@ -210,28 +215,43 @@
                         var element = document.querySelector('.productQuantity');
                         element.remove(element);
                     }
+                    else{
+                        alert("You could not delete the last product due to only one product lefted! ");
+                    }
                 }
             }, false);
 
             function validation() {
-                var cus_username = document.getElementById("cus_username").value;
-                var productID = document.querySelector('.productID').value;
-                var quantity = document.querySelector('.quantity').value;
-                var flag = false;
-                var msg = "";
-                if (cus_username == ""||productID == ""||quantity == "") {
-                    flag = true;
-                    msg = msg + "Please make sure all fields are not empty!";
-                }
-                if (flag == true) {
-                    alert(msg);
-                    return false;
-                }else{
-                    return true;
-                }
+            var cus_username = document.getElementById("cus_username").value;
+            var productID = document.querySelector('.productID').value;
+            var quantity = document.querySelector('.quantity').value;
+            var flag = false;
+            var msg = "";
+            if (cus_username == "") {
+                flag = true;
+                msg = msg + "Please choose the customer username!\r\n";
             }
+            if (productID == "") {
+                flag = true;
+                msg = msg + "Please select at least one product!\r\n";
+            }
+            if (quantity == "") {
+                flag = true;
+                msg = msg + "Please select the quantity of the product you chose!\r\n";
+            }
+            if (flag == true) {
+                alert(msg);
+                return false;
+            }else{
+                return true;
+            }
+        }
         </script>
         
     </body>
-        
+        <div class="foot">
+        <?php
+            include 'footer.php';
+        ?>
+        </div>
 </html>

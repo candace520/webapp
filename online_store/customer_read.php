@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION["cus_username"])) {
-        header("Location: login.php?error=restrictedAccess");
+        header("Location: index.php?error=restrictedAccess");
     }
 ?>
 <!DOCTYPE HTML>
@@ -9,8 +9,9 @@
 
     <head>
         <title>Customer Read</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css' rel = 'stylesheet' integrity = 'sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x' crossorigin = 'anonymous'>
+        <!-- Add icon library -->
+        <link rel = 'stylesheet' href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
     </head>
     <style>
         .page-header{
@@ -25,27 +26,25 @@
     </style>
 
     <body>
-        
-        <!-- container -->
-        <div class="container">
-            <?php
+        <?php
                 include 'menu.php';
             ?>
+        <!-- container -->
+        <div class="container">
+            
         <div class = 'page-header'>
-                            <div class = 'title'><h1>Customer List <img src='picture/img/read.png' style='width: 12%;'></div>
+                            <div class = 'title'><h1>Customer List <img src='picture/product/read.png' style='width: 12%;'></div>
                             <div class = 'title2'><a href = 'customer.php' class = 'btn btn-primary'>Create         New           Customer</h1></a>
                             </div>
                     </div>
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"  onsubmit="return validation()" > 
                 <table class = 'table table-hover table-responsive table-bordered' >
                     <tr style = 'border:none;'>
                         <td class = 'col-10' style = 'border:none;'>
                             <div class = 'input-group rounded'>
                                 <input type = 'text'  class = 'form-control rounded' placeholder = 'Search by customer ID OR names...' aria-label = 'Search'
-                                aria-describedby = 'search-addon' id = 'myInput' onkeyup = 'myFunction()' name="sear"/>
-                                <button type = 'button' class = 'btn btn-primary' >
-                                <i class = 'fa fa-search' style = 'font-size:20px;color:white'></i>
-                                </button>
+                                aria-describedby = 'search-addon' id = 'sear' onkeyup = 'myFunction()' name="sear" value="<?php echo (isset($_POST['sear']))?($_POST['sear']):'';?>"/>
+                                <input type='submit' value='Search' id="searchBtn" class='btn' />
                             </div>
                         </td>
                         
@@ -73,10 +72,23 @@
             $stmt = $con->prepare($query);
 
             if ($_POST) {
-                $sear = $_POST['sear'];
-                $query = 'SELECT * FROM customer  WHERE cus_username LIKE :sear OR id LIKE :sear ORDER BY id DESC';
-                $stmt = $con->prepare( $query );
-                $stmt->bindParam(':sear', $sear);
+                try {
+                    if (
+                        empty($_POST['sear'])
+                    ) {
+                        throw new Exception("Please make sure your name or id not empty before searching!");
+                    }
+                    $sear = "%" . $_POST['sear'] . "%";
+                    $query = 'SELECT * FROM customer  WHERE cus_username LIKE :sear OR id LIKE :sear ORDER BY id DESC';
+                    $stmt = $con->prepare($query);
+                    $stmt->bindParam(':sear', $sear);
+                }
+                    catch (PDOException $exception) {
+                        echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                    } catch (Exception $exception) {
+                        echo "<div class='alert alert-danger'>" . $exception->getMessage() . "</div>";
+                    }
+            
             }    
             
             $stmt->execute();
@@ -93,21 +105,22 @@
 
                 //creating our table heading
                 echo "<tr>";
-                echo "<th>ID</th>";
-                echo "<th>Profile Image</th>";
-                echo "<th>User Name</th>";
+                echo "<th class='col-1 text-center'>ID</th>";
+                echo "<th class='col-1 text-center'>Picture</th>";
+                echo "<th class='col-2 col-lg-1 text-center'>Name</th>";
+                echo "<th class='col-lg-2 text-center'>Action</th>";
                 echo "</tr>";
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     echo "<tr>";
-                    echo "<td>{$id}</td>";
-                    echo "<td><img src='$row[fileToUpload]' width='100' height='100'></td>";
-                    echo "<td>{$cus_username}</td>";
-                    echo "<td>";
-                    echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info m-r-1em'>Details</a>";
+                    echo "<td class='col-1 text-center'>{$id}</td>";
+                    echo "<td class='col-1 text-center'><img src='$row[fileToUpload]' width='100' height='100'></td>";
+                    echo "<td class='col-1 text-center'>{$cus_username}</td>";
+                    echo "<td class ='text-center'>";
+                    echo "<a href='customer_read_one.php?id={$id}' class='btn btn-info me-2'>Details</a>";
 
-                    echo "<a href='customer_update.php?id={$id}' class='btn btn-primary m-r-1em'>Edit</a>";
+                    echo "<a href='customer_update.php?id={$id}' class='btn btn-primary me-2'>Edit</a>";
 
                     echo "<a href='#' onclick='delete_customer(&#39;$cus_username&#39;)'  class='btn btn-danger'>Delete</a>";
                     echo "</td>";
@@ -124,9 +137,7 @@
             }
             ?>
 
-            <?php
-                include 'footer.php';
-            ?>
+            
         </div> 
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -139,5 +150,23 @@
                     window.location = 'customer_delete.php?cus_username=' + cus_username;
                 }
             }
+            function validation() {
+                var sear = document.getElementById("sear").value;
+                var flag = false;
+                var msg = "";
+                if (sear == "") {
+                    flag = true;
+                    msg = msg + "Please make sure your name or id not empty before searching!\r\n";
+                }
+                if (flag == true) {
+                    alert(msg);
+                    return false;
+                }else{
+                    return true;
+                }
+            }
         </script>
+            <?php
+                include 'footer.php';
+            ?>
 </html>

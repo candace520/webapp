@@ -1,47 +1,50 @@
 <?php
     session_start();
     if (!isset($_SESSION["cus_username"])) {
-        header("Location: login.php?error=restrictedAccess");
+        header("Location: index.php?error=restrictedAccess");
     }
 ?>
 <!DOCTYPE HTML>
 <html>
 
-    <head>
-        <title>Create Product</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+    <title>Create Product</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    td {
+        font-size: 15px;
+    }
 
-        <style>
-            td{
-                font-size: 15px;
-            }
-            .instruction{
-                font-size: 20px;
-            }
+    .instruction {
+        font-size: 20px;
+    }
 
-            span {
-                font-weight: bolder;
-                color: white;
-            }
-            .container {
-                width: 70%;
-            }
-        </style>
-    </head>
+    span {
+        font-weight: bolder;
+        color: white;
+    }
 
-    <body>
-        
+    #leftrow {
+        width: 30%;
+    }
+    </style>
+</head>
+<?php
+            include 'menu.php';
+        ?>
 
-        <div class="container">
-            <?php
-                include 'menu.php';
-            ?>
-            <div class="page-header">
-                <h1>Create Product <img src='picture/img/create.png' style='width: 8%;'></h1>
-                <h6>**Please fill in all fields of relevant data!(except Optional)</h6>
-            </div>
-            <?php
+<body>
+
+
+    <div class="container">
+
+        <div class="page-header">
+            <h1>Create Product <img src='picture/product/create.png' style='width: 4%;'></h1>
+            <h6>**Please fill in all fields of relevant data!(except Optional)</h6>
+        </div>
+        <?php
                 if ($_POST) {
                     include 'config/database.php';
                     try {
@@ -71,7 +74,7 @@
                             throw new Exception("<div class='alert alert-danger'>Please make sure the expired date is later than the manufacture date.</div>");
                         }
                         
-                            $target_dir = "picture/img/";
+                            $target_dir = "picture/product/";
                             $fileToUpload = $_FILES['fileToUpload']['name']; 
                             $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//the name of target file u choose
                             $isUploadOK = TRUE;
@@ -80,19 +83,19 @@
                             if($fileToUpload!=""){
                                     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                                 if($check == false) {
-                                    echo"<div class='alert alert-danger'>Please make sure the file uploaded is an image!</div>";
+                                    throw new Exception("Please make sure the file uploaded is an image!");
                                         $isUploadOK = 0;
                                 }
                                 
                                 list($width, $height, $type, $attr) = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
                                     if($width!=$height){
                                         $isUploadOK = false;
-                                        echo"<div class='alert alert-danger'>Please make sure the width and height of your image is same!</div>";  
+                                        throw new Exception("Please make sure the width and height of your image is same!");
                                     }
                                     
                             
                             if ($_FILES["fileToUpload"]["size"] > 512000) {
-                                echo"<div class='alert alert-danger'>Please make sure the image uploaded is not larger than 512kb!</div>";
+                                throw new Exception("Please make sure the image uploaded is not larger than 512kb!");
                                 $isUploadOK = false;
                             }
                             
@@ -124,9 +127,10 @@
                         if ($stmt->execute()) {
                             $lastID = $con->lastInsertId();
                             $temp = explode(".", $_FILES["fileToUpload"]["name"]);
-                            $newfilename = $lastID .'.' . end($temp);
+                            $newfilename = $lastID . '_' . round(microtime(true)) . '.' .  end($temp);
                             $newtarget_file = $target_dir  . $newfilename;
-                            $default = "picture/img/noPic.jpg";
+                            $default = "picture/product/noPic.jpg";
+                            if ($target_file != "") {
                                     $insertcuQuery = "UPDATE products SET fileToUpload=:fileToUpload WHERE productID = :productID";
                                     $insertcuStmt = $con->prepare($insertcuQuery); 
                                     $insertcuStmt->bindParam(':productID', $lastID);
@@ -136,21 +140,20 @@
                                     else{
                                         $insertcuStmt->bindParam(':fileToUpload', $default);
                                     }
-                                    if($insertcuStmt->execute()){
-                                        if($fileToUpload!=""){
+                                    if ($insertcuStmt->execute()) {
+                                        if ($fileToUpload!="") {
                                             if ($isUploadOK == false) {
-                                                echo"<div class='alert alert-danger'>Sorry, your file was not uploaded!</div>";
-                                            }
-                                            else {
+                                                throw new Exception("Sorry, your file was not uploaded!");
+                                            } else {
                                                 if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $newtarget_file)) {
-                                                    echo "Sorry, there was an error uploading your file.";
-                                                    
+                                                    throw new Exception("Sorry, there was an error uploading your file!");
                                                 }
                                             }
                                         }
-                                    echo "<div class='alert alert-success'>Product had been created.</div>";
+                            }
+                                    echo "<div class='alert alert-success'>Product $lastID had been created.</div>";
                         } else {
-                            echo "<div class='alert alert-danger'>Unable to create product.</div>";
+                            echo "<div class='alert alert-danger'>Unable to create product $lastID.</div>";
                         }
                         }
                     }
@@ -164,121 +167,136 @@
                
             ?>
 
-            <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"
+            onsubmit="return validation()" enctype="multipart/form-data">
 
-                <table class='table table-hover table-responsive table-bordered'>
-                    <tr>
-                        <td>Product Image(Optional)</td>
-                        <td>
-                            <input type="file" name="fileToUpload" id="fileToUpload"value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>"><?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>
-                        </td>
-                    </tr>
-                    <tr>
+            <table class='table table-hover table-responsive table-bordered'>
+                <tr>
+                    <td>Product Image(Optional)</td>
+                    <td>
+                        <input type="file" name="fileToUpload" id="fileToUpload"
+                            value="<?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>"><?php echo (isset($_FILES['fileToUpload']['name']))?($_FILES['fileToUpload']['name']):'';?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>
+                        <input type='text' name='name' placeholder="Enter name" class='form-control' id="name"
+                            value="<?php echo (isset($_POST['name']))?($_POST['name']):'';?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td id="leftrow">Malay Name</td>
+                    <td>
+                        <input type='text' name='nameMalay' placeholder="Enter malay name " class='form-control'
+                            id="Mname" value="<?php echo (isset($_POST['nameMalay']))?($_POST['nameMalay']):'';?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><textarea name='description' id="desc" placeholder="Enter description"
+                            class='form-control'><?php echo (isset($_POST['description']))?($_POST['description']):'';?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Price</td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-text">RM</span>
+                            <input type='text' name='price' id="price" placeholder="xx.xx" class='form-control'
+                                value="<?php echo (isset($_POST['price']))?($_POST['price']):'';?>" />
+                        </div>
+                    </td>
+                </tr>
 
-                        <td id="leftrow">Name</td>
-                        <td>
-                            <input type='text' name='name' placeholder="Enter name" class='form-control' id="name"
-                            
-                            value="<?php echo (isset($_POST['name']))?($_POST['name']):'';?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Malay Name</td>
-                        <td>
-                            <input type='text' name='nameMalay' placeholder="Enter malay name " class='form-control' id="Mname"value="<?php echo (isset($_POST['nameMalay']))?($_POST['nameMalay']):'';?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Description</td>
-                        <td><textarea name='description' id="desc" placeholder="Enter description" class='form-control' ><?php echo (isset($_POST['description']))?($_POST['description']):'';?></textarea></td>
-                    </tr>
-                    <tr>
-                        <td>Price</td>
-                        <td>
-                            <div class="input-group">
-                                <span class="input-group-text">RM</span>
-                                <input type='text' name='price' id="price" placeholder="xx.xx" class='form-control' value="<?php echo (isset($_POST['price']))?($_POST['price']):'';?>"/>
-                            </div>
-                        </td>
-                    </tr>
-                    
 
-                    <tr>
-                        <td>Promotion Price</td>
-                        <td>
-                            <div class="input-group">
-                                <span class="input-group-text">RM</span>
-                                <input type='text' name='promotion_price' id="proPrice" placeholder="xx.xx" class='form-control' value="<?php echo (isset($_POST['promotion_price']))?($_POST['promotion_price']):'';?>" />
-                            </div>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>Manufacture Date</td>
-                            <td><input type='date' id="man_date" name='manufacture_date' class='form-control' value="<?php echo (isset($_POST['manufacture_date']))?($_POST['manufacture_date']):'';?>"/></td>
-                    </tr>
-                    <tr>   
-                        <td>Expired Date</td>
-                        <td><input type='date' name='expired_date' class='form-control' id="exp_date" value="<?php echo (isset($_POST['expired_date']))?($_POST['expired_date']):'';?>"/></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <input type='submit' name="submit" value='Save' class='btn btn-primary'/>
-                            <a href='product_read.php' class='btn btn-danger'>Back to Product List</a>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-                <?php
-                include 'footer.php';
-                ?>
+                <tr>
+                    <td>Promotion Price</td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-text">RM</span>
+                            <input type='text' name='promotion_price' id="proPrice" placeholder="xx.xx"
+                                class='form-control'
+                                value="<?php echo (isset($_POST['promotion_price']))?($_POST['promotion_price']):'';?>" />
+                        </div>
+                    </td>
+                </tr>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-        <script>
-            function validation() {
-                var name = document.getElementById("name").value;
-                var Mname = document.getElementById("Mname").value;
-                var desc = document.getElementById("desc").value;
-                var price = document.getElementById("price").value;
-                var proPrice = document.getElementById("proPrice").value;
-                var priceValidation = /^[0-9]*[.]?[0-9]*$/;
-                var man_date = document.getElementById("man_date").value;
-                var exp_date = document.getElementById("exp_date").value;
-                var flag = false;
-                var msg = "";
-                if (name == "" || Mname == "" || desc == "" || price == "" || proPrice == "" || man_date == "" || exp_date == "") {
-                    flag = true;
-                    msg = msg + "Please make sure all fields are not empty!\r\n";
-                }
-                if(isNaN(price)||isNaN(proPrice)){
-                    flag = true;
-                    msg = msg  + " Please make sure the price is a number.\r\n";
-                }
-                if (price <= 0 || proPrice <= 0) {
-                    flag = true;
-                    msg = msg + "Please make sure the price must not be a negative value or zero!\r\n";
-                }
-                if (price > 1000 || proPrice > 1000) {
-                    flag = true;
-                    msg = msg + "Please make sure the price is not bigger than RM 1000!\r\n";
-                }
-                if (parseFloat(price) < parseFloat(proPrice) ) {
-                    flag = true;
-                    msg = msg + "Please make sure the promotion price must be not bigger than normal price!\r\n";
-                }
-                if (man_date > exp_date) {
-                    flag = true;
-                    msg = msg + "Please make sure expired date is later than the manufacture date!\r\n";
-                }
-                if (flag == true) {
-                    alert(msg);
-                    return false;
-                }else{
-                    return true;
-                }
-            }
+                <tr>
+                    <td>Manufacture Date</td>
+                    <td><input type='date' id="man_date" name='manufacture_date' class='form-control'
+                            value="<?php echo (isset($_POST['manufacture_date']))?($_POST['manufacture_date']):'';?>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Expired Date</td>
+                    <td><input type='date' name='expired_date' class='form-control' id="exp_date"
+                            value="<?php echo (isset($_POST['expired_date']))?($_POST['expired_date']):'';?>" /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type='submit' name="submit" value='Save' class='btn btn-primary' />
+                        <a href='product_read.php' class='btn btn-danger'>Back to Product List</a>
+                    </td>
+                </tr>
+            </table>
+
+        </form>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
         </script>
-    </body>
+        <script>
+        function validation() {
+            var name = document.getElementById("name").value;
+            var Mname = document.getElementById("Mname").value;
+            var desc = document.getElementById("desc").value;
+            var price = document.getElementById("price").value;
+            var proPrice = document.getElementById("proPrice").value;
+            var priceValidation = /^[0-9]*[.]?[0-9]*$/;
+            var man_date = document.getElementById("man_date").value;
+            var exp_date = document.getElementById("exp_date").value;
+            var flag = false;
+            var msg = "";
+            if (name == "" || Mname == "" || desc == "" || price == "" || proPrice == "" || man_date == "" ||
+                exp_date == "") {
+                flag = true;
+                msg = msg + "Please make sure all fields are not empty!\r\n";
+            }
+            if (isNaN(price) || isNaN(proPrice)) {
+                flag = true;
+                msg = msg + " Please make sure the price is a number.\r\n";
+            }
+            if (price <= 0 || proPrice <= 0) {
+                flag = true;
+                msg = msg + "Please make sure the price must not be a negative value or zero!\r\n";
+            }
+            if (price > 1000 || proPrice > 1000) {
+                flag = true;
+                msg = msg + "Please make sure the price is not bigger than RM 1000!\r\n";
+            }
+            if (parseFloat(price) < parseFloat(proPrice)) {
+                flag = true;
+                msg = msg + "Please make sure the promotion price must be not bigger than normal price!\r\n";
+            }
+            if (man_date > exp_date) {
+                flag = true;
+                msg = msg + "Please make sure expired date is later than the manufacture date!\r\n";
+            }
+            if (flag == true) {
+                alert(msg);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        </script>
+    </div>
+</body>
+<?php
+            include 'footer.php';
+        ?>
 
 </html>

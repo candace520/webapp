@@ -2,5 +2,5 @@
     session_start();
     session_unset();
 	session_destroy();
-	header('location:login.php?logout=true');
+	header('location:index.php?logout=true');
 ?>
